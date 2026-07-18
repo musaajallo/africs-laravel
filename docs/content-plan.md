@@ -56,17 +56,22 @@ Based on `africs_starter`'s Prisma schema, translated to Eloquent models/migrati
 
 Admin CRUD screens needed for each of the above in Phase 1's CMS.
 
-## Branding Reference (as found — confirm before using)
+## Branding Reference
 
-- Contact email: `info@africs.net` (as found — verify current)
+- Domain (confirmed by user, 2026-07-18): **africsinc.com**
+- Contact email: `info@africsinc.com` (updated to match confirmed domain; supersedes the old `info@africs.net` found in prototypes)
 - Phone: `+220 3718206` (primary — multiple slightly different numbers appeared across sources, confirm correct one)
 - Address: The Gambia (West Coast Region) — exact street name was inconsistent between sources, confirm
 - Colors: deep green + amber/mustard accent recurred across both `africs-html` and `africs_starter` designs — reasonable starting palette even though exact tokens differed
 
+## Positioning: Adding Value (confirmed by user, 2026-07-18)
+
+The brand centers on the tagline **"Adding Value"** across the three pillars — Business, Technology, Design. The "digital product studio for other companies" framing used in an earlier homepage draft was only meant to inform *visual/design* direction, not the actual copy positioning — the company is not primarily a product-development shop. All homepage copy was revised to lead with adding value rather than "building products."
+
 ## Open Questions for You
 
-1. **Real contact details** — current email, phone, address to use (source material had inconsistencies even within `africs_starter`'s own code vs. its reference screenshots).
-2. **What does "Design" concretely offer?** Not resolved in `africs_starter` — its actual division breakdown (Technology/Consulting/Innovation/Operations) doesn't contain a dedicated Design division despite it being in the tagline.
+1. **What does "Design" concretely offer?** Not resolved in `africs_starter` — its actual division breakdown (Technology/Consulting/Innovation/Operations) doesn't contain a dedicated Design division despite it being in the tagline.
+2. **Real contact phone/address** — source material had inconsistencies even within `africs_starter`'s own code vs. its reference screenshots.
 3. Team member names found in the old seed data look like placeholders (e.g. "Naday Keyson" vs "Nadav Keyson" across files) — treat as fake, need real team info.
 
 ## Decided

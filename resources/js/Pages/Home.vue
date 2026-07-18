@@ -50,14 +50,16 @@ const mobileMenuOpen = ref(false);
     <Head title="Africs — Business, Technology &amp; Design Solutions">
         <meta
             name="description"
-            content="Africs is a digital product studio that partners with organizations to research, design, and build the technology their business strategy promises — combining business consulting, engineering, and design under one roof."
+            content="Africs adds value to every engagement — combining business strategy, technology, and design to help organizations across the public and private sectors achieve sustainable growth."
         />
+        <link rel="canonical" href="https://africsinc.com/" />
         <meta property="og:title" content="Africs — Business, Technology &amp; Design Solutions" />
         <meta
             property="og:description"
-            content="A digital product studio combining business consulting, technology, and design to build the products organizations need."
+            content="Adding value to every engagement — through business strategy, technology, and design."
         />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://africsinc.com/" />
         <meta name="twitter:card" content="summary" />
     </Head>
 
@@ -126,17 +128,16 @@ const mobileMenuOpen = ref(false);
             <section class="hero">
                 <div class="hero-inner">
                     <div>
-                        <p class="hero-eyebrow">Africs Studio — Banjul, The Gambia</p>
+                        <p class="hero-eyebrow">Africs — Adding Value in Business, Technology &amp; Design</p>
                         <h1 class="hero-title">
-                            Business ideas,<br />
-                            <em>engineered</em> into products.
+                            Solutions engineered<br />
+                            to add <em>value</em>.
                         </h1>
                         <p class="hero-sub">
-                            We partner with organizations across West Africa
-                            and beyond to research, design, and build the
-                            digital products their strategy depends on —
-                            combining business consulting, technology, and
-                            design under one roof.
+                            We combine business strategy, technology, and
+                            design to add value to every engagement — for
+                            organizations and individuals across the public
+                            and private sectors.
                         </p>
                         <div class="hero-actions">
                             <a href="#contact" class="btn btn-primary btn-lg">
@@ -161,7 +162,7 @@ const mobileMenuOpen = ref(false);
                         specialise in solutions that bridge
                         <span>business objectives</span>, technological
                         capability, and design thinking into one outcome:
-                        <span>products that work.</span>
+                        <span>real, measurable value.</span>
                     </blockquote>
                 </div>
             </section>
@@ -182,11 +183,11 @@ const mobileMenuOpen = ref(false);
                     <div class="divisions-grid">
                         <article class="division-card">
                             <p class="division-code">TECHNOLOGY</p>
-                            <h3 class="division-name">Product &amp; engineering</h3>
+                            <h3 class="division-name">Digital transformation</h3>
                             <p class="division-desc">
-                                Software product design, engineering, cloud
-                                infrastructure, and IT strategy — the build
-                                side of the business case.
+                                Software, cloud infrastructure, and IT
+                                strategy that turn technology into a genuine
+                                business advantage.
                             </p>
                         </article>
 
@@ -204,9 +205,8 @@ const mobileMenuOpen = ref(false);
                             <p class="division-code">INNOVATION</p>
                             <h3 class="division-name">Research &amp; development</h3>
                             <p class="division-desc">
-                                Early-stage research and prototyping for
-                                problems that don't have an off-the-shelf
-                                answer yet.
+                                Early-stage research that adds value where
+                                an off-the-shelf answer doesn't exist yet.
                             </p>
                         </article>
 
@@ -215,8 +215,8 @@ const mobileMenuOpen = ref(false);
                             <h3 class="division-name">Operational excellence</h3>
                             <p class="division-desc">
                                 Process optimisation and delivery discipline
-                                so what gets built keeps running long after
-                                launch.
+                                that keeps the value we add compounding well
+                                beyond the engagement.
                             </p>
                         </article>
                     </div>
@@ -229,7 +229,7 @@ const mobileMenuOpen = ref(false);
                     <div class="section-head">
                         <p class="section-eyebrow">How we work</p>
                         <h2 class="section-title" style="color: var(--color-cream-text)">
-                            One process, from problem to product.
+                            One process, engineered to add value.
                         </h2>
                     </div>
 
@@ -239,8 +239,8 @@ const mobileMenuOpen = ref(false);
                             <h3 class="process-title">Discover</h3>
                             <p class="process-desc">
                                 We get precise about the business problem,
-                                the users, and the constraints before anyone
-                                designs or writes a line of code.
+                                the people affected, and the constraints
+                                before we propose anything.
                             </p>
                         </div>
 
@@ -248,9 +248,9 @@ const mobileMenuOpen = ref(false);
                             <p class="process-number">02</p>
                             <h3 class="process-title">Design</h3>
                             <p class="process-desc">
-                                We prototype the product experience and
-                                validate direction with real users before
-                                committing to a build.
+                                We prototype the experience and validate
+                                direction with real users before committing
+                                to a build.
                             </p>
                         </div>
 
@@ -258,7 +258,7 @@ const mobileMenuOpen = ref(false);
                             <p class="process-number">03</p>
                             <h3 class="process-title">Build</h3>
                             <p class="process-desc">
-                                We engineer the product with the right
+                                We engineer the solution with the right
                                 technology choices for your scale, budget,
                                 and team.
                             </p>
@@ -266,11 +266,10 @@ const mobileMenuOpen = ref(false);
 
                         <div class="process-step">
                             <p class="process-number">04</p>
-                            <h3 class="process-title">Ship</h3>
+                            <h3 class="process-title">Deliver</h3>
                             <p class="process-desc">
-                                We launch, measure, and iterate alongside
-                                your team — not disappear the day it goes
-                                live.
+                                We measure and iterate alongside your team —
+                                not disappear once the engagement ends.
                             </p>
                         </div>
                     </div>
@@ -287,9 +286,9 @@ const mobileMenuOpen = ref(false);
                                 Training the next generation of builders.
                             </h2>
                             <p class="section-lede" style="margin-top: 0.6rem">
-                                Courses in product, engineering, and business
-                                fundamentals for people who want to build the
-                                way we do.
+                                Courses in business, technology, and design
+                                fundamentals for people who want to add value
+                                the way we do.
                             </p>
                         </div>
                         <span class="badge">Coming soon</span>
@@ -300,14 +299,14 @@ const mobileMenuOpen = ref(false);
             <!-- Contact CTA -->
             <section id="contact" class="cta-section reveal">
                 <div class="container">
-                    <h2 class="cta-title">Have a product to build?</h2>
+                    <h2 class="cta-title">Ready to add value to your next project?</h2>
                     <p class="cta-sub">
-                        Tell us about the problem you're solving — we'll tell
-                        you honestly whether we're the right team for it.
+                        Tell us about the challenge you're facing — we'll
+                        tell you honestly how we can help.
                     </p>
                     <div class="cta-actions">
-                        <a href="mailto:info@africs.net" class="btn btn-primary btn-lg">
-                            info@africs.net
+                        <a href="mailto:info@africsinc.com" class="btn btn-primary btn-lg">
+                            info@africsinc.com
                         </a>
                     </div>
                 </div>
@@ -319,15 +318,14 @@ const mobileMenuOpen = ref(false);
                 <div class="footer-brand">
                     <ApplicationLogo style="height: 1.75rem" alt="Africs" />
                     <p class="footer-tagline">
-                        A digital product studio combining business,
-                        technology, and design — based in Banjul, The
-                        Gambia.
+                        Adding value in business, technology, and design —
+                        based in Banjul, The Gambia.
                     </p>
                 </div>
 
                 <div class="footer-links">
                     <div>
-                        <p class="footer-col-title">Studio</p>
+                        <p class="footer-col-title">Company</p>
                         <div class="footer-col-links">
                             <a href="#capabilities">Capabilities</a>
                             <a href="#process">How we work</a>
@@ -337,7 +335,7 @@ const mobileMenuOpen = ref(false);
                     <div>
                         <p class="footer-col-title">Contact</p>
                         <div class="footer-col-links">
-                            <a href="mailto:info@africs.net">info@africs.net</a>
+                            <a href="mailto:info@africsinc.com">info@africsinc.com</a>
                             <a href="#contact">Start a project</a>
                         </div>
                     </div>

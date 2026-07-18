@@ -17,7 +17,8 @@
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 "name": "Africs",
-                "description": "A digital product studio combining business consulting, technology, and design."
+                "url": "https://africsinc.com",
+                "description": "Africs adds value to every engagement through business, technology, and design solutions."
             }
             @endverbatim
         </script>
