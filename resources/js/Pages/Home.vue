@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import ConstellationDiagram from '@/Components/ConstellationDiagram.vue';
+import SiteHeader from '@/Components/SiteHeader.vue';
+import SiteFooter from '@/Components/SiteFooter.vue';
 
 defineProps({
     canLogin: {
@@ -42,8 +43,36 @@ onMounted(() => {
 
 onUnmounted(() => observer?.disconnect());
 
-const year = new Date().getFullYear();
-const mobileMenuOpen = ref(false);
+// Placeholder until real client logos are available — add an image and set
+// `src` to a path under /public/images/clients/, e.g. src: '/images/clients/acme.svg'.
+const clientLogos = [
+    { name: 'Client One', src: null },
+    { name: 'Client Two', src: null },
+    { name: 'Client Three', src: null },
+    { name: 'Client Four', src: null },
+    { name: 'Client Five', src: null },
+    { name: 'Client Six', src: null },
+];
+
+// Placeholder copy until real client testimonials are available — replace
+// quote/name/role with an actual quote before this goes live.
+const testimonials = [
+    {
+        quote: 'Add a short quote here about the outcome of working with Africs — what changed, and why it mattered.',
+        name: 'Client Name',
+        role: 'Title, Company',
+    },
+    {
+        quote: 'Add a second testimonial here, ideally from a different type of engagement (e.g. a technology or design project).',
+        name: 'Client Name',
+        role: 'Title, Company',
+    },
+    {
+        quote: 'Add a third testimonial here — real names and companies build far more trust than placeholder text like this.',
+        name: 'Client Name',
+        role: 'Title, Company',
+    },
+];
 </script>
 
 <template>
@@ -66,61 +95,7 @@ const mobileMenuOpen = ref(false);
     <a href="#main" class="skip-link">Skip to content</a>
 
     <div ref="page">
-        <header class="site-nav">
-            <div class="site-nav-inner">
-                <Link href="/" class="site-nav-brand">
-                    <ApplicationLogo class="site-nav-logo" alt="Africs" />
-                </Link>
-
-                <nav class="site-nav-links" aria-label="Primary">
-                    <a href="#capabilities" class="site-nav-link">Capabilities</a>
-                    <a href="#process" class="site-nav-link">How we work</a>
-                    <a href="#academy" class="site-nav-link">Academy</a>
-                    <a href="#contact" class="site-nav-link">Contact</a>
-                </nav>
-
-                <Link
-                    v-if="canLogin"
-                    :href="route('login')"
-                    class="btn btn-secondary"
-                    style="margin-left: auto"
-                >
-                    Client login
-                </Link>
-
-                <button
-                    type="button"
-                    class="site-nav-toggle"
-                    :aria-expanded="mobileMenuOpen"
-                    aria-label="Toggle menu"
-                    @click="mobileMenuOpen = !mobileMenuOpen"
-                >
-                    <svg width="24" height="24" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path
-                            v-if="!mobileMenuOpen"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"
-                        />
-                        <path
-                            v-else
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </button>
-            </div>
-
-            <nav v-show="mobileMenuOpen" class="site-mobile-menu" aria-label="Mobile">
-                <a href="#capabilities" class="site-nav-link" @click="mobileMenuOpen = false">Capabilities</a>
-                <a href="#process" class="site-nav-link" @click="mobileMenuOpen = false">How we work</a>
-                <a href="#academy" class="site-nav-link" @click="mobileMenuOpen = false">Academy</a>
-                <a href="#contact" class="site-nav-link" @click="mobileMenuOpen = false">Contact</a>
-            </nav>
-        </header>
+        <SiteHeader :can-login="canLogin" />
 
         <main id="main">
             <!-- Hero -->
@@ -138,9 +113,9 @@ const mobileMenuOpen = ref(false);
                             and private sectors.
                         </p>
                         <div class="hero-actions">
-                            <a href="#contact" class="btn btn-primary btn-lg">
+                            <Link :href="route('contact')" class="btn btn-primary btn-lg">
                                 Start a project
-                            </a>
+                            </Link>
                             <a href="#process" class="btn btn-on-dark btn-lg">
                                 See how we work
                             </a>
@@ -162,6 +137,23 @@ const mobileMenuOpen = ref(false);
                         capability, and design thinking into one outcome:
                         <span>real, measurable value.</span>
                     </blockquote>
+                </div>
+            </section>
+
+            <!-- Client logos -->
+            <section class="logos-strip reveal">
+                <p class="logos-heading">Organizations we've worked with</p>
+                <div class="logos-viewport">
+                    <div class="logos-track">
+                        <div
+                            v-for="(logo, index) in [...clientLogos, ...clientLogos]"
+                            :key="index"
+                            class="logo-tile"
+                        >
+                            <img v-if="logo.src" :src="logo.src" :alt="logo.name" />
+                            <span v-else>{{ logo.name }}</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -274,6 +266,34 @@ const mobileMenuOpen = ref(false);
                 </div>
             </section>
 
+            <!-- Testimonials -->
+            <section class="section reveal">
+                <div class="container">
+                    <div class="section-head">
+                        <p class="section-eyebrow">What clients say</p>
+                        <h2 class="section-title">Proof, in their words.</h2>
+                    </div>
+
+                    <div class="testimonials-grid">
+                        <article
+                            v-for="(testimonial, index) in testimonials"
+                            :key="index"
+                            class="testimonial-card"
+                        >
+                            <p class="testimonial-mark" aria-hidden="true">&ldquo;</p>
+                            <p class="testimonial-quote">{{ testimonial.quote }}</p>
+                            <div class="testimonial-author">
+                                <span class="testimonial-avatar">{{ testimonial.name.charAt(0) }}</span>
+                                <div>
+                                    <p class="testimonial-name">{{ testimonial.name }}</p>
+                                    <p class="testimonial-role">{{ testimonial.role }}</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
             <!-- Academy -->
             <section id="academy" class="section reveal">
                 <div class="container">
@@ -295,7 +315,7 @@ const mobileMenuOpen = ref(false);
             </section>
 
             <!-- Contact CTA -->
-            <section id="contact" class="cta-section reveal">
+            <section class="cta-section reveal">
                 <div class="container">
                     <h2 class="cta-title">Ready to add value to your next project?</h2>
                     <p class="cta-sub">
@@ -303,7 +323,10 @@ const mobileMenuOpen = ref(false);
                         tell you honestly how we can help.
                     </p>
                     <div class="cta-actions">
-                        <a href="mailto:info@africsinc.com" class="btn btn-primary btn-lg">
+                        <Link :href="route('contact')" class="btn btn-primary btn-lg">
+                            Get in touch
+                        </Link>
+                        <a href="mailto:info@africsinc.com" class="btn btn-on-dark btn-lg">
                             info@africsinc.com
                         </a>
                     </div>
@@ -311,36 +334,6 @@ const mobileMenuOpen = ref(false);
             </section>
         </main>
 
-        <footer class="site-footer">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <ApplicationLogo style="height: 5rem" alt="Africs" />
-                    <p class="footer-tagline">
-                        Adding value in business, technology, and design —
-                        based in Banjul, The Gambia.
-                    </p>
-                </div>
-
-                <div class="footer-links">
-                    <div>
-                        <p class="footer-col-title">Company</p>
-                        <div class="footer-col-links">
-                            <a href="#capabilities">Capabilities</a>
-                            <a href="#process">How we work</a>
-                            <a href="#academy">Academy</a>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="footer-col-title">Contact</p>
-                        <div class="footer-col-links">
-                            <a href="mailto:info@africsinc.com">info@africsinc.com</a>
-                            <a href="#contact">Start a project</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <p class="footer-bottom">&copy; {{ year }} Africs.</p>
-        </footer>
+        <SiteFooter />
     </div>
 </template>
