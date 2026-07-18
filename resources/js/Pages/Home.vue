@@ -70,7 +70,6 @@ const mobileMenuOpen = ref(false);
             <div class="site-nav-inner">
                 <Link href="/" class="site-nav-brand">
                     <ApplicationLogo class="site-nav-logo" alt="Africs" />
-                    <span class="site-nav-wordmark">Africs</span>
                 </Link>
 
                 <nav class="site-nav-links" aria-label="Primary">
@@ -128,7 +127,6 @@ const mobileMenuOpen = ref(false);
             <section class="hero">
                 <div class="hero-inner">
                     <div>
-                        <p class="hero-eyebrow">Africs — Adding Value in Business, Technology &amp; Design</p>
                         <h1 class="hero-title">
                             Solutions engineered<br />
                             to add <em>value</em>.
@@ -316,7 +314,7 @@ const mobileMenuOpen = ref(false);
         <footer class="site-footer">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <ApplicationLogo style="height: 1.75rem" alt="Africs" />
+                    <ApplicationLogo style="height: 2.25rem" alt="Africs" />
                     <p class="footer-tagline">
                         Adding value in business, technology, and design —
                         based in Banjul, The Gambia.

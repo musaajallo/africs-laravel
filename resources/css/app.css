@@ -576,16 +576,8 @@ input:focus-visible,
 }
 
 .site-nav-logo {
-    height: 1.75rem;
+    height: 2.75rem;
     width: auto;
-}
-
-.site-nav-wordmark {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-ink);
 }
 
 .site-nav-links {
