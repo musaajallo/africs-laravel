@@ -562,7 +562,7 @@ input:focus-visible,
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 1.5rem;
-    height: 4.25rem;
+    height: 5.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -576,7 +576,7 @@ input:focus-visible,
 }
 
 .site-nav-logo {
-    height: 2.75rem;
+    height: 5rem;
     width: auto;
 }
 

@@ -314,7 +314,7 @@ const mobileMenuOpen = ref(false);
         <footer class="site-footer">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <ApplicationLogo style="height: 2.25rem" alt="Africs" />
+                    <ApplicationLogo style="height: 5rem" alt="Africs" />
                     <p class="footer-tagline">
                         Adding value in business, technology, and design —
                         based in Banjul, The Gambia.
