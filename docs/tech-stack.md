@@ -9,7 +9,29 @@
 | Auth        | Laravel Breeze (Vue/Inertia stack) | Next task after this planning pass |
 | Database    | MySQL                            | Local dev DB: `africs_laravel` |
 | File storage| Local disk                       | `local` filesystem disk for now |
-| Sessions/Cache/Queue | Database driver          | Laravel defaults, fine at current scale |
+| Sessions/Cache/Queue | Database driver          | Laravel defaults, fine locally; switches to Redis in production (see below) |
+| Hosting     | Laravel Forge                    | User is deploying via Forge |
+
+## Production (on Forge)
+
+Session, cache, and queue move to **Redis** on the Forge server (instead of the `database` driver used locally):
+
+- Client: **phpredis** (native PHP extension, not the `predis` Composer package) — faster, no extra dependency
+- Forge setup needed before/at deploy:
+  1. Install the **Redis** service on the server (Forge server dashboard → Redis)
+  2. Enable the **phpredis** PHP extension for this site (Forge → site → PHP settings)
+- Forge env vars to set (via the site's Environment editor, not committed to the repo):
+  ```
+  SESSION_DRIVER=redis
+  CACHE_STORE=redis
+  QUEUE_CONNECTION=redis
+  REDIS_CLIENT=phpredis
+  REDIS_HOST=127.0.0.1
+  REDIS_PASSWORD=null
+  REDIS_PORT=6379
+  ```
+  (`REDIS_HOST`/`PORT` stay at the local defaults since Forge's Redis service runs on the same server.)
+- A queue worker also needs to be configured in Forge (Daemon or Forge's built-in Queue tab) once anything is actually dispatched to a queue — nothing queues jobs yet, but this is the point to set it up so it's not forgotten later.
 
 ## Planned Later (as the site grows)
 
