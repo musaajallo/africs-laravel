@@ -8,18 +8,22 @@ Rough build order:
 
 1. **Foundation** (done)
    - Laravel scaffold, MySQL connection (`africs_laravel`), app key, base migrations
-2. **Auth**
-   - Install Laravel Breeze (Vue + Inertia stack) for login/register/password reset
-   - Define admin vs. public user roles/permissions
-3. **Content plan**
-   - Finalize site structure, page list, and content model — see [content-plan.md](./content-plan.md)
-4. **CMS data model**
-   - Migrations + Eloquent models for pages/services/posts/team/testimonials/etc. per content plan
-   - Admin CRUD screens (Vue/Inertia) for each content type
-5. **Public website**
-   - Public-facing pages consuming the CMS content (home, about, pillar pages, services, blog, contact)
-6. **Polish**
-   - SEO basics (meta tags, sitemap), contact form handling/notifications, image/media handling on local disk
+2. **Auth** (done)
+   - Laravel Breeze (Vue + Inertia stack) installed for login/register/password reset
+   - Basic `role` column on `users` (superadmin/admin/user) — to be replaced by proper RBAC, see step 4
+3. **Content plan** (done)
+   - Site structure, page list, and content model — see [content-plan.md](./content-plan.md)
+4. **Public website** (in progress)
+   - Homepage, Contact page (with working form), Cookie Policy page shipped
+   - Content is currently hardcoded in Vue (divisions, testimonials, client logos) — becomes CMS-managed in step 5
+5. **CMS + Admin panels**
+   - Two separate panels: `/cms` (web content) and `/admin` (users, RBAC, logs) — full plan in [backend-architecture.md](./backend-architecture.md)
+   - RBAC foundation (roles/permissions) must land before the panels can be properly gated
+   - Migrate hardcoded homepage content into DB-backed models + CRUD
+6. **Integrations**
+   - Resend (transactional email), AI provider abstraction (Claude/Gemini), WhatsApp two-way messaging — see [backend-architecture.md](./backend-architecture.md)
+7. **Polish**
+   - SEO basics (meta tags done on Home/Contact; sitemap still open), image/media handling on local disk (moves to S3 later, see tech-stack.md)
 
 ## Phase 2 — Full ERP
 

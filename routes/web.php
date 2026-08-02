@@ -2,17 +2,46 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    $logoExtensions = ['png', 'jpg', 'jpeg', 'svg', 'webp'];
+    $clientLogosDir = base_path('docs/company logos');
+
+    $clientLogos = collect(File::exists($clientLogosDir) ? File::files($clientLogosDir) : [])
+        ->filter(fn ($file) => in_array(strtolower($file->getExtension()), $logoExtensions))
+        ->sortBy(fn ($file) => $file->getFilename())
+        ->values()
+        ->map(fn ($file) => [
+            'name' => Str::of($file->getFilenameWithoutExtension())->replace(['-', '_'], ' ')->title()->toString(),
+            'src' => route('client-logo', ['filename' => $file->getFilename()]),
+        ]);
+
     return Inertia::render('Home', [
         'canLogin' => Route::has('login'),
+        'clientLogos' => $clientLogos,
     ]);
 });
 
+Route::get('/client-logos/{filename}', function (string $filename) {
+    $path = base_path('docs/company logos/'.basename($filename));
+
+    abort_unless(File::exists($path), 404);
+
+    return response()->file($path);
+})->where('filename', '.*')->name('client-logo');
+
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('/portfolio', function () {
+    return Inertia::render('Portfolio', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('portfolio');
 
 Route::get('/cookie-policy', function () {
     return Inertia::render('CookiePolicy', [

@@ -37,3 +37,5 @@ See [content-plan.md](./content-plan.md) for what was extracted from them.
 - [tech-stack.md](./tech-stack.md) — stack decisions and infra plan
 - [content-plan.md](./content-plan.md) — Phase 1 website content/site structure
 - [roadmap.md](./roadmap.md) — phased delivery plan
+- [backend-architecture.md](./backend-architecture.md) — CMS/Admin panels, RBAC, Resend/AI/WhatsApp integrations
+- [deployment.md](./deployment.md) — Forge server setup and deploy steps

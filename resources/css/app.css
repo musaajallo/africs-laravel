@@ -19,12 +19,10 @@
     --color-surface: #ffffff;
 
     --font-sans:
-        'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         Helvetica, Arial, sans-serif;
-    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --font-mono:
-        'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
-        monospace;
+    --font-display: var(--font-sans);
+    --font-mono: var(--font-sans);
 
     --radius: 8px;
     --shadow-card: 0 1px 3px rgba(22, 26, 23, 0.08), 0 1px 2px rgba(22, 26, 23, 0.06);
@@ -558,9 +556,7 @@ textarea.field-input {
     position: sticky;
     top: 0;
     z-index: 60;
-    background: rgba(248, 244, 234, 0.78);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--color-paper);
     border-bottom: 1px solid var(--color-border);
 }
 
@@ -627,6 +623,10 @@ textarea.field-input {
 
 @media (max-width: 780px) {
     .site-nav-links {
+        display: none;
+    }
+
+    .site-nav-login {
         display: none;
     }
 
@@ -843,6 +843,53 @@ textarea.field-input {
     margin-top: 0.5rem;
     font-size: 0.9rem;
     line-height: 1.55;
+    color: var(--color-muted);
+}
+
+/* ---------- Portfolio ---------- */
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 720px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.portfolio-card {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-green);
+}
+
+.portfolio-link {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--color-green);
+}
+
+.portfolio-empty {
+    padding: 3rem 0;
+    text-align: center;
     color: var(--color-muted);
 }
 
@@ -1107,29 +1154,112 @@ textarea.field-input {
 }
 
 .contact-form {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 2.5rem 2.25rem 2.25rem;
     box-shadow: var(--shadow-card);
+}
+
+.contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--color-green);
+}
+
+/* The shared .field / .field-input styling is built for the plain
+   authenticated app shell; restyle it here to match the site's editorial
+   type system instead of looking like a generic dashboard form. */
+.contact-form .field {
+    margin-top: 0;
+}
+
+.contact-form .field-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    transition: color 0.15s ease;
+}
+
+.contact-form .field:focus-within .field-label {
+    color: var(--color-green);
+}
+
+.contact-form .field-input {
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 0.6rem 0.1rem;
+    background: transparent;
+}
+
+.contact-form .field-input:focus {
+    border-bottom-color: var(--color-green);
+    box-shadow: 0 1px 0 0 var(--color-green);
+}
+
+.contact-form textarea.field-input {
+    margin-top: 0.35rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.85rem;
+    background: var(--color-paper);
+}
+
+.contact-form textarea.field-input:focus {
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 3px rgba(13, 77, 44, 0.1);
+}
+
+.contact-form .form-success {
+    margin-bottom: 0;
+}
+
+.contact-form .form-actions {
+    margin-top: 0;
 }
 
 .field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    column-gap: 1.5rem;
 }
 
 @media (max-width: 560px) {
     .field-row {
         grid-template-columns: 1fr;
+        row-gap: 1.5rem;
     }
 }
 
 .contact-aside {
-    background: var(--color-bone);
+    background: var(--color-ink);
+    color: var(--color-cream-text);
+    border: 1px dashed var(--color-border-dark);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 2.25rem 2rem;
+}
+
+.contact-aside-item {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-dark);
+}
+
+.contact-aside-item:first-child {
+    padding-top: 0;
+    border-top: none;
 }
 
 .contact-aside-item + .contact-aside-item {
@@ -1141,23 +1271,50 @@ textarea.field-input {
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-muted);
+    color: var(--color-amber);
 }
 
 .contact-aside-value {
     margin-top: 0.4rem;
-    font-size: 0.95rem;
-    color: var(--color-ink);
+    font-size: 1rem;
+    color: var(--color-cream-text);
+}
+
+.contact-aside-value a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.contact-aside-value a:hover {
+    color: var(--color-amber);
+    border-bottom-color: var(--color-amber);
+}
+
+.contact-aside-coords {
+    margin-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted-on-dark);
 }
 
 .form-success {
-    margin-bottom: 1.5rem;
     padding: 0.85rem 1rem;
     border-radius: var(--radius);
     background: rgba(13, 77, 44, 0.08);
     border: 1px solid var(--color-green);
     color: var(--color-green);
     font-size: 0.9rem;
+}
+
+.contact-process .process-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+    .contact-process .process-list {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ---------- Legal / prose pages ---------- */
@@ -1291,7 +1448,7 @@ textarea.field-input {
 
 .logos-strip {
     padding: 3.5rem 0;
-    background: var(--color-bone);
+    background: var(--color-surface);
     text-align: center;
 }
 
@@ -1303,9 +1460,21 @@ textarea.field-input {
     color: var(--color-muted);
 }
 
-.logos-viewport {
+.logos-wrapper {
     margin-top: 2rem;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logos-viewport {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-mask-image: linear-gradient(
         to right,
         transparent,
@@ -1322,26 +1491,23 @@ textarea.field-input {
     );
 }
 
+.logos-viewport::-webkit-scrollbar {
+    display: none;
+}
+
 .logos-track {
     display: flex;
     align-items: center;
     gap: 3rem;
     width: max-content;
-    animation: marquee 28s linear infinite;
-}
-
-.logos-viewport:hover .logos-track {
-    animation-play-state: paused;
 }
 
 .logo-tile {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 8rem;
     height: 3.5rem;
-    padding: 0 1.5rem;
-    border: 1px dashed var(--color-border);
-    border-radius: var(--radius);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.05em;
@@ -1350,29 +1516,28 @@ textarea.field-input {
 }
 
 .logo-tile img {
-    height: 2rem;
-    width: auto;
-    filter: grayscale(1);
-    opacity: 0.7;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-@keyframes marquee {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-50%);
-    }
+.logos-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .logos-track {
-        animation: none;
-    }
-
-    .logos-viewport {
-        overflow-x: auto;
-    }
+.logos-nav:hover {
+    border-color: var(--color-green);
+    color: var(--color-green);
 }
 
 /* ---------- Testimonials ---------- */

@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=fraunces:400,600,900i|dm-sans:400,500,700|jetbrains-mono:400,500&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=jost:400,500,600,600i,700,900&display=swap" rel="stylesheet" />
 
         <script type="application/ld+json">
             @verbatim

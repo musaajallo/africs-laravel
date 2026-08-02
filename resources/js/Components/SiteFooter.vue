@@ -51,6 +51,7 @@ const year = new Date().getFullYear();
                     <a href="/#capabilities">Capabilities</a>
                     <a href="/#process">How we work</a>
                     <a href="/#academy">Academy</a>
+                    <Link :href="route('portfolio')">Portfolio</Link>
                     <Link :href="route('contact')">Contact</Link>
                 </div>
             </div>

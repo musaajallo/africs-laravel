@@ -24,16 +24,17 @@ const mobileMenuOpen = ref(false);
                 <a href="/#capabilities" class="site-nav-link">Capabilities</a>
                 <a href="/#process" class="site-nav-link">How we work</a>
                 <a href="/#academy" class="site-nav-link">Academy</a>
+                <Link :href="route('portfolio')" class="site-nav-link">Portfolio</Link>
                 <Link :href="route('contact')" class="site-nav-link">Contact</Link>
             </nav>
 
             <Link
                 v-if="canLogin"
                 :href="route('login')"
-                class="btn btn-secondary"
+                class="btn btn-secondary site-nav-login"
                 style="margin-left: auto"
             >
-                Client login
+                Login
             </Link>
 
             <button
@@ -67,7 +68,16 @@ const mobileMenuOpen = ref(false);
             <a href="/#capabilities" class="site-nav-link" @click="mobileMenuOpen = false">Capabilities</a>
             <a href="/#process" class="site-nav-link" @click="mobileMenuOpen = false">How we work</a>
             <a href="/#academy" class="site-nav-link" @click="mobileMenuOpen = false">Academy</a>
+            <Link :href="route('portfolio')" class="site-nav-link" @click="mobileMenuOpen = false">Portfolio</Link>
             <Link :href="route('contact')" class="site-nav-link" @click="mobileMenuOpen = false">Contact</Link>
+            <Link
+                v-if="canLogin"
+                :href="route('login')"
+                class="site-nav-link"
+                @click="mobileMenuOpen = false"
+            >
+                Login
+            </Link>
         </nav>
     </header>
 </template>

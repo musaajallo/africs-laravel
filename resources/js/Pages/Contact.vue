@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
@@ -6,6 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SiteHeader from '@/Components/SiteHeader.vue';
 import SiteFooter from '@/Components/SiteFooter.vue';
+import { useScrollReveal } from '@/Composables/useScrollReveal';
 
 defineProps({
     canLogin: {
@@ -14,6 +16,9 @@ defineProps({
 });
 
 const page = usePage();
+const pageRoot = ref(null);
+
+useScrollReveal(pageRoot);
 
 const form = useForm({
     name: '',
@@ -45,7 +50,7 @@ const submit = () => {
 
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <div>
+    <div ref="pageRoot">
         <SiteHeader :can-login="canLogin" />
 
         <main id="main">
@@ -135,6 +140,7 @@ const submit = () => {
                             <div class="form-actions" style="justify-content: flex-start">
                                 <PrimaryButton :disabled="form.processing">
                                     Send message
+                                    <span aria-hidden="true">&rarr;</span>
                                 </PrimaryButton>
                             </div>
                         </form>
@@ -149,8 +155,54 @@ const submit = () => {
                             <div class="contact-aside-item">
                                 <p class="contact-aside-label">Based in</p>
                                 <p class="contact-aside-value">Banjul, The Gambia</p>
+                                <p class="contact-aside-coords">13.45&deg; N, 16.58&deg; W</p>
                             </div>
                         </aside>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What happens after you submit -->
+            <section class="section section-dark contact-process reveal">
+                <div class="container">
+                    <div class="section-head">
+                        <p class="section-eyebrow">After you hit send</p>
+                        <h2 class="section-title" style="color: var(--color-cream-text)">
+                            What happens next
+                        </h2>
+                        <p class="section-lede">
+                            No inbox black hole. Here's exactly what to
+                            expect once you send that message.
+                        </p>
+                    </div>
+
+                    <div class="process-list">
+                        <div class="process-step">
+                            <p class="process-number">01</p>
+                            <h3 class="process-title">A person reads it</h3>
+                            <p class="process-desc">
+                                Every message reaches a member of the team
+                                directly — not a shared inbox on autopilot.
+                            </p>
+                        </div>
+
+                        <div class="process-step">
+                            <p class="process-number">02</p>
+                            <h3 class="process-title">We ask before we assume</h3>
+                            <p class="process-desc">
+                                If anything's unclear, we'll follow up with
+                                questions before we guess at a solution.
+                            </p>
+                        </div>
+
+                        <div class="process-step">
+                            <p class="process-number">03</p>
+                            <h3 class="process-title">We talk it through</h3>
+                            <p class="process-desc">
+                                Once we understand the challenge, we set up a
+                                short call to scope it properly.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
