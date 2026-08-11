@@ -48,7 +48,7 @@ const year = new Date().getFullYear();
                 <p class="footer-col-title">Quick Links</p>
                 <div class="footer-col-links">
                     <Link href="/">Home</Link>
-                    <a href="/#capabilities">Capabilities</a>
+                    <a href="/#services">Services</a>
                     <a href="/#process">How we work</a>
                     <a href="/#academy">Academy</a>
                     <Link :href="route('portfolio')">Portfolio</Link>
@@ -59,10 +59,10 @@ const year = new Date().getFullYear();
             <div class="footer-col">
                 <p class="footer-col-title">Our Divisions</p>
                 <div class="footer-col-links">
-                    <a href="/#capabilities">Digital Transformation</a>
-                    <a href="/#capabilities">Business Strategy</a>
-                    <a href="/#capabilities">Research &amp; Development</a>
-                    <a href="/#capabilities">Operational Excellence</a>
+                    <a href="/#services">Digital Transformation</a>
+                    <a href="/#services">Business Strategy</a>
+                    <a href="/#services">Research &amp; Development</a>
+                    <a href="/#services">Operational Excellence</a>
                 </div>
             </div>
 

@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
-import ConstellationDiagram from '@/Components/ConstellationDiagram.vue';
 import SiteHeader from '@/Components/SiteHeader.vue';
 import SiteFooter from '@/Components/SiteFooter.vue';
 import { useScrollReveal } from '@/Composables/useScrollReveal';
@@ -119,50 +118,35 @@ const testimonials = [
         <main id="main">
             <!-- Hero -->
             <section class="hero">
-                <div class="hero-inner">
-                    <div>
-                        <h1 class="hero-title">
-                            Solutions engineered<br />
-                            to add <em>value</em>.
-                        </h1>
-                        <p class="hero-sub">
-                            We combine business strategy, technology, and
-                            design to add value to every engagement — for
-                            organizations and individuals across the public
-                            and private sectors.
-                        </p>
-                        <div class="hero-actions">
-                            <Link :href="route('contact')" class="btn btn-primary btn-lg">
-                                Start a project
-                            </Link>
-                            <a href="#process" class="btn btn-on-dark btn-lg">
-                                See how we work
-                            </a>
-                        </div>
-                    </div>
-
-                    <ConstellationDiagram />
+                <div class="hero-pattern" aria-hidden="true">
+                    <div class="hero-pattern-surface"></div>
                 </div>
-            </section>
-
-            <!-- Mission -->
-            <section class="section reveal">
-                <div class="container">
-                    <blockquote class="quote">
-                        “Adding value to every engagement” isn't a slogan for
-                        us — it's the test every project has to pass. We
-                        specialise in solutions that bridge
-                        <span>business objectives</span>, technological
-                        capability, and design thinking into one outcome:
-                        <span>real, measurable value.</span>
-                    </blockquote>
+                <div class="hero-glow" aria-hidden="true"></div>
+                <div class="hero-inner">
+                    <h1 class="hero-title">
+                        Solutions engineered<br />
+                        to add <em>value</em>.
+                    </h1>
+                    <p class="hero-sub">
+                        We combine business strategy, technology, and
+                        design to add value to every engagement — for
+                        organizations and individuals across the public
+                        and private sectors.
+                    </p>
+                    <div class="hero-actions">
+                        <Link :href="route('contact')" class="btn btn-primary btn-lg">
+                            Start a project
+                        </Link>
+                        <a href="#process" class="btn btn-on-dark btn-lg">
+                            See how we work
+                        </a>
+                    </div>
                 </div>
             </section>
 
             <!-- Client logos -->
             <section class="logos-strip reveal">
                 <div class="container">
-                    <p class="logos-heading">Organizations we've worked with</p>
                     <div class="logos-wrapper">
                         <button
                             type="button"
@@ -209,11 +193,11 @@ const testimonials = [
                 </div>
             </section>
 
-            <!-- Capabilities / Divisions -->
-            <section id="capabilities" class="section reveal">
+            <!-- Services / Divisions -->
+            <section id="services" class="section reveal">
                 <div class="container">
                     <div class="section-head">
-                        <p class="section-eyebrow">Capabilities</p>
+                        <p class="section-eyebrow">Services</p>
                         <h2 class="section-title">Four disciplines, one team.</h2>
                         <p class="section-lede">
                             Every engagement draws on whichever mix of these
@@ -363,6 +347,20 @@ const testimonials = [
                         </div>
                         <span class="badge">Coming soon</span>
                     </div>
+                </div>
+            </section>
+
+            <!-- Mission -->
+            <section class="section reveal">
+                <div class="container">
+                    <blockquote class="quote">
+                        “Adding value to every engagement” isn't a slogan for
+                        us — it's the test every project has to pass. We
+                        specialise in solutions that bridge
+                        <span>business objectives</span>, technological
+                        capability, and design thinking into one outcome:
+                        <span>real, measurable value.</span>
+                    </blockquote>
                 </div>
             </section>
 
