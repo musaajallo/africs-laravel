@@ -13,6 +13,22 @@ const mobileMenuOpen = ref(false);
 const mobileServicesOpen = ref(false);
 const isDark = ref(false);
 const servicesOpen = ref(false);
+const servicesDropdown = ref(null);
+let closeServicesTimeout = null;
+
+function openServices() {
+    clearTimeout(closeServicesTimeout);
+    servicesOpen.value = true;
+}
+
+function scheduleCloseServices() {
+    clearTimeout(closeServicesTimeout);
+    // Small delay so moving the pointer from the trigger down into the
+    // menu (crossing the gap between them) doesn't close it prematurely.
+    closeServicesTimeout = setTimeout(() => {
+        servicesOpen.value = false;
+    }, 150);
+}
 
 const closeServicesOnEscape = (e) => {
     if (servicesOpen.value && e.key === 'Escape') {
@@ -20,8 +36,21 @@ const closeServicesOnEscape = (e) => {
     }
 };
 
-onMounted(() => document.addEventListener('keydown', closeServicesOnEscape));
-onUnmounted(() => document.removeEventListener('keydown', closeServicesOnEscape));
+const closeServicesOnClickOutside = (e) => {
+    if (servicesOpen.value && servicesDropdown.value && !servicesDropdown.value.contains(e.target)) {
+        servicesOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('keydown', closeServicesOnEscape);
+    document.addEventListener('click', closeServicesOnClickOutside);
+});
+onUnmounted(() => {
+    document.removeEventListener('keydown', closeServicesOnEscape);
+    document.removeEventListener('click', closeServicesOnClickOutside);
+    clearTimeout(closeServicesTimeout);
+});
 </script>
 
 <template>
@@ -34,13 +63,18 @@ onUnmounted(() => document.removeEventListener('keydown', closeServicesOnEscape)
             <nav class="site-nav-links" aria-label="Primary">
                 <Link href="/" class="site-nav-link">Home</Link>
 
-                <div class="site-nav-dropdown">
+                <div
+                    ref="servicesDropdown"
+                    class="site-nav-dropdown"
+                    @mouseenter="openServices"
+                    @mouseleave="scheduleCloseServices"
+                >
                     <button
                         type="button"
                         class="site-nav-link site-nav-dropdown-trigger"
                         aria-haspopup="true"
                         :aria-expanded="servicesOpen"
-                        @click="servicesOpen = !servicesOpen"
+                        @click="openServices"
                     >
                         Services
                         <svg
@@ -58,8 +92,6 @@ onUnmounted(() => document.removeEventListener('keydown', closeServicesOnEscape)
                             <path d="M5 7.5L10 12.5L15 7.5" />
                         </svg>
                     </button>
-
-                    <div v-show="servicesOpen" class="site-nav-dropdown-overlay" @click="servicesOpen = false"></div>
 
                     <div v-show="servicesOpen" class="site-nav-dropdown-menu">
                         <Link :href="route('services.business')" class="site-nav-dropdown-item" @click="servicesOpen = false">Business</Link>

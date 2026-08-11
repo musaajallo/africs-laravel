@@ -629,12 +629,6 @@ textarea.field-input {
     transform: rotate(180deg);
 }
 
-.site-nav-dropdown-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 40;
-}
-
 .site-nav-dropdown-menu {
     position: absolute;
     top: calc(100% + 0.85rem);
