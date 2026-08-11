@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import SiteHeader from '@/Components/SiteHeader.vue';
 import SiteFooter from '@/Components/SiteFooter.vue';
@@ -16,59 +16,8 @@ defineProps({
 });
 
 const page = ref(null);
-const logosViewport = ref(null);
-let marqueeFrame = null;
-let resumeTimeout = null;
-let marqueePaused = false;
 
 useScrollReveal(page);
-
-const prefersReducedMotion =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function stepMarquee() {
-    const el = logosViewport.value;
-    if (el && !marqueePaused) {
-        el.scrollLeft += 0.6;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) {
-            el.scrollLeft -= half;
-        }
-    }
-    marqueeFrame = requestAnimationFrame(stepMarquee);
-}
-
-function pauseMarquee() {
-    marqueePaused = true;
-    // Safety net: if a mouseleave/touchend never fires (e.g. a stuck
-    // synthetic hover state on touch devices), don't stay paused forever.
-    resumeMarquee(6000);
-}
-
-function resumeMarquee(delay = 0) {
-    clearTimeout(resumeTimeout);
-    resumeTimeout = setTimeout(() => {
-        marqueePaused = false;
-    }, delay);
-}
-
-function scrollLogos(direction) {
-    pauseMarquee();
-    logosViewport.value?.scrollBy({ left: direction * 280, behavior: 'smooth' });
-    resumeMarquee(2500);
-}
-
-onMounted(() => {
-    if (!prefersReducedMotion) {
-        marqueeFrame = requestAnimationFrame(stepMarquee);
-    }
-});
-
-onUnmounted(() => {
-    if (marqueeFrame) cancelAnimationFrame(marqueeFrame);
-    clearTimeout(resumeTimeout);
-});
 
 // Placeholder until real client logos are available — add an image and set
 // `src` to a path under /public/images/clients/, e.g. src: '/images/clients/acme.svg'.
@@ -146,49 +95,16 @@ const testimonials = [
 
             <!-- Client logos -->
             <section class="logos-strip reveal">
-                <div class="container">
-                    <div class="logos-wrapper">
-                        <button
-                            type="button"
-                            class="logos-nav"
-                            aria-label="Scroll logos left"
-                            @click="scrollLogos(-1)"
-                        >
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12.5 15L7.5 10L12.5 5" />
-                            </svg>
-                        </button>
-
+                <div class="logos-viewport">
+                    <div class="logos-track">
                         <div
-                            ref="logosViewport"
-                            class="logos-viewport"
-                            @mouseenter="pauseMarquee"
-                            @mouseleave="resumeMarquee(0)"
-                            @touchstart="pauseMarquee"
-                            @touchend="resumeMarquee(1500)"
+                            v-for="(logo, index) in [...clientLogos, ...clientLogos]"
+                            :key="index"
+                            class="logo-tile"
                         >
-                            <div class="logos-track">
-                                <div
-                                    v-for="(logo, index) in [...clientLogos, ...clientLogos]"
-                                    :key="index"
-                                    class="logo-tile"
-                                >
-                                    <img v-if="logo.src" :src="logo.src" :alt="logo.name" />
-                                    <span v-else>{{ logo.name }}</span>
-                                </div>
-                            </div>
+                            <img v-if="logo.src" :src="logo.src" :alt="logo.name" />
+                            <span v-else>{{ logo.name }}</span>
                         </div>
-
-                        <button
-                            type="button"
-                            class="logos-nav"
-                            aria-label="Scroll logos right"
-                            @click="scrollLogos(1)"
-                        >
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M7.5 5L12.5 10L7.5 15" />
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </section>

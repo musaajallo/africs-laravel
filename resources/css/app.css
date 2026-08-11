@@ -1549,48 +1549,51 @@ textarea.field-input {
 .logos-strip {
     padding: 3.5rem 0;
     background: var(--color-surface);
-    text-align: center;
-}
-
-.logos-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
 }
 
 .logos-viewport {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    overflow: hidden;
     -webkit-mask-image: linear-gradient(
         to right,
         transparent,
-        black 8%,
-        black 92%,
+        black 6%,
+        black 94%,
         transparent
     );
     mask-image: linear-gradient(
         to right,
         transparent,
-        black 8%,
-        black 92%,
+        black 6%,
+        black 94%,
         transparent
     );
-}
-
-.logos-viewport::-webkit-scrollbar {
-    display: none;
 }
 
 .logos-track {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 4rem;
     width: max-content;
+    animation: logos-scroll 32s linear infinite;
+}
+
+.logos-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes logos-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logos-track {
+        animation: none;
+    }
 }
 
 .logo-tile {
@@ -1604,31 +1607,13 @@ textarea.field-input {
     letter-spacing: 0.05em;
     color: var(--color-muted);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .logo-tile img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-.logos-nav {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-ink);
-    cursor: pointer;
-}
-
-.logos-nav:hover {
-    border-color: var(--color-green);
-    color: var(--color-green);
 }
 
 /* ---------- Testimonials ---------- */
