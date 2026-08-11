@@ -43,6 +43,24 @@ Route::get('/portfolio', function () {
     ]);
 })->name('portfolio');
 
+Route::get('/services/business', function () {
+    return Inertia::render('Services/Business', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('services.business');
+
+Route::get('/services/technology', function () {
+    return Inertia::render('Services/Technology', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('services.technology');
+
+Route::get('/services/design', function () {
+    return Inertia::render('Services/Design', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('services.design');
+
 Route::get('/cookie-policy', function () {
     return Inertia::render('CookiePolicy', [
         'canLogin' => Route::has('login'),

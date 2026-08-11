@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
@@ -10,7 +10,18 @@ defineProps({
 });
 
 const mobileMenuOpen = ref(false);
+const mobileServicesOpen = ref(false);
 const isDark = ref(false);
+const servicesOpen = ref(false);
+
+const closeServicesOnEscape = (e) => {
+    if (servicesOpen.value && e.key === 'Escape') {
+        servicesOpen.value = false;
+    }
+};
+
+onMounted(() => document.addEventListener('keydown', closeServicesOnEscape));
+onUnmounted(() => document.removeEventListener('keydown', closeServicesOnEscape));
 </script>
 
 <template>
@@ -22,7 +33,41 @@ const isDark = ref(false);
 
             <nav class="site-nav-links" aria-label="Primary">
                 <Link href="/" class="site-nav-link">Home</Link>
-                <a href="/#services" class="site-nav-link">Services</a>
+
+                <div class="site-nav-dropdown">
+                    <button
+                        type="button"
+                        class="site-nav-link site-nav-dropdown-trigger"
+                        aria-haspopup="true"
+                        :aria-expanded="servicesOpen"
+                        @click="servicesOpen = !servicesOpen"
+                    >
+                        Services
+                        <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="site-nav-dropdown-caret"
+                            :class="{ 'is-open': servicesOpen }"
+                        >
+                            <path d="M5 7.5L10 12.5L15 7.5" />
+                        </svg>
+                    </button>
+
+                    <div v-show="servicesOpen" class="site-nav-dropdown-overlay" @click="servicesOpen = false"></div>
+
+                    <div v-show="servicesOpen" class="site-nav-dropdown-menu">
+                        <Link :href="route('services.business')" class="site-nav-dropdown-item" @click="servicesOpen = false">Business</Link>
+                        <Link :href="route('services.technology')" class="site-nav-dropdown-item" @click="servicesOpen = false">Technology</Link>
+                        <Link :href="route('services.design')" class="site-nav-dropdown-item" @click="servicesOpen = false">Design</Link>
+                    </div>
+                </div>
+
                 <a href="/#process" class="site-nav-link">How we work</a>
                 <a href="/#academy" class="site-nav-link">Academy</a>
                 <Link :href="route('portfolio')" class="site-nav-link">Portfolio</Link>
@@ -84,7 +129,38 @@ const isDark = ref(false);
 
         <nav v-show="mobileMenuOpen" class="site-mobile-menu" aria-label="Mobile">
             <Link href="/" class="site-nav-link" @click="mobileMenuOpen = false">Home</Link>
-            <a href="/#services" class="site-nav-link" @click="mobileMenuOpen = false">Services</a>
+
+            <div class="site-mobile-group">
+                <button
+                    type="button"
+                    class="site-nav-link site-mobile-group-trigger"
+                    :aria-expanded="mobileServicesOpen"
+                    @click="mobileServicesOpen = !mobileServicesOpen"
+                >
+                    Services
+                    <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="site-nav-dropdown-caret"
+                        :class="{ 'is-open': mobileServicesOpen }"
+                    >
+                        <path d="M5 7.5L10 12.5L15 7.5" />
+                    </svg>
+                </button>
+
+                <div v-show="mobileServicesOpen" class="site-mobile-submenu">
+                    <Link :href="route('services.business')" class="site-nav-link" @click="mobileMenuOpen = false">Business</Link>
+                    <Link :href="route('services.technology')" class="site-nav-link" @click="mobileMenuOpen = false">Technology</Link>
+                    <Link :href="route('services.design')" class="site-nav-link" @click="mobileMenuOpen = false">Design</Link>
+                </div>
+            </div>
+
             <a href="/#process" class="site-nav-link" @click="mobileMenuOpen = false">How we work</a>
             <a href="/#academy" class="site-nav-link" @click="mobileMenuOpen = false">Academy</a>
             <Link :href="route('portfolio')" class="site-nav-link" @click="mobileMenuOpen = false">Portfolio</Link>
