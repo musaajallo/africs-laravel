@@ -29,6 +29,12 @@ final class Rbac
     /** Gate permission for the Console panel (/console). */
     public const PERM_CONSOLE_ACCESS = 'console.access';
 
+    /** View the user & access management screens. */
+    public const PERM_USERS_VIEW = 'users.view';
+
+    /** Create, edit, deactivate users and assign their roles. */
+    public const PERM_USERS_MANAGE = 'users.manage';
+
     /**
      * Every permission the application knows about.
      *
@@ -39,6 +45,8 @@ final class Rbac
         return [
             self::PERM_CMS_ACCESS,
             self::PERM_CONSOLE_ACCESS,
+            self::PERM_USERS_VIEW,
+            self::PERM_USERS_MANAGE,
         ];
     }
 

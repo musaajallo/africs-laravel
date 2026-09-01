@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import PanelFlash from '@/Components/Panel/PanelFlash.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
@@ -18,8 +19,8 @@ const props = defineProps({
 const { user } = useAuth();
 const sidebarOpen = ref(false);
 
-function isActive(routeName) {
-    return route().current(routeName);
+function isActive(item) {
+    return route().current(item.activeMatch || item.routeName);
 }
 </script>
 
@@ -47,7 +48,7 @@ function isActive(routeName) {
                     :key="item.routeName"
                     :href="route(item.routeName)"
                     class="panel-nav-link"
-                    :class="{ 'is-active': isActive(item.routeName) }"
+                    :class="{ 'is-active': isActive(item) }"
                     @click="sidebarOpen = false"
                 >
                     {{ item.label }}
@@ -108,5 +109,7 @@ function isActive(routeName) {
                 <slot />
             </main>
         </div>
+
+        <PanelFlash />
     </div>
 </template>
