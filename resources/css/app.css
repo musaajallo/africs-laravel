@@ -1996,3 +1996,249 @@ textarea.field-input {
     font-size: 0.8rem;
     color: var(--color-muted);
 }
+
+/* ========================================================================
+   Panel shell — shared chrome for the CMS (/cms) and Console (/console).
+   Sidebar + topbar layout, brand-token styled, responsive to an off-canvas
+   drawer below 900px. Accent per panel via [data-panel].
+   ======================================================================== */
+
+.panel-shell {
+    --panel-accent: var(--color-green);
+    --panel-sidebar-width: 15rem;
+    min-height: 100vh;
+    background: #f7f6f1;
+    color: var(--color-ink);
+}
+
+.panel-shell[data-panel='cms'] {
+    --panel-accent: var(--color-amber-dark);
+}
+
+.panel-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--panel-sidebar-width);
+    background: var(--color-green-dark);
+    color: var(--color-cream-text);
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+}
+
+.panel-shell[data-panel='cms'] .panel-sidebar {
+    background: var(--color-ink);
+}
+
+.panel-sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border-dark);
+}
+
+.panel-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.panel-brand-logo {
+    height: 1.75rem;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
+
+.panel-brand-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.panel-sidebar-close {
+    display: none;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.panel-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0.75rem;
+    gap: 0.15rem;
+    overflow-y: auto;
+}
+
+.panel-nav-link {
+    display: block;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-muted-on-dark);
+    text-decoration: none;
+}
+
+.panel-nav-link:hover {
+    color: var(--color-cream-text);
+    background: rgba(243, 239, 227, 0.08);
+}
+
+.panel-nav-link.is-active {
+    color: var(--color-cream-text);
+    background: rgba(243, 239, 227, 0.14);
+}
+
+.panel-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 15, 12, 0.45);
+    z-index: 35;
+}
+
+.panel-main {
+    margin-left: var(--panel-sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.panel-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 3.75rem;
+    padding: 0 1.5rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-topbar-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-ink);
+}
+
+.panel-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0.35rem;
+    color: var(--color-muted);
+    cursor: pointer;
+}
+
+.panel-user-button {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    cursor: pointer;
+}
+
+.panel-user-button:hover {
+    color: var(--color-ink);
+}
+
+.panel-user-meta {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-user-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-ink);
+}
+
+.panel-user-email {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+.panel-content {
+    flex: 1;
+    padding: 1.75rem 1.5rem 3rem;
+}
+
+.panel-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.panel-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+}
+
+.panel-page-lead {
+    margin-top: 0.5rem;
+    color: var(--color-muted);
+    max-width: 42rem;
+}
+
+.panel-card-grid {
+    margin-top: 1.75rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.panel-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    box-shadow: var(--shadow-card);
+}
+
+.panel-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 0.4rem;
+}
+
+.panel-card p {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+}
+
+@media (max-width: 900px) {
+    .panel-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+    }
+
+    .panel-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    .panel-sidebar-close {
+        display: inline-flex;
+    }
+
+    .panel-main {
+        margin-left: 0;
+    }
+
+    .panel-menu-toggle {
+        display: inline-flex;
+    }
+}
