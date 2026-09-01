@@ -15,13 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesAndPermissionsSeeder::class);
 
-        User::firstOrCreate(
-            ['email' => 'admin@africs.test'],
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@africsinc.com'],
             [
                 'name' => 'Africs Admin',
                 'username' => 'admin',
                 'password' => 'password',
             ],
-        )->syncRoles([Rbac::ROLE_SUPER_ADMIN]);
+        );
+
+        $admin->forceFill(['email_verified_at' => $admin->email_verified_at ?? now()])->save();
+        $admin->syncRoles([Rbac::ROLE_SUPER_ADMIN]);
     }
 }
