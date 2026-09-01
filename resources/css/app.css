@@ -2271,160 +2271,139 @@ textarea.field-input {
 
 /* ========================================================================
    Panel shell — shared chrome for the CMS (/cms) and Console (/console).
-   Sidebar + topbar layout, brand-token styled, responsive to an off-canvas
-   drawer below 900px. Accent per panel via [data-panel].
+   Fixed dark header across the top, dark sidebar beneath it, light canvas.
+   Responsive to an off-canvas drawer below 900px. Accent per panel.
    ======================================================================== */
 
 .panel-shell {
-    --panel-accent: var(--color-green);
-    --panel-sidebar-width: 15rem;
+    --panel-accent: var(--color-amber);
+    --panel-header-h: 3.5rem;
+    --panel-sidebar-width: 15.5rem;
+    --panel-dark: #0f130e;
+    --panel-dark-raised: #171b15;
+    --panel-hairline: rgba(243, 239, 227, 0.08);
     min-height: 100vh;
-    background: #f7f6f1;
+    background: #f4f3ec;
     color: var(--color-ink);
 }
 
 .panel-shell[data-panel='cms'] {
-    --panel-accent: var(--color-amber-dark);
+    --panel-accent: #7bb26f;
 }
 
-.panel-sidebar {
+/* ---------- header ---------- */
+
+.panel-header {
     position: fixed;
-    inset: 0 auto 0 0;
-    width: var(--panel-sidebar-width);
-    background: var(--color-green-dark);
-    color: var(--color-cream-text);
-    display: flex;
-    flex-direction: column;
-    z-index: 40;
-}
-
-.panel-shell[data-panel='cms'] .panel-sidebar {
-    background: var(--color-ink);
-}
-
-.panel-sidebar-head {
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: var(--panel-header-h);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1rem 0 1.25rem;
+    background: var(--panel-dark);
+    border-bottom: 1px solid var(--panel-hairline);
+}
+
+.panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.panel-header-right {
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
-    padding: 1.1rem 1.25rem;
-    border-bottom: 1px solid var(--color-border-dark);
+    flex-shrink: 0;
 }
 
 .panel-brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.8rem;
     text-decoration: none;
-    color: inherit;
+    flex-shrink: 0;
 }
 
 .panel-brand-logo {
-    height: 1.75rem;
+    height: 1.55rem;
     width: auto;
     filter: brightness(0) invert(1);
 }
 
+.panel-brand-divider {
+    width: 1px;
+    height: 1.15rem;
+    background: rgba(243, 239, 227, 0.2);
+    flex-shrink: 0;
+}
+
+.panel-brand-divider.is-faint {
+    background: rgba(243, 239, 227, 0.12);
+}
+
 .panel-brand-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-}
-
-.panel-sidebar-close {
-    display: none;
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.panel-nav {
-    display: flex;
-    flex-direction: column;
-    padding: 0.75rem 0.75rem;
-    gap: 0.15rem;
-    overflow-y: auto;
-}
-
-.panel-nav-link {
-    display: block;
-    padding: 0.55rem 0.75rem;
-    border-radius: var(--radius);
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     font-weight: 500;
-    color: var(--color-muted-on-dark);
-    text-decoration: none;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: rgba(243, 239, 227, 0.66);
+    white-space: nowrap;
 }
 
-.panel-nav-link:hover {
-    color: var(--color-cream-text);
-    background: rgba(243, 239, 227, 0.08);
-}
-
-.panel-nav-link.is-active {
-    color: var(--color-cream-text);
-    background: rgba(243, 239, 227, 0.14);
-}
-
-.panel-scrim {
-    position: fixed;
-    inset: 0;
-    background: rgba(9, 15, 12, 0.45);
-    z-index: 35;
-}
-
-.panel-main {
-    margin-left: var(--panel-sidebar-width);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.panel-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    height: 3.75rem;
-    padding: 0 1.5rem;
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-}
-
-.panel-topbar-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-ink);
+.panel-header-context {
+    font-size: 0.85rem;
+    color: rgba(243, 239, 227, 0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .panel-menu-toggle {
     display: none;
     background: none;
     border: none;
-    padding: 0.35rem;
-    color: var(--color-muted);
+    padding: 0.3rem;
+    color: rgba(243, 239, 227, 0.7);
     cursor: pointer;
 }
 
 .panel-user-button {
-    margin-left: auto;
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.55rem;
     background: none;
     border: none;
-    font-size: 0.875rem;
-    color: var(--color-muted);
     cursor: pointer;
+    padding: 0.3rem 0.45rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    color: rgba(243, 239, 227, 0.78);
 }
 
 .panel-user-button:hover {
-    color: var(--color-ink);
+    color: var(--color-cream-text);
+    background: rgba(243, 239, 227, 0.06);
+}
+
+.panel-user-avatar {
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-green);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 }
 
 .panel-user-meta {
@@ -2443,9 +2422,83 @@ textarea.field-input {
     color: var(--color-muted);
 }
 
+/* ---------- sidebar ---------- */
+
+.panel-sidebar {
+    position: fixed;
+    top: var(--panel-header-h);
+    bottom: 0;
+    left: 0;
+    width: var(--panel-sidebar-width);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--panel-dark-raised);
+    border-right: 1px solid var(--panel-hairline);
+}
+
+.panel-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0.9rem 0.7rem;
+    gap: 0.1rem;
+    overflow-y: auto;
+}
+
+.panel-nav-link {
+    display: block;
+    padding: 0.58rem 0.8rem;
+    border-radius: var(--radius);
+    border-left: 2px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(243, 239, 227, 0.58);
+    text-decoration: none;
+}
+
+.panel-nav-link:hover {
+    color: var(--color-cream-text);
+    background: rgba(243, 239, 227, 0.05);
+}
+
+.panel-nav-link.is-active {
+    color: var(--color-cream-text);
+    background: rgba(243, 239, 227, 0.08);
+    border-left-color: var(--panel-accent);
+}
+
+.panel-nav-link.is-muted {
+    color: rgba(243, 239, 227, 0.38);
+    font-size: 0.8rem;
+}
+
+.panel-nav-link.is-muted:hover {
+    color: rgba(243, 239, 227, 0.7);
+}
+
+.panel-sidebar-foot {
+    padding: 0.7rem;
+    border-top: 1px solid var(--panel-hairline);
+}
+
+.panel-scrim {
+    position: fixed;
+    inset: var(--panel-header-h) 0 0 0;
+    background: rgba(9, 15, 12, 0.5);
+    z-index: 35;
+}
+
+/* ---------- main / canvas ---------- */
+
+.panel-main {
+    margin-left: var(--panel-sidebar-width);
+    padding-top: var(--panel-header-h);
+    min-height: 100vh;
+}
+
 .panel-content {
-    flex: 1;
-    padding: 1.75rem 1.5rem 3rem;
+    padding: 2.25rem 2rem 4rem;
 }
 
 .panel-page {
@@ -2454,8 +2507,9 @@ textarea.field-input {
 }
 
 .panel-page-title {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
     font-weight: 700;
+    letter-spacing: -0.015em;
     color: var(--color-ink);
 }
 
@@ -2475,8 +2529,8 @@ textarea.field-input {
 .panel-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.25rem;
+    border-radius: 12px;
+    padding: 1.25rem 1.35rem;
     box-shadow: var(--shadow-card);
 }
 
@@ -2500,10 +2554,7 @@ textarea.field-input {
 
     .panel-sidebar.is-open {
         transform: translateX(0);
-    }
-
-    .panel-sidebar-close {
-        display: inline-flex;
+        box-shadow: 0 12px 40px rgba(9, 15, 12, 0.4);
     }
 
     .panel-main {
@@ -2512,6 +2563,23 @@ textarea.field-input {
 
     .panel-menu-toggle {
         display: inline-flex;
+    }
+
+    .panel-content {
+        padding: 1.5rem 1.15rem 3rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .panel-header-context,
+    .panel-brand-divider.is-faint {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .panel-user-name-inline {
+        display: none;
     }
 }
 

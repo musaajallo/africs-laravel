@@ -12,12 +12,21 @@ const props = defineProps({
     panel: { type: String, required: true },
     label: { type: String, required: true },
     homeRoute: { type: String, required: true },
-    // [{ label, routeName, icon? }]
+    // [{ label, routeName, activeMatch?, permission? }]
     nav: { type: Array, default: () => [] },
 });
 
 const { user } = useAuth();
 const sidebarOpen = ref(false);
+
+function initials(name) {
+    return (name || '?')
+        .split(' ')
+        .map((part) => part[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase();
+}
 
 function isActive(item) {
     return route().current(item.activeMatch || item.routeName);
@@ -26,63 +35,37 @@ function isActive(item) {
 
 <template>
     <div class="panel-shell" :data-panel="props.panel">
-        <aside class="panel-sidebar" :class="{ 'is-open': sidebarOpen }">
-            <div class="panel-sidebar-head">
-                <Link :href="props.homeRoute" class="panel-brand">
-                    <ApplicationLogo class="panel-brand-logo" />
-                    <span class="panel-brand-label">{{ props.label }}</span>
-                </Link>
-                <button
-                    type="button"
-                    class="panel-sidebar-close"
-                    @click="sidebarOpen = false"
-                    aria-label="Close menu"
-                >
-                    &times;
-                </button>
-            </div>
-
-            <nav class="panel-nav">
-                <Link
-                    v-for="item in props.nav"
-                    :key="item.routeName"
-                    :href="route(item.routeName)"
-                    class="panel-nav-link"
-                    :class="{ 'is-active': isActive(item) }"
-                    @click="sidebarOpen = false"
-                >
-                    {{ item.label }}
-                </Link>
-            </nav>
-        </aside>
-
-        <div
-            v-if="sidebarOpen"
-            class="panel-scrim"
-            @click="sidebarOpen = false"
-        ></div>
-
-        <div class="panel-main">
-            <header class="panel-topbar">
+        <header class="panel-header">
+            <div class="panel-header-left">
                 <button
                     type="button"
                     class="panel-menu-toggle"
                     @click="sidebarOpen = true"
                     aria-label="Open menu"
                 >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
 
-                <div class="panel-topbar-title">
-                    <slot name="title">{{ props.label }}</slot>
-                </div>
+                <Link :href="props.homeRoute" class="panel-brand">
+                    <ApplicationLogo class="panel-brand-logo" alt="Africs" />
+                    <span class="panel-brand-divider" aria-hidden="true"></span>
+                    <span class="panel-brand-label">{{ props.label }}</span>
+                </Link>
 
+                <template v-if="$slots.title">
+                    <span class="panel-brand-divider is-faint" aria-hidden="true"></span>
+                    <span class="panel-header-context"><slot name="title" /></span>
+                </template>
+            </div>
+
+            <div class="panel-header-right">
                 <Dropdown align="right">
                     <template #trigger>
                         <button type="button" class="panel-user-button">
-                            <span>{{ user?.name }}</span>
+                            <span class="panel-user-avatar">{{ initials(user?.name) }}</span>
+                            <span class="panel-user-name-inline">{{ user?.name }}</span>
                             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                                 <path
                                     fill-rule="evenodd"
@@ -103,12 +86,39 @@ function isActive(item) {
                         </DropdownLink>
                     </template>
                 </Dropdown>
-            </header>
+            </div>
+        </header>
 
-            <main class="panel-content">
+        <aside class="panel-sidebar" :class="{ 'is-open': sidebarOpen }">
+            <nav class="panel-nav">
+                <Link
+                    v-for="item in props.nav"
+                    :key="item.routeName"
+                    :href="route(item.routeName)"
+                    class="panel-nav-link"
+                    :class="{ 'is-active': isActive(item) }"
+                    @click="sidebarOpen = false"
+                >
+                    {{ item.label }}
+                </Link>
+            </nav>
+
+            <div class="panel-sidebar-foot">
+                <Link href="/" class="panel-nav-link is-muted">← Back to site</Link>
+            </div>
+        </aside>
+
+        <div
+            v-if="sidebarOpen"
+            class="panel-scrim"
+            @click="sidebarOpen = false"
+        ></div>
+
+        <main class="panel-main">
+            <div class="panel-content">
                 <slot />
-            </main>
-        </div>
+            </div>
+        </main>
 
         <PanelFlash />
     </div>
