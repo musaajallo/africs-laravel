@@ -30,14 +30,17 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <GuestLayout
+        heading="Sign in"
+        subheading="Access the Africs Console and CMS."
+    >
+        <Head title="Sign in" />
 
         <div v-if="status" class="status-message">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
+        <form class="auth-form" @submit.prevent="submit">
             <div class="field">
                 <InputLabel for="email" value="Email" />
 
@@ -54,7 +57,16 @@ const submit = () => {
             </div>
 
             <div class="field">
-                <InputLabel for="password" value="Password" />
+                <div class="auth-field-row">
+                    <InputLabel for="password" value="Password" />
+                    <Link
+                        v-if="canResetPassword"
+                        :href="route('password.request')"
+                        class="auth-inline-link"
+                    >
+                        Forgot password?
+                    </Link>
+                </div>
 
                 <TextInput
                     id="password"
@@ -67,26 +79,18 @@ const submit = () => {
                 <InputError :message="form.errors.password" />
             </div>
 
-            <div class="field">
-                <label class="checkbox-row">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span>Remember me</span>
-                </label>
-            </div>
+            <label class="checkbox-row auth-remember">
+                <Checkbox name="remember" v-model:checked="form.remember" />
+                <span>Keep me signed in</span>
+            </label>
 
-            <div class="form-actions">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="link"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
+            <PrimaryButton
+                class="auth-submit"
+                :class="{ 'is-loading': form.processing }"
+                :disabled="form.processing"
+            >
+                {{ form.processing ? 'Signing in…' : 'Sign in' }}
+            </PrimaryButton>
         </form>
     </GuestLayout>
 </template>

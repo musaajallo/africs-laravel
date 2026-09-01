@@ -18,15 +18,13 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        heading="Confirm your password"
+        subheading="This is a secure area — please re-enter your password to continue."
+    >
         <Head title="Confirm Password" />
 
-        <p class="panel-description" style="margin-bottom: 1rem">
-            This is a secure area of the application. Please confirm your
-            password before continuing.
-        </p>
-
-        <form @submit.prevent="submit">
+        <form class="auth-form" @submit.prevent="submit">
             <div class="field">
                 <InputLabel for="password" value="Password" />
                 <TextInput
@@ -40,11 +38,9 @@ const submit = () => {
                 <InputError :message="form.errors.password" />
             </div>
 
-            <div class="form-actions">
-                <PrimaryButton :disabled="form.processing">
-                    Confirm
-                </PrimaryButton>
-            </div>
+            <PrimaryButton class="auth-submit" :disabled="form.processing">
+                Confirm
+            </PrimaryButton>
         </form>
     </GuestLayout>
 </template>

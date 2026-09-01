@@ -22,20 +22,17 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        heading="Reset your password"
+        subheading="Enter your email and we'll send you a link to choose a new password."
+    >
         <Head title="Forgot Password" />
-
-        <p class="panel-description" style="margin-bottom: 1rem">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will
-            allow you to choose a new one.
-        </p>
 
         <div v-if="status" class="status-message">
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
+        <form class="auth-form" @submit.prevent="submit">
             <div class="field">
                 <InputLabel for="email" value="Email" />
 
@@ -51,11 +48,9 @@ const submit = () => {
                 <InputError :message="form.errors.email" />
             </div>
 
-            <div class="form-actions">
-                <PrimaryButton :disabled="form.processing">
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
+            <PrimaryButton class="auth-submit" :disabled="form.processing">
+                Email password reset link
+            </PrimaryButton>
         </form>
     </GuestLayout>
 </template>

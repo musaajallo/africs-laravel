@@ -32,10 +32,13 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
+    <GuestLayout
+        heading="Choose a new password"
+        subheading="Set a new password for your Africs account."
+    >
         <Head title="Reset Password" />
 
-        <form @submit.prevent="submit">
+        <form class="auth-form" @submit.prevent="submit">
             <div class="field">
                 <InputLabel for="email" value="Email" />
 
@@ -82,11 +85,9 @@ const submit = () => {
                 <InputError :message="form.errors.password_confirmation" />
             </div>
 
-            <div class="form-actions">
-                <PrimaryButton :disabled="form.processing">
-                    Reset Password
-                </PrimaryButton>
-            </div>
+            <PrimaryButton class="auth-submit" :disabled="form.processing">
+                Reset password
+            </PrimaryButton>
         </form>
     </GuestLayout>
 </template>
