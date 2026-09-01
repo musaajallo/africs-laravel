@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -18,6 +18,8 @@ const props = defineProps({
 
 const { user } = useAuth();
 const sidebarOpen = ref(false);
+const searchInput = ref(null);
+const isMac = ref(false);
 
 function initials(name) {
     return (name || '?')
@@ -31,6 +33,20 @@ function initials(name) {
 function isActive(item) {
     return route().current(item.activeMatch || item.routeName);
 }
+
+function onKeydown(e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.value?.focus();
+    }
+}
+
+onMounted(() => {
+    isMac.value = /Mac|iPhone|iPad/.test(navigator.platform);
+    window.addEventListener('keydown', onKeydown);
+});
+
+onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 </script>
 
 <template>
@@ -43,7 +59,7 @@ function isActive(item) {
                     @click="sidebarOpen = true"
                     aria-label="Open menu"
                 >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
@@ -53,14 +69,39 @@ function isActive(item) {
                     <span class="panel-brand-divider" aria-hidden="true"></span>
                     <span class="panel-brand-label">{{ props.label }}</span>
                 </Link>
-
-                <template v-if="$slots.title">
-                    <span class="panel-brand-divider is-faint" aria-hidden="true"></span>
-                    <span class="panel-header-context"><slot name="title" /></span>
-                </template>
             </div>
 
+            <form class="panel-search" role="search" @submit.prevent>
+                <svg class="panel-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="M21 21l-4.3-4.3" />
+                </svg>
+                <input
+                    ref="searchInput"
+                    type="search"
+                    class="panel-search-input"
+                    placeholder="Search…"
+                    aria-label="Search"
+                />
+                <kbd class="panel-search-kbd">{{ isMac ? '⌘' : 'Ctrl' }} K</kbd>
+            </form>
+
             <div class="panel-header-right">
+                <Dropdown align="right">
+                    <template #trigger>
+                        <button type="button" class="panel-icon-button" aria-label="Notifications">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="panel-menu-head">Notifications</div>
+                        <div class="panel-menu-empty">You're all caught up.</div>
+                    </template>
+                </Dropdown>
+
                 <Dropdown align="right">
                     <template #trigger>
                         <button type="button" class="panel-user-button">
