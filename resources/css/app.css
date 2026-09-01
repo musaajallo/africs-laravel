@@ -142,6 +142,15 @@ input:focus-visible,
     background: var(--color-green-dark);
 }
 
+.btn-accent {
+    background: var(--color-amber);
+    color: var(--color-ink);
+}
+
+.btn-accent:hover:not(:disabled) {
+    background: var(--color-amber-dark);
+}
+
 .btn-secondary {
     background: #fff;
     border-color: var(--color-border);
@@ -585,7 +594,7 @@ textarea.field-input {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.6rem;
 }
 
 .site-nav-actions {
@@ -604,6 +613,17 @@ textarea.field-input {
 
 .site-nav-link:hover {
     color: var(--color-ink);
+}
+
+/* ---------- Nav initiative buttons ---------- */
+
+.site-nav-btn {
+    white-space: nowrap;
+}
+
+.site-mobile-menu .site-nav-btn {
+    align-self: flex-start;
+    margin-top: 0.4rem;
 }
 
 .site-nav-dropdown {
@@ -747,7 +767,8 @@ textarea.field-input {
 
 .hero {
     position: relative;
-    background: var(--color-green-dark);
+    background:
+        linear-gradient(180deg, var(--color-green) 0%, var(--color-green-dark) 70%, #062616 100%);
     color: var(--color-cream-text);
     overflow: hidden;
     padding: 5rem 0 6rem;
@@ -763,32 +784,28 @@ textarea.field-input {
 
 .hero-pattern-surface {
     position: absolute;
-    inset: -144px;
-    opacity: 0.55;
-    background-image:
-        repeating-linear-gradient(
-            60deg,
-            rgba(0, 0, 0, 0.25) 0,
-            rgba(0, 0, 0, 0.25) 1px,
-            transparent 1px,
-            transparent 72px
-        ),
-        repeating-linear-gradient(
-            -60deg,
-            rgba(0, 0, 0, 0.25) 0,
-            rgba(0, 0, 0, 0.25) 1px,
-            transparent 1px,
-            transparent 72px
-        ),
-        repeating-linear-gradient(
-            60deg,
-            rgba(212, 162, 76, 0.06) 0,
-            rgba(212, 162, 76, 0.06) 36px,
-            transparent 36px,
-            transparent 72px
-        );
-    background-size: 144px 144px;
-    animation: hero-pattern-drift 45s linear infinite;
+    inset: -48px;
+    background-image: radial-gradient(
+        circle,
+        rgba(243, 239, 227, 0.05) 1px,
+        transparent 1.6px
+    );
+    background-size: 24px 24px;
+    /* Grid dissolves toward the centre so it frames the headline
+       rather than sitting behind it. */
+    -webkit-mask-image: radial-gradient(
+        58% 62% at 50% 46%,
+        transparent 0%,
+        transparent 34%,
+        #000 78%
+    );
+    mask-image: radial-gradient(
+        58% 62% at 50% 46%,
+        transparent 0%,
+        transparent 34%,
+        #000 78%
+    );
+    animation: hero-pattern-drift 60s linear infinite;
     will-change: transform;
 }
 
@@ -797,7 +814,7 @@ textarea.field-input {
         transform: translate3d(0, 0, 0);
     }
     to {
-        transform: translate3d(144px, 144px, 0);
+        transform: translate3d(24px, 24px, 0);
     }
 }
 
@@ -812,8 +829,8 @@ textarea.field-input {
     inset: 0;
     z-index: 2;
     background:
-        radial-gradient(55% 65% at 20% 10%, rgba(13, 77, 44, 0.65), transparent 60%),
-        radial-gradient(45% 50% at 60% 90%, rgba(212, 162, 76, 0.14), transparent 65%);
+        radial-gradient(46% 52% at 50% 42%, rgba(212, 162, 76, 0.12), transparent 62%),
+        radial-gradient(140% 120% at 50% 0%, transparent 45%, rgba(0, 0, 0, 0.38) 100%);
     pointer-events: none;
 }
 
@@ -1031,6 +1048,7 @@ textarea.field-input {
     display: block;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-green);
     border-radius: 12px;
     padding: 1.75rem;
     text-decoration: none;
@@ -1106,19 +1124,65 @@ textarea.field-input {
     color: var(--color-muted-on-dark);
 }
 
-/* ---------- Academy banner ---------- */
+/* ---------- Initiatives grid ---------- */
 
-.academy-banner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+.initiatives-grid {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 720px) {
+    .initiatives-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.initiative-card {
+    display: block;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-left: 4px solid var(--color-amber);
+    border-left: 4px solid var(--color-border);
     border-radius: 12px;
-    padding: 2rem;
+    padding: 1.75rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.initiative-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+}
+
+.initiative-card--academy {
+    border-left-color: var(--color-amber);
+}
+
+.initiative-card--academy:hover {
+    border-color: var(--color-amber);
+    border-left-color: var(--color-amber);
+}
+
+.initiative-card--limitless {
+    border-left-color: var(--color-green);
+}
+
+.initiative-card--limitless:hover {
+    border-color: var(--color-green);
+    border-left-color: var(--color-green);
+}
+
+.initiative-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-green);
+}
+
+.initiative-card--academy .initiative-link {
+    color: var(--color-amber-dark);
 }
 
 .badge {
@@ -1309,10 +1373,179 @@ textarea.field-input {
     }
 }
 
+/* ---------- Initiative pages (Academy / Limitless Africs) ---------- */
+
+.initiative-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--color-green) 0%, var(--color-green-dark) 100%);
+    color: var(--color-cream-text);
+    padding: 3.5rem 0;
+}
+
+.initiative-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        circle,
+        rgba(243, 239, 227, 0.06) 1px,
+        transparent 1.6px
+    );
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(130% 110% at 100% 0%, #000, transparent 72%);
+    mask-image: radial-gradient(130% 110% at 100% 0%, #000, transparent 72%);
+    pointer-events: none;
+}
+
+.initiative-hero > .container {
+    position: relative;
+    z-index: 1;
+}
+
+.initiative-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 3rem;
+    align-items: center;
+}
+
+@media (max-width: 880px) {
+    .initiative-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2.25rem;
+    }
+}
+
+.initiative-hero .section-eyebrow {
+    color: var(--color-amber);
+}
+
+.initiative-hero-title {
+    margin-top: 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    line-height: 1.1;
+    color: #fff;
+}
+
+.initiative-hero-lede {
+    margin-top: 1.1rem;
+    max-width: 34rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--color-muted-on-dark);
+}
+
+.initiative-hero-actions {
+    margin-top: 1.85rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.initiative-hero-actions .btn-primary {
+    background: var(--color-amber);
+    color: var(--color-ink);
+}
+
+.initiative-hero-actions .btn-primary:hover:not(:disabled) {
+    background: var(--color-amber-dark);
+}
+
+.initiative-hero .badge {
+    color: var(--color-amber);
+    border-color: rgba(212, 162, 76, 0.5);
+}
+
+.initiative-hero-figure {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    aspect-ratio: 3 / 2;
+    border: 1px solid rgba(212, 162, 76, 0.35);
+    background:
+        radial-gradient(120% 120% at 18% 12%, rgba(212, 162, 76, 0.26), transparent 58%),
+        linear-gradient(158deg, #14703f, #0a3c22);
+}
+
+.initiative-hero-figure::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        circle,
+        rgba(243, 239, 227, 0.1) 1px,
+        transparent 1.5px
+    );
+    background-size: 20px 20px;
+}
+
+/* Deliberate placeholder mark until a real photo is supplied */
+.initiative-hero-figure::before {
+    content: '∞';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 8.5rem);
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(243, 239, 227, 0.18);
+}
+
+.initiative-hero-figure img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 880px) {
+    .initiative-hero-figure {
+        aspect-ratio: 16 / 10;
+    }
+}
+
+/* Programmes / tracks / capabilities: green left accent, adapts to card count */
+.programs-grid {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: 1.25rem;
+}
+
+.program-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-green);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.program-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-green);
+}
+
 /* ---------- Contact page ---------- */
 
-.page-hero {
-    padding: 3.5rem 0 1rem;
+/* Simple (no-figure) variant of the initiative hero, used by pages whose
+   body is a form or long-form content rather than a card list. */
+.initiative-hero .legal-updated {
+    color: var(--color-muted-on-dark);
+}
+
+.after-hero {
+    padding-top: 2rem;
 }
 
 .contact-grid {

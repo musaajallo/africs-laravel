@@ -1,7 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import NavDropdown from '@/Components/NavDropdown.vue';
+import NavMobileGroup from '@/Components/NavMobileGroup.vue';
 
 defineProps({
     canLogin: {
@@ -10,47 +12,19 @@ defineProps({
 });
 
 const mobileMenuOpen = ref(false);
-const mobileServicesOpen = ref(false);
 const isDark = ref(false);
-const servicesOpen = ref(false);
-const servicesDropdown = ref(null);
-let closeServicesTimeout = null;
 
-function openServices() {
-    clearTimeout(closeServicesTimeout);
-    servicesOpen.value = true;
-}
+const servicesItems = [
+    { label: 'Business', href: route('services.business') },
+    { label: 'Technology', href: route('services.technology') },
+    { label: 'Design', href: route('services.design') },
+];
 
-function scheduleCloseServices() {
-    clearTimeout(closeServicesTimeout);
-    // Small delay so moving the pointer from the trigger down into the
-    // menu (crossing the gap between them) doesn't close it prematurely.
-    closeServicesTimeout = setTimeout(() => {
-        servicesOpen.value = false;
-    }, 150);
-}
-
-const closeServicesOnEscape = (e) => {
-    if (servicesOpen.value && e.key === 'Escape') {
-        servicesOpen.value = false;
-    }
-};
-
-const closeServicesOnClickOutside = (e) => {
-    if (servicesOpen.value && servicesDropdown.value && !servicesDropdown.value.contains(e.target)) {
-        servicesOpen.value = false;
-    }
-};
-
-onMounted(() => {
-    document.addEventListener('keydown', closeServicesOnEscape);
-    document.addEventListener('click', closeServicesOnClickOutside);
-});
-onUnmounted(() => {
-    document.removeEventListener('keydown', closeServicesOnEscape);
-    document.removeEventListener('click', closeServicesOnClickOutside);
-    clearTimeout(closeServicesTimeout);
-});
+const moreItems = [
+    { label: 'Partnerships', href: route('partnerships') },
+    { label: 'Network', href: route('network') },
+    { label: 'Careers', href: route('careers') },
+];
 </script>
 
 <template>
@@ -63,47 +37,16 @@ onUnmounted(() => {
             <nav class="site-nav-links" aria-label="Primary">
                 <Link href="/" class="site-nav-link">Home</Link>
 
-                <div
-                    ref="servicesDropdown"
-                    class="site-nav-dropdown"
-                    @mouseenter="openServices"
-                    @mouseleave="scheduleCloseServices"
-                >
-                    <button
-                        type="button"
-                        class="site-nav-link site-nav-dropdown-trigger"
-                        aria-haspopup="true"
-                        :aria-expanded="servicesOpen"
-                        @click="openServices"
-                    >
-                        Services
-                        <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="site-nav-dropdown-caret"
-                            :class="{ 'is-open': servicesOpen }"
-                        >
-                            <path d="M5 7.5L10 12.5L15 7.5" />
-                        </svg>
-                    </button>
-
-                    <div v-show="servicesOpen" class="site-nav-dropdown-menu">
-                        <Link :href="route('services.business')" class="site-nav-dropdown-item" @click="servicesOpen = false">Business</Link>
-                        <Link :href="route('services.technology')" class="site-nav-dropdown-item" @click="servicesOpen = false">Technology</Link>
-                        <Link :href="route('services.design')" class="site-nav-dropdown-item" @click="servicesOpen = false">Design</Link>
-                    </div>
-                </div>
+                <NavDropdown label="Services" :items="servicesItems" />
 
                 <a href="/#process" class="site-nav-link">How we work</a>
-                <a href="/#academy" class="site-nav-link">Academy</a>
                 <Link :href="route('portfolio')" class="site-nav-link">Portfolio</Link>
+
+                <NavDropdown label="More" :items="moreItems" />
+
                 <Link :href="route('contact')" class="site-nav-link">Contact</Link>
+                <Link :href="route('academy')" class="btn btn-accent site-nav-btn">Academy</Link>
+                <Link :href="route('limitless-africs')" class="btn btn-primary site-nav-btn">Limitless Africs</Link>
             </nav>
 
             <div class="site-nav-actions">
@@ -162,41 +105,24 @@ onUnmounted(() => {
         <nav v-show="mobileMenuOpen" class="site-mobile-menu" aria-label="Mobile">
             <Link href="/" class="site-nav-link" @click="mobileMenuOpen = false">Home</Link>
 
-            <div class="site-mobile-group">
-                <button
-                    type="button"
-                    class="site-nav-link site-mobile-group-trigger"
-                    :aria-expanded="mobileServicesOpen"
-                    @click="mobileServicesOpen = !mobileServicesOpen"
-                >
-                    Services
-                    <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="site-nav-dropdown-caret"
-                        :class="{ 'is-open': mobileServicesOpen }"
-                    >
-                        <path d="M5 7.5L10 12.5L15 7.5" />
-                    </svg>
-                </button>
-
-                <div v-show="mobileServicesOpen" class="site-mobile-submenu">
-                    <Link :href="route('services.business')" class="site-nav-link" @click="mobileMenuOpen = false">Business</Link>
-                    <Link :href="route('services.technology')" class="site-nav-link" @click="mobileMenuOpen = false">Technology</Link>
-                    <Link :href="route('services.design')" class="site-nav-link" @click="mobileMenuOpen = false">Design</Link>
-                </div>
-            </div>
+            <NavMobileGroup
+                label="Services"
+                :items="servicesItems"
+                @navigate="mobileMenuOpen = false"
+            />
 
             <a href="/#process" class="site-nav-link" @click="mobileMenuOpen = false">How we work</a>
-            <a href="/#academy" class="site-nav-link" @click="mobileMenuOpen = false">Academy</a>
             <Link :href="route('portfolio')" class="site-nav-link" @click="mobileMenuOpen = false">Portfolio</Link>
+
+            <NavMobileGroup
+                label="More"
+                :items="moreItems"
+                @navigate="mobileMenuOpen = false"
+            />
+
             <Link :href="route('contact')" class="site-nav-link" @click="mobileMenuOpen = false">Contact</Link>
+            <Link :href="route('academy')" class="btn btn-accent site-nav-btn" @click="mobileMenuOpen = false">Academy</Link>
+            <Link :href="route('limitless-africs')" class="btn btn-primary site-nav-btn" @click="mobileMenuOpen = false">Limitless Africs</Link>
             <Link
                 v-if="canLogin"
                 :href="route('login')"

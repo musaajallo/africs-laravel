@@ -50,9 +50,13 @@ const year = new Date().getFullYear();
                     <Link href="/">Home</Link>
                     <a href="/#services">Services</a>
                     <a href="/#process">How we work</a>
-                    <a href="/#academy">Academy</a>
                     <Link :href="route('portfolio')">Portfolio</Link>
+                    <Link :href="route('partnerships')">Partnerships</Link>
+                    <Link :href="route('network')">Network</Link>
+                    <Link :href="route('careers')">Careers</Link>
                     <Link :href="route('contact')">Contact</Link>
+                    <Link :href="route('academy')">Academy</Link>
+                    <Link :href="route('limitless-africs')">Limitless Africs</Link>
                 </div>
             </div>
 

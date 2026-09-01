@@ -54,20 +54,20 @@ const submit = () => {
         <SiteHeader :can-login="canLogin" />
 
         <main id="main">
-            <section class="page-hero">
+            <section class="initiative-hero">
                 <div class="container">
                     <p class="section-eyebrow">Contact</p>
-                    <h1 class="section-title" style="font-size: clamp(2rem, 4vw, 2.75rem)">
+                    <h1 class="initiative-hero-title">
                         Ready to add value to your next project?
                     </h1>
-                    <p class="section-lede">
+                    <p class="initiative-hero-lede">
                         Tell us about the challenge you're facing — we'll
                         tell you honestly how we can help.
                     </p>
                 </div>
             </section>
 
-            <section class="section" style="padding-top: 0">
+            <section class="section after-hero">
                 <div class="container">
                     <div class="contact-grid">
                         <form class="contact-form" @submit.prevent="submit">

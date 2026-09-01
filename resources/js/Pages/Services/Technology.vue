@@ -1,87 +1,44 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import SiteHeader from '@/Components/SiteHeader.vue';
-import SiteFooter from '@/Components/SiteFooter.vue';
+import InitiativePageLayout from '@/Components/InitiativePageLayout.vue';
 
 defineProps({
     canLogin: {
         type: Boolean,
     },
 });
+
+const capabilities = [
+    {
+        code: 'TECHNOLOGY',
+        name: 'Digital transformation',
+        desc: 'Software, cloud infrastructure, and IT strategy that turn technology into a genuine business advantage.',
+    },
+    {
+        code: 'INNOVATION',
+        name: 'Research & development',
+        desc: "Early-stage research that adds value where an off-the-shelf answer doesn't exist yet.",
+    },
+];
 </script>
 
 <template>
-    <Head title="Technology Services — Africs">
-        <meta
-            name="description"
-            content="Software, infrastructure, and applied research that turn technology into a genuine advantage."
-        />
-        <link rel="canonical" href="https://africsinc.com/services/technology" />
-    </Head>
-
-    <a href="#main" class="skip-link">Skip to content</a>
-
-    <div>
-        <SiteHeader :can-login="canLogin" />
-
-        <main id="main">
-            <section class="page-hero">
-                <div class="container">
-                    <p class="section-eyebrow">Services</p>
-                    <h1 class="section-title" style="font-size: clamp(2rem, 4vw, 2.75rem)">
-                        Technology.
-                    </h1>
-                    <p class="section-lede">
-                        Software, infrastructure, and applied research that
-                        turn technology into a genuine advantage.
-                    </p>
-                </div>
-            </section>
-
-            <section class="section" style="padding-top: 0">
-                <div class="container">
-                    <div class="divisions-grid">
-                        <article class="division-card">
-                            <p class="division-code">TECHNOLOGY</p>
-                            <h3 class="division-name">Digital transformation</h3>
-                            <p class="division-desc">
-                                Software, cloud infrastructure, and IT
-                                strategy that turn technology into a genuine
-                                business advantage.
-                            </p>
-                        </article>
-
-                        <article class="division-card">
-                            <p class="division-code">INNOVATION</p>
-                            <h3 class="division-name">Research &amp; development</h3>
-                            <p class="division-desc">
-                                Early-stage research that adds value where
-                                an off-the-shelf answer doesn't exist yet.
-                            </p>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
-            <section class="cta-section reveal">
-                <div class="container">
-                    <h2 class="cta-title">Ready to build the right technology?</h2>
-                    <p class="cta-sub">
-                        Tell us about the challenge you're facing — we'll
-                        tell you honestly how we can help.
-                    </p>
-                    <div class="cta-actions">
-                        <Link :href="route('contact')" class="btn btn-primary btn-lg">
-                            Get in touch
-                        </Link>
-                        <a href="mailto:info@africsinc.com" class="btn btn-on-dark btn-lg">
-                            info@africsinc.com
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <SiteFooter />
-    </div>
+    <InitiativePageLayout
+        :can-login="canLogin"
+        meta-title="Technology Services — Africs"
+        meta-description="Software, infrastructure, and applied research that turn technology into a genuine advantage."
+        canonical="https://africsinc.com/services/technology"
+        eyebrow="Services"
+        title="Technology."
+        lede="Software, infrastructure, and applied research that turn technology into a genuine advantage."
+        primary-label="Talk to us"
+        :primary-href="route('contact')"
+        section-eyebrow="Capabilities"
+        section-title="What Technology covers."
+        :cards="capabilities"
+        cta-title="Ready to build the right technology?"
+        cta-text="Tell us about the challenge you're facing — we'll tell you honestly how we can help."
+        cta-label="Get in touch"
+        :cta-href="route('contact')"
+        cta-email="info@africsinc.com"
+    />
 </template>

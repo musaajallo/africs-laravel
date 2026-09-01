@@ -25,17 +25,15 @@ defineProps({
         <SiteHeader :can-login="canLogin" />
 
         <main id="main">
-            <section class="page-hero">
+            <section class="initiative-hero">
                 <div class="container">
                     <p class="section-eyebrow">Legal</p>
-                    <h1 class="section-title" style="font-size: clamp(2rem, 4vw, 2.75rem)">
-                        Cookie Policy
-                    </h1>
+                    <h1 class="initiative-hero-title">Cookie Policy</h1>
                     <p class="legal-updated">Last updated: 18 July 2026</p>
                 </div>
             </section>
 
-            <section class="section" style="padding-top: 0">
+            <section class="section after-hero">
                 <div class="container">
                     <div class="legal-content">
                         <h2>What are cookies?</h2>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import SiteHeader from '@/Components/SiteHeader.vue';
 import SiteFooter from '@/Components/SiteFooter.vue';
 import { useScrollReveal } from '@/Composables/useScrollReveal';
@@ -37,22 +37,40 @@ const projects = [];
         <SiteHeader :can-login="canLogin" />
 
         <main id="main">
-            <section class="page-hero">
+            <section class="initiative-hero">
                 <div class="container">
-                    <p class="section-eyebrow">Portfolio</p>
-                    <h1 class="section-title" style="font-size: clamp(2rem, 4vw, 2.75rem)">
-                        Work we've added value to.
-                    </h1>
-                    <p class="section-lede">
-                        A selection of projects across technology, strategy,
-                        and design — built with clients who trusted us with
-                        the problem, not just the brief.
-                    </p>
+                    <div class="initiative-hero-grid">
+                        <div>
+                            <p class="section-eyebrow">Portfolio</p>
+                            <h1 class="initiative-hero-title">Work we've added value to.</h1>
+                            <p class="initiative-hero-lede">
+                                A selection of projects across technology,
+                                strategy, and design — built with clients who
+                                trusted us with the problem, not just the brief.
+                            </p>
+                            <div class="initiative-hero-actions">
+                                <Link :href="route('contact')" class="btn btn-primary btn-lg">
+                                    Start a project
+                                </Link>
+                            </div>
+                        </div>
+
+                        <figure class="initiative-hero-figure" aria-hidden="true"></figure>
+                    </div>
                 </div>
             </section>
 
-            <section class="section" style="padding-top: 0">
+            <section class="section">
                 <div class="container">
+                    <div class="section-head">
+                        <p class="section-eyebrow">Case studies</p>
+                        <h2 class="section-title">Selected engagements.</h2>
+                        <p class="section-lede">
+                            Each one is a problem a client brought us before it
+                            had an obvious answer.
+                        </p>
+                    </div>
+
                     <div v-if="projects.length" class="portfolio-grid">
                         <a
                             v-for="project in projects"
@@ -74,6 +92,24 @@ const projects = [];
 
                     <div v-else class="portfolio-empty">
                         <p>We're putting our project archive together — check back soon.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta-section reveal">
+                <div class="container">
+                    <h2 class="cta-title">Want your project on this page?</h2>
+                    <p class="cta-sub">
+                        Tell us about the challenge you're facing — we'll tell
+                        you honestly how we can help.
+                    </p>
+                    <div class="cta-actions">
+                        <Link :href="route('contact')" class="btn btn-primary btn-lg">
+                            Get in touch
+                        </Link>
+                        <a href="mailto:info@africsinc.com" class="btn btn-on-dark btn-lg">
+                            info@africsinc.com
+                        </a>
                     </div>
                 </div>
             </section>

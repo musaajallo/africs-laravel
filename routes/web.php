@@ -61,6 +61,36 @@ Route::get('/services/design', function () {
     ]);
 })->name('services.design');
 
+Route::get('/academy', function () {
+    return Inertia::render('Academy', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('academy');
+
+Route::get('/limitless-africs', function () {
+    return Inertia::render('LimitlessAfrics', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('limitless-africs');
+
+Route::get('/partnerships', function () {
+    return Inertia::render('Partnerships', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('partnerships');
+
+Route::get('/network', function () {
+    return Inertia::render('Network', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('network');
+
+Route::get('/careers', function () {
+    return Inertia::render('Careers', [
+        'canLogin' => Route::has('login'),
+    ]);
+})->name('careers');
+
 Route::get('/cookie-policy', function () {
     return Inertia::render('CookiePolicy', [
         'canLogin' => Route::has('login'),

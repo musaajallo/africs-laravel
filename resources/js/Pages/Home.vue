@@ -246,22 +246,41 @@ const testimonials = [
                 </div>
             </section>
 
-            <!-- Academy -->
-            <section id="academy" class="section reveal">
+            <!-- Initiatives -->
+            <section class="section reveal">
                 <div class="container">
-                    <div class="academy-banner">
-                        <div>
-                            <p class="section-eyebrow">Africs Academy</p>
-                            <h2 class="section-title" style="font-size: 1.6rem">
-                                Training the next generation of builders.
-                            </h2>
-                            <p class="section-lede" style="margin-top: 0.6rem">
+                    <div class="section-head">
+                        <p class="section-eyebrow">Initiatives</p>
+                        <h2 class="section-title">Beyond client work.</h2>
+                        <p class="section-lede">
+                            Two initiatives where we invest in the wider
+                            ecosystem — training builders, and backing
+                            communities across the region.
+                        </p>
+                    </div>
+
+                    <div class="initiatives-grid">
+                        <Link :href="route('academy')" class="initiative-card initiative-card--academy">
+                            <p class="division-code">Africs Academy</p>
+                            <h3 class="division-name">Training the next generation of builders</h3>
+                            <p class="division-desc">
                                 Courses in business, technology, and design
                                 fundamentals for people who want to add value
                                 the way we do.
                             </p>
-                        </div>
-                        <span class="badge">Coming soon</span>
+                            <span class="initiative-link">Explore the Academy &rarr;</span>
+                        </Link>
+
+                        <Link :href="route('limitless-africs')" class="initiative-card initiative-card--limitless">
+                            <p class="division-code">Limitless Africs</p>
+                            <h3 class="division-name">Empowering communities across Africa</h3>
+                            <p class="division-desc">
+                                Our social initiative — education, technology,
+                                and sustainable development work that leaves
+                                communities stronger.
+                            </p>
+                            <span class="initiative-link">Explore Limitless Africs &rarr;</span>
+                        </Link>
                     </div>
                 </div>
             </section>
