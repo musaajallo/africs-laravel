@@ -4,6 +4,7 @@ use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\RoadmapController;
+use App\Http\Controllers\Console\SettingsController;
 use App\Http\Controllers\Console\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +40,8 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // User & access management. Individual actions are authorised by UserPolicy.
     Route::resource('users', UserController::class)->except('show');
+
+    // Settings.
+    Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
+    Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Console;
 
 use App\Support\ClientTypes;
+use App\Support\Settings;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,9 +13,6 @@ use Illuminate\Validation\Rule;
  */
 class ClientRequest extends FormRequest
 {
-    /** Currencies the business invoices in. Becomes Settings-driven later. */
-    public const CURRENCIES = ['GMD', 'USD', 'EUR'];
-
     protected function prepareForValidation(): void
     {
         $this->merge(array_filter([
@@ -42,7 +40,7 @@ class ClientRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:50'],
             'website' => ['nullable', 'url', 'max:255'],
             'tax_number' => ['nullable', 'string', 'max:100'],
-            'currency' => ['nullable', Rule::in(self::CURRENCIES)],
+            'currency' => ['nullable', Rule::in(Settings::enabledCurrencies())],
             'billing_address' => ['nullable', 'string', 'max:2000'],
             'city' => ['nullable', 'string', 'max:120'],
             'country' => ['nullable', 'string', 'size:2'],

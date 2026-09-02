@@ -44,7 +44,12 @@ const allNav = [
         activeMatch: 'console.users.*',
         permission: 'users.view',
     },
-    soon('Settings', 'settings'),
+    {
+        label: 'Settings',
+        routeName: 'console.settings.edit',
+        activeMatch: 'console.settings.*',
+        permission: 'settings.view',
+    },
     soon('API tokens', 'api-tokens'),
     soon('Activity log', 'activity'),
 ];

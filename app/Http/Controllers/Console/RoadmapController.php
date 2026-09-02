@@ -50,11 +50,6 @@ class RoadmapController extends Controller
             'phase' => 'Phase 7',
             'blurb' => 'Physical equipment Africs owns — laptops, desktops, printers — with purchase details, serial numbers, assignees and condition.',
         ],
-        'settings' => [
-            'title' => 'Settings',
-            'phase' => 'Phase 0d',
-            'blurb' => 'Company profile, enabled currencies and base reporting currency, tax rates, payment terms and numbering — the values other modules read.',
-        ],
         'api-tokens' => [
             'title' => 'API tokens',
             'phase' => 'Phase 0b',

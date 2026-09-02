@@ -41,6 +41,12 @@ final class Rbac
     /** Create, edit, archive clients and manage their contacts. */
     public const PERM_CLIENTS_MANAGE = 'clients.manage';
 
+    /** View the Settings screen. */
+    public const PERM_SETTINGS_VIEW = 'settings.view';
+
+    /** Change company details, currencies, tax and payment defaults. */
+    public const PERM_SETTINGS_MANAGE = 'settings.manage';
+
     /**
      * Every permission the application knows about.
      *
@@ -55,6 +61,8 @@ final class Rbac
             self::PERM_USERS_MANAGE,
             self::PERM_CLIENTS_VIEW,
             self::PERM_CLIENTS_MANAGE,
+            self::PERM_SETTINGS_VIEW,
+            self::PERM_SETTINGS_MANAGE,
         ];
     }
 
@@ -74,6 +82,8 @@ final class Rbac
                 self::PERM_CONSOLE_ACCESS,
                 self::PERM_CLIENTS_VIEW,
                 self::PERM_CLIENTS_MANAGE,
+                self::PERM_SETTINGS_VIEW,
+                self::PERM_SETTINGS_MANAGE,
             ],
         ];
     }

@@ -7,6 +7,7 @@ use App\Http\Requests\Console\ClientRequest;
 use App\Models\Client;
 use App\Models\User;
 use App\Support\ClientTypes;
+use App\Support\Settings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -178,7 +179,7 @@ class ClientController extends Controller
     protected function formOptions(): array
     {
         return [
-            'currencies' => ClientRequest::CURRENCIES,
+            'currencies' => Settings::enabledCurrencies(),
             'categories' => ClientTypes::CATEGORIES,
             'owners' => User::query()->active()->orderBy('name')->get(['id', 'name']),
         ];
