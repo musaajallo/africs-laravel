@@ -1,9 +1,11 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Head, router } from '@inertiajs/vue3';
 import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
+import ContactDialog from './Partials/ContactDialog.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
@@ -11,6 +13,26 @@ const props = defineProps({
 });
 
 const { can } = useAuth();
+const canManage = computed(() => can('clients.manage'));
+
+const dialogOpen = ref(false);
+const editingContact = ref(null);
+
+function addContact() {
+    editingContact.value = null;
+    dialogOpen.value = true;
+}
+
+function editContact(contact) {
+    editingContact.value = contact;
+    dialogOpen.value = true;
+}
+
+function deleteContact(contact) {
+    router.delete(route('console.clients.contacts.destroy', [props.client.id, contact.id]), {
+        preserveScroll: true,
+    });
+}
 
 function archive() {
     router.delete(route('console.clients.destroy', props.client.id));
@@ -20,8 +42,17 @@ function restore() {
     router.put(route('console.clients.restore', props.client.id));
 }
 
-const details = [
-    { label: 'Type', value: props.client.type === 'individual' ? 'Individual' : 'Company' },
+const typeLabels = {
+    individual: 'Individual',
+    organisation: 'Organisation',
+    government: 'Government',
+};
+
+const details = computed(() => [
+    {
+        label: 'Type',
+        value: [typeLabels[props.client.type], props.client.category].filter(Boolean).join(' · '),
+    },
     { label: 'Status', value: props.client.status === 'active' ? 'Active' : 'Inactive' },
     { label: 'Email', value: props.client.email },
     { label: 'Phone', value: props.client.phone },
@@ -32,7 +63,7 @@ const details = [
     { label: 'Account manager', value: props.client.owner },
     { label: 'Added by', value: props.client.created_by },
     { label: 'Added on', value: props.client.created_at },
-];
+]);
 </script>
 
 <template>
@@ -48,22 +79,19 @@ const details = [
                         All clients
                     </PanelButton>
                     <PanelButton
-                        v-if="can('clients.manage') && !client.archived"
+                        v-if="canManage && !client.archived"
                         :href="route('console.clients.edit', client.id)"
                     >
                         Edit
                     </PanelButton>
                     <PanelConfirm
-                        v-if="can('clients.manage') && !client.archived"
+                        v-if="canManage && !client.archived"
                         title="Archive this client?"
                         :message="`${client.name} will be hidden from the client list. History is kept and it can be restored.`"
                         confirm-label="Archive"
                         @confirm="archive"
                     />
-                    <PanelButton
-                        v-if="can('clients.manage') && client.archived"
-                        @click="restore"
-                    >
+                    <PanelButton v-if="canManage && client.archived" @click="restore">
                         Restore
                     </PanelButton>
                 </template>
@@ -91,7 +119,13 @@ const details = [
                 </section>
 
                 <section class="panel-card">
-                    <h2 class="panel-card-title">People</h2>
+                    <div class="client-card-head">
+                        <h2 class="panel-card-title">People</h2>
+                        <button v-if="canManage" type="button" class="panel-link" @click="addContact">
+                            + Add contact
+                        </button>
+                    </div>
+
                     <p v-if="!client.contacts.length" class="panel-cell-muted">No contacts recorded.</p>
                     <ul v-else class="client-contact-list">
                         <li v-for="contact in client.contacts" :key="contact.id">
@@ -104,6 +138,19 @@ const details = [
                                 <a v-if="contact.email" :href="`mailto:${contact.email}`" class="panel-link" style="padding: 0">{{ contact.email }}</a>
                                 <span v-if="contact.phone">{{ contact.phone }}</span>
                             </div>
+                            <div v-if="canManage" class="client-contact-row-actions">
+                                <button type="button" class="panel-link" @click="editContact(contact)">Edit</button>
+                                <PanelConfirm
+                                    :title="`Remove ${contact.name}?`"
+                                    message="This contact will be deleted from the client."
+                                    confirm-label="Remove"
+                                    @confirm="deleteContact(contact)"
+                                >
+                                    <template #trigger>
+                                        <button type="button" class="panel-link is-danger">Delete</button>
+                                    </template>
+                                </PanelConfirm>
+                            </div>
                         </li>
                     </ul>
                 </section>
@@ -114,5 +161,12 @@ const details = [
                 <p>These appear here as the billing and projects modules come online.</p>
             </section>
         </div>
+
+        <ContactDialog
+            :client-id="client.id"
+            :contact="editingContact"
+            :show="dialogOpen"
+            @close="dialogOpen = false"
+        />
     </ConsoleLayout>
 </template>

@@ -1,4 +1,5 @@
 <script setup>
+import { computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import PanelField from '@/Components/Panel/PanelField.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
@@ -6,10 +7,17 @@ import PanelButton from '@/Components/Panel/PanelButton.vue';
 const props = defineProps({
     client: { type: Object, default: null },
     currencies: { type: Array, default: () => [] },
+    categories: { type: Object, default: () => ({}) },
     owners: { type: Array, default: () => [] },
 });
 
 const isEdit = !!props.client;
+
+const typeLabels = {
+    individual: 'Individual',
+    organisation: 'Organisation',
+    government: 'Government',
+};
 
 function blankContact() {
     return { id: null, name: '', title: '', email: '', phone: '', is_primary: false, notes: '' };
@@ -17,7 +25,8 @@ function blankContact() {
 
 const form = useForm({
     name: props.client?.name ?? '',
-    type: props.client?.type ?? 'company',
+    type: props.client?.type ?? 'organisation',
+    category: props.client?.category ?? '',
     status: props.client?.status ?? 'active',
     email: props.client?.email ?? '',
     phone: props.client?.phone ?? '',
@@ -33,6 +42,15 @@ const form = useForm({
         ? props.client.contacts.map((c) => ({ ...c }))
         : [blankContact()],
 });
+
+const categoryOptions = computed(() => props.categories[form.type] ?? []);
+
+watch(
+    () => form.type,
+    () => {
+        if (!categoryOptions.value.includes(form.category)) form.category = '';
+    },
+);
 
 function addContact() {
     form.contacts.push(blankContact());
@@ -74,8 +92,18 @@ function submit() {
 
                 <PanelField label="Type" :error="form.errors.type">
                     <select v-model="form.type" class="field-input">
-                        <option value="company">Company</option>
-                        <option value="individual">Individual</option>
+                        <option v-for="(l, key) in typeLabels" :key="key" :value="key">{{ l }}</option>
+                    </select>
+                </PanelField>
+
+                <PanelField
+                    v-if="categoryOptions.length"
+                    label="Category"
+                    :error="form.errors.category"
+                >
+                    <select v-model="form.category" class="field-input">
+                        <option value="">Unspecified</option>
+                        <option v-for="c in categoryOptions" :key="c" :value="c">{{ c }}</option>
                     </select>
                 </PanelField>
 

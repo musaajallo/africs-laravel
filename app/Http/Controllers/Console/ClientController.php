@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Console\ClientRequest;
 use App\Models\Client;
 use App\Models\User;
+use App\Support\ClientTypes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ class ClientController extends Controller
         $filters = [
             'search' => $request->string('search')->trim()->value(),
             'status' => $request->string('status')->trim()->value(),
+            'type' => $request->string('type')->trim()->value(),
         ];
 
         $clients = Client::query()
@@ -31,6 +33,10 @@ class ClientController extends Controller
                 in_array($filters['status'], ['active', 'inactive'], true),
                 fn ($query) => $query->where('status', $filters['status']),
             )
+            ->when(
+                in_array($filters['type'], ClientTypes::TYPES, true),
+                fn ($query) => $query->where('type', $filters['type']),
+            )
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString()
@@ -38,6 +44,7 @@ class ClientController extends Controller
                 'id' => $client->id,
                 'name' => $client->name,
                 'type' => $client->type,
+                'category' => $client->category,
                 'status' => $client->status,
                 'city' => $client->city,
                 'country' => $client->country,
@@ -49,6 +56,7 @@ class ClientController extends Controller
         return Inertia::render('Console/Clients/Index', [
             'clients' => $clients,
             'filters' => $filters,
+            'types' => ClientTypes::TYPES,
         ]);
     }
 
@@ -171,6 +179,7 @@ class ClientController extends Controller
     {
         return [
             'currencies' => ClientRequest::CURRENCIES,
+            'categories' => ClientTypes::CATEGORIES,
             'owners' => User::query()->active()->orderBy('name')->get(['id', 'name']),
         ];
     }
@@ -184,6 +193,7 @@ class ClientController extends Controller
             'id' => $client->id,
             'name' => $client->name,
             'type' => $client->type,
+            'category' => $client->category,
             'status' => $client->status,
             'email' => $client->email,
             'phone' => $client->phone,

@@ -12,17 +12,29 @@ import { useAuth } from '@/Composables/useAuth.js';
 const props = defineProps({
     clients: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
+    types: { type: Array, default: () => [] },
 });
 
 const { can } = useAuth();
 const search = ref(props.filters.search ?? '');
 const status = ref(props.filters.status ?? '');
+const type = ref(props.filters.type ?? '');
 let timer = null;
+
+const typeLabels = {
+    individual: 'Individual',
+    organisation: 'Organisation',
+    government: 'Government',
+};
 
 function apply() {
     router.get(
         route('console.clients.index'),
-        { search: search.value || undefined, status: status.value || undefined },
+        {
+            search: search.value || undefined,
+            status: status.value || undefined,
+            type: type.value || undefined,
+        },
         { preserveState: true, preserveScroll: true, replace: true },
     );
 }
@@ -31,7 +43,7 @@ watch(search, () => {
     clearTimeout(timer);
     timer = setTimeout(apply, 300);
 });
-watch(status, apply);
+watch([status, type], apply);
 
 function archive(client) {
     router.delete(route('console.clients.destroy', client.id), { preserveScroll: true });
@@ -63,7 +75,11 @@ function archive(client) {
                     class="field-input panel-toolbar-search"
                     placeholder="Search name, email or city"
                 />
-                <select v-model="status" class="field-input" style="max-width: 12rem">
+                <select v-model="type" class="field-input" style="max-width: 12rem">
+                    <option value="">All types</option>
+                    <option v-for="t in types" :key="t" :value="t">{{ typeLabels[t] }}</option>
+                </select>
+                <select v-model="status" class="field-input" style="max-width: 11rem">
                     <option value="">All statuses</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -88,7 +104,7 @@ function archive(client) {
                             {{ row.name }}
                         </Link>
                         <div class="panel-cell-muted">
-                            {{ row.type === 'individual' ? 'Individual' : 'Company' }}
+                            {{ typeLabels[row.type] }}<span v-if="row.category"> &middot; {{ row.category }}</span>
                             <span v-if="row.status === 'inactive'"> &middot; inactive</span>
                         </div>
                     </td>

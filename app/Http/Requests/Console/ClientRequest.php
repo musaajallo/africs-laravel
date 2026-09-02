@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Console;
 
+use App\Support\ClientTypes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,13 +21,22 @@ class ClientRequest extends FormRequest
             'currency' => $this->filled('currency') ? strtoupper((string) $this->input('currency')) : null,
             'country' => $this->filled('country') ? strtoupper((string) $this->input('country')) : null,
         ], fn ($value) => $value !== null));
+
+        // An individual client has no category.
+        if ($this->input('type') === 'individual') {
+            $this->merge(['category' => null]);
+        }
     }
 
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', Rule::in(['company', 'individual'])],
+            'type' => ['required', Rule::in(ClientTypes::TYPES)],
+            'category' => [
+                'nullable',
+                Rule::in(ClientTypes::categoriesFor($this->input('type'))),
+            ],
             'status' => ['required', Rule::in(['active', 'inactive'])],
             'email' => ['nullable', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],

@@ -3236,3 +3236,25 @@ textarea.field-input {
     font-size: 0.875rem;
     color: var(--pnl-muted);
 }
+
+.client-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.client-card-head .panel-card-title {
+    margin-bottom: 0;
+}
+
+.client-contact-row-actions {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.client-contact-row-actions .panel-link {
+    padding-left: 0;
+}

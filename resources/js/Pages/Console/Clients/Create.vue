@@ -6,6 +6,7 @@ import ClientForm from './Partials/ClientForm.vue';
 
 defineProps({
     currencies: { type: Array, default: () => [] },
+    categories: { type: Object, default: () => ({}) },
     owners: { type: Array, default: () => [] },
 });
 </script>
@@ -22,7 +23,7 @@ defineProps({
                 subtitle="Add a company or individual you do work for."
             />
             <div class="panel-card">
-                <ClientForm :currencies="currencies" :owners="owners" />
+                <ClientForm :currencies="currencies" :categories="categories" :owners="owners" />
             </div>
         </div>
     </ConsoleLayout>

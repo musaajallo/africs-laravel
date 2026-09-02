@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
-    'name', 'type', 'status', 'email', 'phone', 'website', 'tax_number',
-    'currency', 'billing_address', 'city', 'country', 'notes', 'owner_id',
+    'name', 'type', 'category', 'status', 'email', 'phone', 'website',
+    'tax_number', 'currency', 'billing_address', 'city', 'country', 'notes',
+    'owner_id',
 ])]
 class Client extends Model
 {
