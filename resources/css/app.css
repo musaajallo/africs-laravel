@@ -2568,15 +2568,43 @@ textarea.field-input {
     overflow-y: auto;
 }
 
+.panel-nav-heading {
+    margin: 1.1rem 0 0.3rem;
+    padding: 0 0.8rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(243, 239, 227, 0.34);
+}
+
+.panel-nav-heading:first-child {
+    margin-top: 0;
+}
+
 .panel-nav-link {
-    display: block;
-    padding: 0.58rem 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.55rem 0.8rem;
     border-radius: var(--radius);
     border-left: 2px solid transparent;
     font-size: 0.875rem;
     font-weight: 500;
     color: rgba(243, 239, 227, 0.58);
     text-decoration: none;
+}
+
+.panel-nav-soon {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    color: rgba(243, 239, 227, 0.4);
+    background: rgba(243, 239, 227, 0.07);
 }
 
 .panel-nav-link:hover {
@@ -3257,4 +3285,36 @@ textarea.field-input {
 
 .client-contact-row-actions .panel-link {
     padding-left: 0;
+}
+
+/* ---------- Roadmap placeholder page ---------- */
+
+.roadmap-card {
+    max-width: 40rem;
+}
+
+.roadmap-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 5px;
+    color: var(--pnl-warn);
+    background: color-mix(in srgb, var(--pnl-warn) 12%, transparent);
+    margin-bottom: 1rem;
+}
+
+.roadmap-blurb {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--pnl-ink);
+    margin: 0 0 1rem;
+}
+
+.roadmap-note {
+    font-size: 0.85rem;
+    color: var(--pnl-muted);
+    margin: 0 0 1rem;
 }

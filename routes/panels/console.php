@@ -3,6 +3,7 @@
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
+use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Placeholder pages for roadmap modules not built yet. Remove per module.
+    Route::get('roadmap/{module}', [RoadmapController::class, 'show'])->name('roadmap');
 
     // Clients & contacts. Actions are authorised by ClientPolicy.
     Route::put('clients/{client}/restore', [ClientController::class, 'restore'])

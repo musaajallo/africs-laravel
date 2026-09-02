@@ -46,7 +46,13 @@ function initials(name) {
 }
 
 function isActive(item) {
-    return route().current(item.activeMatch || item.routeName);
+    if (!route().current(item.activeMatch || item.routeName)) return false;
+    if (item.routeParams) {
+        return Object.entries(item.routeParams).every(
+            ([key, value]) => String(route().params[key]) === String(value),
+        );
+    }
+    return true;
 }
 
 function onKeydown(e) {
@@ -171,16 +177,19 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 
         <aside class="panel-sidebar" :class="{ 'is-open': sidebarOpen }">
             <nav class="panel-nav">
-                <Link
-                    v-for="item in props.nav"
-                    :key="item.routeName"
-                    :href="route(item.routeName)"
-                    class="panel-nav-link"
-                    :class="{ 'is-active': isActive(item) }"
-                    @click="sidebarOpen = false"
-                >
-                    {{ item.label }}
-                </Link>
+                <template v-for="(item, i) in props.nav" :key="i">
+                    <p v-if="item.heading" class="panel-nav-heading">{{ item.heading }}</p>
+                    <Link
+                        v-else
+                        :href="route(item.routeName, item.routeParams)"
+                        class="panel-nav-link"
+                        :class="{ 'is-active': isActive(item) }"
+                        @click="sidebarOpen = false"
+                    >
+                        <span>{{ item.label }}</span>
+                        <span v-if="item.soon" class="panel-nav-soon">soon</span>
+                    </Link>
+                </template>
             </nav>
 
             <div class="panel-sidebar-foot">
