@@ -20,6 +20,21 @@ const { user } = useAuth();
 const sidebarOpen = ref(false);
 const searchInput = ref(null);
 const isMac = ref(false);
+const theme = ref('light');
+
+function applyTheme(value) {
+    theme.value = value;
+    document.documentElement.dataset.panelTheme = value === 'dark' ? 'dark' : '';
+    try {
+        localStorage.setItem('africs.panelTheme', value);
+    } catch (e) {
+        // storage unavailable — the choice just won't persist
+    }
+}
+
+function toggleTheme() {
+    applyTheme(theme.value === 'dark' ? 'light' : 'dark');
+}
 
 function initials(name) {
     return (name || '?')
@@ -43,6 +58,15 @@ function onKeydown(e) {
 
 onMounted(() => {
     isMac.value = /Mac|iPhone|iPad/.test(navigator.platform);
+    let stored = null;
+    try {
+        stored = localStorage.getItem('africs.panelTheme');
+    } catch (e) {
+        stored = null;
+    }
+    theme.value = stored === 'dark' ? 'dark' : 'light';
+    document.documentElement.dataset.panelTheme =
+        theme.value === 'dark' ? 'dark' : '';
     window.addEventListener('keydown', onKeydown);
 });
 
@@ -87,6 +111,21 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
             </form>
 
             <div class="panel-header-right">
+                <button
+                    type="button"
+                    class="panel-icon-button panel-theme-toggle"
+                    :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+                    @click="toggleTheme"
+                >
+                    <svg v-if="theme === 'dark'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4.2" />
+                        <path d="M12 3v2M12 19v2M5 12H3M21 12h-2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4" />
+                    </svg>
+                    <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.6 6.6 0 0 0 10.5 10.5Z" />
+                    </svg>
+                </button>
+
                 <Dropdown align="right">
                     <template #trigger>
                         <button type="button" class="panel-icon-button" aria-label="Notifications">

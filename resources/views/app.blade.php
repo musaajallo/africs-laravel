@@ -23,6 +23,15 @@
             @endverbatim
         </script>
 
+        <!-- Apply the saved panel theme before paint to avoid a flash -->
+        <script>
+            try {
+                if (localStorage.getItem('africs.panelTheme') === 'dark') {
+                    document.documentElement.dataset.panelTheme = 'dark';
+                }
+            } catch (e) {}
+        </script>
+
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

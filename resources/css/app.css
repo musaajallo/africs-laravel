@@ -2282,13 +2282,55 @@ textarea.field-input {
     --panel-header-bg: #0c4a29;
     --panel-sidebar-bg: #093a20;
     --panel-hairline: rgba(243, 239, 227, 0.12);
+
+    /* content-area palette — retuned to the ERP plan's warm neutrals.
+       Redefined under :root[data-panel-theme='dark'] for the toggle. */
+    --pnl-canvas: #f5f3ec;
+    --pnl-surface: #fffdf7;
+    --pnl-surface-2: #f0ede1;
+    --pnl-ink: #191d18;
+    --pnl-ink-soft: #474c45;
+    --pnl-muted: #7b7f72;
+    --pnl-line: #e4dfce;
+    --pnl-line-strong: #cec8b3;
+    --pnl-accent: #0d4d2c;
+    --pnl-accent-contrast: #ffffff;
+    --pnl-accent-tint: rgba(13, 77, 44, 0.1);
+    --pnl-ok: #0d4d2c;
+    --pnl-warn: #a56a1a;
+    --pnl-danger: #b3261e;
+    --pnl-shadow: 0 1px 2px rgba(20, 26, 20, 0.05),
+        0 12px 30px -16px rgba(20, 26, 20, 0.14);
+
     min-height: 100vh;
-    background: #f4f3ec;
-    color: var(--color-ink);
+    background: var(--pnl-canvas);
+    color: var(--pnl-ink);
 }
 
 .panel-shell[data-panel='cms'] {
     --panel-accent: #d4a24c;
+}
+
+:root[data-panel-theme='dark'] .panel-shell {
+    --panel-header-bg: #0a3d22;
+    --panel-sidebar-bg: #08301b;
+
+    --pnl-canvas: #0f130f;
+    --pnl-surface: #171d16;
+    --pnl-surface-2: #12170f;
+    --pnl-ink: #f0eee2;
+    --pnl-ink-soft: #cbc8b8;
+    --pnl-muted: #8d9181;
+    --pnl-line: #293026;
+    --pnl-line-strong: #3a4136;
+    --pnl-accent: #59aa7b;
+    --pnl-accent-contrast: #0b1a10;
+    --pnl-accent-tint: rgba(89, 170, 123, 0.16);
+    --pnl-ok: #59aa7b;
+    --pnl-warn: #d8a45a;
+    --pnl-danger: #e0685f;
+    --pnl-shadow: 0 1px 2px rgba(0, 0, 0, 0.35),
+        0 14px 36px -18px rgba(0, 0, 0, 0.7);
 }
 
 /* ---------- header ---------- */
@@ -2443,14 +2485,14 @@ textarea.field-input {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-muted);
-    border-bottom: 1px solid var(--color-border);
+    color: var(--pnl-muted);
+    border-bottom: 1px solid var(--pnl-line);
 }
 
 .panel-menu-empty {
     padding: 1.1rem 1rem;
     font-size: 0.85rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
     text-align: center;
 }
 
@@ -2488,18 +2530,18 @@ textarea.field-input {
 
 .panel-user-meta {
     padding: 0.6rem 1rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--pnl-line);
 }
 
 .panel-user-name {
     font-weight: 600;
     font-size: 0.875rem;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-user-email {
     font-size: 0.8rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 /* ---------- sidebar ---------- */
@@ -2590,12 +2632,12 @@ textarea.field-input {
     font-size: 1.55rem;
     font-weight: 700;
     letter-spacing: -0.015em;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-page-lead {
     margin-top: 0.5rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
     max-width: 42rem;
 }
 
@@ -2607,23 +2649,23 @@ textarea.field-input {
 }
 
 .panel-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: var(--pnl-surface);
+    border: 1px solid var(--pnl-line);
     border-radius: 12px;
     padding: 1.25rem 1.35rem;
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--pnl-shadow);
 }
 
 .panel-card-title {
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
     margin-bottom: 0.4rem;
 }
 
 .panel-card p {
     font-size: 0.875rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 @media (max-width: 960px) {
@@ -2706,14 +2748,14 @@ textarea.field-input {
     margin-bottom: 1rem;
 }
 
-.panel-search {
+.panel-toolbar-search {
     max-width: 22rem;
 }
 
 .panel-table-wrap {
     overflow-x: auto;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: var(--pnl-surface);
+    border: 1px solid var(--pnl-line);
     border-radius: var(--radius);
 }
 
@@ -2721,6 +2763,7 @@ textarea.field-input {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
+    color: var(--pnl-ink);
 }
 
 .panel-table th {
@@ -2729,15 +2772,15 @@ textarea.field-input {
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--color-muted);
-    border-bottom: 1px solid var(--color-border);
-    background: #faf9f5;
+    color: var(--pnl-muted);
+    border-bottom: 1px solid var(--pnl-line);
+    background: var(--pnl-surface-2);
     white-space: nowrap;
 }
 
 .panel-table td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--pnl-line);
     vertical-align: middle;
 }
 
@@ -2746,22 +2789,22 @@ textarea.field-input {
 }
 
 .panel-table tbody tr:hover td {
-    background: #faf9f5;
+    background: var(--pnl-surface-2);
 }
 
 .panel-table-empty {
     text-align: center;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
     padding: 2.5rem 1rem;
 }
 
 .panel-cell-strong {
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-cell-muted {
-    color: var(--color-muted);
+    color: var(--pnl-muted);
     font-size: 0.8rem;
 }
 
@@ -2772,8 +2815,8 @@ textarea.field-input {
     border-radius: 999px;
     font-size: 0.72rem;
     font-weight: 600;
-    background: rgba(13, 77, 44, 0.1);
-    color: var(--color-green-dark);
+    background: var(--pnl-accent-tint);
+    color: var(--pnl-accent);
     white-space: nowrap;
 }
 
@@ -2794,11 +2837,11 @@ textarea.field-input {
 }
 
 .panel-status.is-on {
-    color: var(--color-green);
+    color: var(--pnl-ok);
 }
 
 .panel-status.is-off {
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 .panel-row-actions {
@@ -2812,7 +2855,7 @@ textarea.field-input {
     padding: 0 0.5rem;
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-green);
+    color: var(--pnl-accent);
     text-decoration: none;
     cursor: pointer;
 }
@@ -2822,7 +2865,7 @@ textarea.field-input {
 }
 
 .panel-link.is-danger {
-    color: var(--color-danger);
+    color: var(--pnl-danger);
 }
 
 .panel-pagination {
@@ -2836,7 +2879,7 @@ textarea.field-input {
 
 .panel-pagination-summary {
     font-size: 0.8rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 .panel-pagination-links {
@@ -2850,21 +2893,21 @@ textarea.field-input {
     padding: 0.35rem 0.55rem;
     text-align: center;
     font-size: 0.8rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--pnl-line-strong);
     border-radius: var(--radius);
-    color: var(--color-ink);
+    color: var(--pnl-ink);
     text-decoration: none;
-    background: var(--color-surface);
+    background: var(--pnl-surface);
 }
 
 .panel-pagination-link:hover:not(.is-disabled):not(.is-active) {
-    background: var(--color-hover);
+    background: var(--pnl-surface-2);
 }
 
 .panel-pagination-link.is-active {
-    background: var(--color-green);
-    border-color: var(--color-green);
-    color: #fff;
+    background: var(--pnl-accent);
+    border-color: var(--pnl-accent);
+    color: var(--pnl-accent-contrast);
 }
 
 .panel-pagination-link.is-disabled {
@@ -2882,7 +2925,7 @@ textarea.field-input {
 
 .panel-form-section {
     border: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--pnl-line);
     margin: 1.5rem 0 0;
     padding: 1.25rem 0 0;
 }
@@ -2892,7 +2935,7 @@ textarea.field-input {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
     padding: 0;
     margin-bottom: 0.75rem;
 }
@@ -2906,26 +2949,26 @@ textarea.field-input {
 .panel-field-label {
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-field-req {
-    color: var(--color-danger);
+    color: var(--pnl-danger);
     margin-left: 0.15rem;
 }
 
 .panel-field-hint {
     font-size: 0.78rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 .panel-field-error {
     font-size: 0.78rem;
-    color: var(--color-danger);
+    color: var(--pnl-danger);
 }
 
-.panel-field.has-error .field-input {
-    border-color: var(--color-danger);
+.panel-shell .panel-field.has-error .field-input {
+    border-color: var(--pnl-danger);
 }
 
 .panel-checkbox-list {
@@ -2942,7 +2985,7 @@ textarea.field-input {
 }
 
 .panel-checkbox input {
-    accent-color: var(--color-green);
+    accent-color: var(--pnl-accent);
 }
 
 .panel-form-actions {
@@ -2967,7 +3010,7 @@ textarea.field-input {
     border-radius: var(--radius);
     background: var(--color-green-dark);
     color: var(--color-cream-text);
-    box-shadow: 0 8px 24px rgba(9, 15, 12, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     font-size: 0.875rem;
 }
 
@@ -2998,13 +3041,13 @@ textarea.field-input {
 .panel-confirm-title {
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-confirm-message {
     margin-top: 0.5rem;
     font-size: 0.9rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 .panel-confirm-actions {
@@ -3012,4 +3055,66 @@ textarea.field-input {
     justify-content: flex-end;
     gap: 0.5rem;
     margin-top: 1.5rem;
+}
+
+/* ========================================================================
+   Panel-scoped overrides for shared components — makes the auth-page /
+   site components (inputs, secondary buttons, dropdowns, modals) follow
+   the panel palette and the light/dark toggle.
+   ======================================================================== */
+
+.panel-shell .field-input {
+    background: var(--pnl-surface);
+    border-color: var(--pnl-line-strong);
+    color: var(--pnl-ink);
+}
+
+.panel-shell .field-input::placeholder {
+    color: var(--pnl-muted);
+}
+
+.panel-shell .field-input:focus {
+    border-color: var(--pnl-accent);
+    box-shadow: 0 0 0 3px var(--pnl-accent-tint);
+}
+
+.panel-shell .btn-secondary {
+    background: var(--pnl-surface);
+    border-color: var(--pnl-line-strong);
+    color: var(--pnl-ink);
+}
+
+.panel-shell .btn-secondary:hover:not(:disabled) {
+    background: var(--pnl-surface-2);
+}
+
+.panel-shell .dropdown-menu {
+    background: var(--pnl-surface);
+    border-color: var(--pnl-line);
+    box-shadow: var(--pnl-shadow);
+}
+
+.panel-shell .dropdown-item {
+    color: var(--pnl-ink);
+}
+
+.panel-shell .dropdown-item:hover {
+    background: var(--pnl-surface-2);
+}
+
+.panel-shell .modal-content {
+    background: var(--pnl-surface);
+    border: 1px solid var(--pnl-line);
+    box-shadow: var(--pnl-shadow);
+}
+
+.panel-shell .modal-backdrop,
+.panel-shell .modal-dialog::backdrop {
+    background: rgba(4, 8, 5, 0.62);
+}
+
+/* Header theme toggle */
+
+.panel-theme-toggle svg {
+    display: block;
 }

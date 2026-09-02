@@ -56,7 +56,7 @@ function toggleActive(user) {
                 <input
                     v-model="search"
                     type="search"
-                    class="field-input panel-search"
+                    class="field-input panel-toolbar-search"
                     placeholder="Search name, username or email"
                 />
             </div>
