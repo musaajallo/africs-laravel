@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Console;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Console\LeadFormRequest;
 use App\Http\Requests\Console\LeadTriageRequest;
 use App\Models\Client;
 use App\Models\Lead;
 use App\Models\User;
 use App\Support\ActivityPresenter;
+use App\Support\LeadChannels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +44,7 @@ class LeadController extends Controller
                 'name' => $lead->name,
                 'company' => $lead->company,
                 'email' => $lead->email,
+                'channel' => LeadChannels::LABELS[$lead->source] ?? $lead->source,
                 'status' => $lead->status,
                 'owner' => $lead->owner?->name,
                 'received' => $lead->created_at->diffForHumans(),
@@ -54,29 +57,32 @@ class LeadController extends Controller
         ]);
     }
 
+    public function create(): Response
+    {
+        $this->authorize('create', Lead::class);
+
+        return Inertia::render('Console/Leads/Create', $this->formOptions());
+    }
+
+    public function store(LeadFormRequest $request): RedirectResponse
+    {
+        $this->authorize('create', Lead::class);
+
+        $lead = Lead::create($request->leadAttributes());
+
+        return redirect()
+            ->route('console.leads.show', $lead)
+            ->with('success', 'Lead added.');
+    }
+
     public function show(Request $request, Lead $lead): Response
     {
         $this->authorize('view', $lead);
 
-        $lead->load(['owner:id,name', 'convertedClient:id,name']);
+        $lead->load(['owner:id,name', 'convertedClient:id,name', 'referredByClient:id,name']);
 
         return Inertia::render('Console/Leads/Show', [
-            'lead' => [
-                'id' => $lead->id,
-                'name' => $lead->name,
-                'company' => $lead->company,
-                'email' => $lead->email,
-                'phone' => $lead->phone,
-                'message' => $lead->message,
-                'source' => $lead->source,
-                'status' => $lead->status,
-                'owner_id' => $lead->owner_id,
-                'notes' => $lead->notes,
-                'received_at' => $lead->created_at->toDayDateTimeString(),
-                'converted_client' => $lead->convertedClient
-                    ? ['id' => $lead->convertedClient->id, 'name' => $lead->convertedClient->name]
-                    : null,
-            ],
+            'lead' => $this->present($lead),
             'owners' => User::query()->active()->orderBy('name')->get(['id', 'name']),
             'canConvert' => $request->user()->can('convert', $lead),
             'activity' => Activity::forSubject($lead)
@@ -88,11 +94,33 @@ class LeadController extends Controller
         ]);
     }
 
-    public function update(LeadTriageRequest $request, Lead $lead): RedirectResponse
+    public function edit(Lead $lead): Response
     {
         $this->authorize('update', $lead);
 
-        // Don't let triage move a converted lead back into the pipeline.
+        return Inertia::render('Console/Leads/Edit', [
+            'lead' => $this->present($lead),
+            ...$this->formOptions(),
+        ]);
+    }
+
+    /** Edit the lead's own details (name, contact, channel, referral). */
+    public function update(LeadFormRequest $request, Lead $lead): RedirectResponse
+    {
+        $this->authorize('update', $lead);
+
+        $lead->update($request->leadAttributes());
+
+        return redirect()
+            ->route('console.leads.show', $lead)
+            ->with('success', 'Lead updated.');
+    }
+
+    /** Triage: status, owner, notes. */
+    public function triage(LeadTriageRequest $request, Lead $lead): RedirectResponse
+    {
+        $this->authorize('update', $lead);
+
         if ($lead->isConverted()) {
             return back()->with('success', 'This lead has already been converted.');
         }
@@ -154,5 +182,44 @@ class LeadController extends Controller
         return redirect()
             ->route('console.leads.index')
             ->with('success', 'Lead deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function formOptions(): array
+    {
+        return [
+            'channels' => LeadChannels::LABELS,
+            'clients' => Client::query()->orderBy('name')->get(['id', 'name']),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function present(Lead $lead): array
+    {
+        return [
+            'id' => $lead->id,
+            'name' => $lead->name,
+            'company' => $lead->company,
+            'email' => $lead->email,
+            'phone' => $lead->phone,
+            'message' => $lead->message,
+            'source' => $lead->source,
+            'channel_label' => LeadChannels::LABELS[$lead->source] ?? $lead->source,
+            'referred_by_client_id' => $lead->referred_by_client_id,
+            'referred_by_client' => $lead->referredByClient?->name,
+            'referral_source' => $lead->referral_source,
+            'status' => $lead->status,
+            'owner_id' => $lead->owner_id,
+            'notes' => $lead->notes,
+            'received_at' => $lead->created_at->toDayDateTimeString(),
+            'is_converted' => $lead->isConverted(),
+            'converted_client' => $lead->convertedClient
+                ? ['id' => $lead->convertedClient->id, 'name' => $lead->convertedClient->name]
+                : null,
+        ];
     }
 }

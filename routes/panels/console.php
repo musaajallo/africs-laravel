@@ -5,6 +5,7 @@ use App\Http\Controllers\Console\ApiTokenController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
+use App\Http\Controllers\Console\LeadController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
 use App\Http\Controllers\Console\TagController;
@@ -27,6 +28,17 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // Placeholder pages for roadmap modules not built yet. Remove per module.
     Route::get('roadmap/{module}', [RoadmapController::class, 'show'])->name('roadmap');
+
+    // Leads inbox.
+    Route::get('leads', [LeadController::class, 'index'])->name('leads.index');
+    Route::get('leads/create', [LeadController::class, 'create'])->name('leads.create');
+    Route::post('leads', [LeadController::class, 'store'])->name('leads.store');
+    Route::get('leads/{lead}', [LeadController::class, 'show'])->name('leads.show');
+    Route::get('leads/{lead}/edit', [LeadController::class, 'edit'])->name('leads.edit');
+    Route::put('leads/{lead}', [LeadController::class, 'update'])->name('leads.update');
+    Route::put('leads/{lead}/triage', [LeadController::class, 'triage'])->name('leads.triage');
+    Route::post('leads/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
+    Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy');
 
     // Clients & contacts. Actions are authorised by ClientPolicy.
     Route::put('clients/{client}/restore', [ClientController::class, 'restore'])

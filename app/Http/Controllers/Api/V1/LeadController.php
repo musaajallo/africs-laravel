@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Console\LeadFormRequest;
 use App\Http\Resources\Api\V1\LeadResource;
 use App\Models\Lead;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -31,5 +33,14 @@ class LeadController extends Controller
         $this->authorize('view', $lead);
 
         return new LeadResource($lead);
+    }
+
+    public function store(LeadFormRequest $request): JsonResponse
+    {
+        $this->authorize('create', Lead::class);
+
+        $lead = Lead::create($request->leadAttributes());
+
+        return (new LeadResource($lead))->response()->setStatusCode(201);
     }
 }

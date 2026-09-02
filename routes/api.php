@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\ClientController;
+use App\Http\Controllers\Api\V1\LeadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,15 @@ Route::prefix('v1')
         Route::middleware('abilities:clients.view')->group(function () {
             Route::get('clients', [ClientController::class, 'index'])->name('api.v1.clients.index');
             Route::get('clients/{client}', [ClientController::class, 'show'])->name('api.v1.clients.show');
+        });
+
+        Route::middleware('abilities:leads.view')->group(function () {
+            Route::get('leads', [LeadController::class, 'index'])->name('api.v1.leads.index');
+            Route::get('leads/{lead}', [LeadController::class, 'show'])->name('api.v1.leads.show');
+        });
+
+        Route::middleware('abilities:leads.manage')->group(function () {
+            Route::post('leads', [LeadController::class, 'store'])->name('api.v1.leads.store');
         });
 
         Route::middleware('abilities:clients.manage')->group(function () {

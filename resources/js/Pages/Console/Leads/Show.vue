@@ -15,7 +15,7 @@ const props = defineProps({
     activity: { type: Array, default: () => [] },
 });
 
-const converted = !!props.lead.converted_client;
+const converted = props.lead.is_converted;
 
 const form = useForm({
     status: props.lead.status === 'converted' ? 'qualified' : props.lead.status,
@@ -24,7 +24,7 @@ const form = useForm({
 });
 
 function save() {
-    form.put(route('console.leads.update', props.lead.id), { preserveScroll: true });
+    form.put(route('console.leads.triage', props.lead.id), { preserveScroll: true });
 }
 
 function convert() {
@@ -46,6 +46,7 @@ function destroy() {
             <PanelPageHeader :title="lead.company || lead.name" :subtitle="lead.company ? lead.name : null">
                 <template #actions>
                     <PanelButton variant="secondary" :href="route('console.leads.index')">All leads</PanelButton>
+                    <PanelButton v-if="!converted" variant="secondary" :href="route('console.leads.edit', lead.id)">Edit</PanelButton>
                     <PanelButton v-if="canConvert" @click="convert">Convert to client</PanelButton>
                     <PanelConfirm
                         title="Delete this lead?"
@@ -73,10 +74,18 @@ function destroy() {
                         <div><dt>Status</dt><dd><LeadStatusBadge :status="lead.status" /></dd></div>
                         <div><dt>Email</dt><dd>{{ lead.email }}</dd></div>
                         <div v-if="lead.phone"><dt>Phone</dt><dd>{{ lead.phone }}</dd></div>
-                        <div><dt>Source</dt><dd>{{ lead.source }}</dd></div>
+                        <div><dt>Channel</dt><dd>{{ lead.channel_label }}</dd></div>
+                        <div v-if="lead.referred_by_client">
+                            <dt>Referred by</dt>
+                            <dd>{{ lead.referred_by_client }} <span class="panel-cell-muted">(client)</span></dd>
+                        </div>
+                        <div v-else-if="lead.referral_source">
+                            <dt>Referred by</dt>
+                            <dd>{{ lead.referral_source }}</dd>
+                        </div>
                         <div><dt>Received</dt><dd>{{ lead.received_at }}</dd></div>
                     </dl>
-                    <div class="client-address">
+                    <div v-if="lead.message" class="client-address">
                         <dt>Message</dt>
                         <dd style="white-space: pre-line">{{ lead.message }}</dd>
                     </div>

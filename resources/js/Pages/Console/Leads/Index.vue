@@ -5,7 +5,9 @@ import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelTable from '@/Components/Panel/PanelTable.vue';
 import PanelPagination from '@/Components/Panel/PanelPagination.vue';
+import PanelButton from '@/Components/Panel/PanelButton.vue';
 import LeadStatusBadge from '@/Components/Panel/LeadStatusBadge.vue';
+import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
     leads: { type: Object, required: true },
@@ -13,6 +15,7 @@ const props = defineProps({
     statuses: { type: Array, default: () => [] },
 });
 
+const { can } = useAuth();
 const search = ref(props.filters.search ?? '');
 const status = ref(props.filters.status ?? '');
 let timer = null;
@@ -41,8 +44,14 @@ watch(status, apply);
         <div class="panel-page">
             <PanelPageHeader
                 title="Leads"
-                subtitle="Enquiries from the website's contact form, waiting to be worked."
-            />
+                subtitle="Enquiries waiting to be worked — from the website, referrals, events and outreach."
+            >
+                <template #actions>
+                    <PanelButton v-if="can('leads.manage')" :href="route('console.leads.create')">
+                        New lead
+                    </PanelButton>
+                </template>
+            </PanelPageHeader>
 
             <div class="panel-toolbar">
                 <input
@@ -58,7 +67,7 @@ watch(status, apply);
             </div>
 
             <PanelTable
-                :columns="['Lead', 'Email', 'Status', 'Owner', 'Received', { label: 'Actions', align: 'right' }]"
+                :columns="['Lead', 'Channel', 'Status', 'Owner', 'Received', { label: 'Actions', align: 'right' }]"
                 :rows="leads.data"
                 empty="No leads match your filter."
             >
@@ -67,9 +76,9 @@ watch(status, apply);
                         <Link :href="route('console.leads.show', row.id)" class="panel-link" style="padding: 0">
                             {{ row.company || row.name }}
                         </Link>
-                        <div v-if="row.company" class="panel-cell-muted">{{ row.name }}</div>
+                        <div class="panel-cell-muted">{{ row.company ? row.name : row.email }}</div>
                     </td>
-                    <td>{{ row.email }}</td>
+                    <td class="panel-cell-muted">{{ row.channel }}</td>
                     <td><LeadStatusBadge :status="row.status" /></td>
                     <td>{{ row.owner || '—' }}</td>
                     <td class="panel-cell-muted">{{ row.received }}</td>

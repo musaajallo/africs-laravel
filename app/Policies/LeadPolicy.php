@@ -18,6 +18,11 @@ class LeadPolicy
         return $user->can(Rbac::PERM_LEADS_VIEW);
     }
 
+    public function create(User $user): bool
+    {
+        return $user->can(Rbac::PERM_LEADS_MANAGE);
+    }
+
     public function update(User $user, Lead $lead): bool
     {
         return $user->can(Rbac::PERM_LEADS_MANAGE);
