@@ -6,6 +6,7 @@ import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelTable from '@/Components/Panel/PanelTable.vue';
 import PanelPagination from '@/Components/Panel/PanelPagination.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
+import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
@@ -31,6 +32,10 @@ watch(search, () => {
     timer = setTimeout(apply, 300);
 });
 watch(status, apply);
+
+function archive(client) {
+    router.delete(route('console.clients.destroy', client.id), { preserveScroll: true });
+}
 </script>
 
 <template>
@@ -66,7 +71,14 @@ watch(status, apply);
             </div>
 
             <PanelTable
-                :columns="['Name', 'Location', 'Currency', 'Account manager', { label: 'Contacts', align: 'right' }]"
+                :columns="[
+                    'Name',
+                    'Location',
+                    'Currency',
+                    'Account manager',
+                    { label: 'Contacts', align: 'right' },
+                    { label: 'Actions', align: 'right' },
+                ]"
                 :rows="clients.data"
                 empty="No clients match your search."
             >
@@ -86,7 +98,28 @@ watch(status, apply);
                     </td>
                     <td>{{ row.currency || '—' }}</td>
                     <td>{{ row.owner || '—' }}</td>
-                    <td class="panel-row-actions">{{ row.contacts_count }}</td>
+                    <td style="text-align: right">{{ row.contacts_count }}</td>
+                    <td class="panel-row-actions">
+                        <Link :href="route('console.clients.show', row.id)" class="panel-link">View</Link>
+                        <Link
+                            v-if="can('clients.manage')"
+                            :href="route('console.clients.edit', row.id)"
+                            class="panel-link"
+                        >
+                            Edit
+                        </Link>
+                        <PanelConfirm
+                            v-if="can('clients.manage')"
+                            title="Archive this client?"
+                            :message="`${row.name} will be hidden from the list. History is kept and it can be restored.`"
+                            confirm-label="Archive"
+                            @confirm="archive(row)"
+                        >
+                            <template #trigger>
+                                <button type="button" class="panel-link is-danger">Archive</button>
+                            </template>
+                        </PanelConfirm>
+                    </td>
                 </template>
             </PanelTable>
 
