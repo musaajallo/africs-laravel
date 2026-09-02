@@ -6,11 +6,13 @@ import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
 import TagBadge from '@/Components/Panel/TagBadge.vue';
+import ActivityFeed from '@/Components/Panel/ActivityFeed.vue';
 import ContactDialog from './Partials/ContactDialog.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
     client: { type: Object, required: true },
+    activity: { type: Array, default: () => [] },
 });
 
 const { can } = useAuth();
@@ -161,10 +163,17 @@ const details = computed(() => [
                 </section>
             </div>
 
-            <section class="panel-card client-future">
-                <h2 class="panel-card-title">Projects, proformas &amp; invoices</h2>
-                <p>These appear here as the billing and projects modules come online.</p>
-            </section>
+            <div class="client-detail-grid">
+                <section class="panel-card">
+                    <h2 class="panel-card-title">Recent activity</h2>
+                    <ActivityFeed :items="activity" empty="No changes recorded yet." />
+                </section>
+
+                <section class="panel-card client-future">
+                    <h2 class="panel-card-title">Projects, proformas &amp; invoices</h2>
+                    <p>These appear here as the billing and projects modules come online.</p>
+                </section>
+            </div>
         </div>
 
         <ContactDialog

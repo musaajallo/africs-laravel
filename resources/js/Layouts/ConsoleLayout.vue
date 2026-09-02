@@ -57,7 +57,12 @@ const allNav = [
         permission: 'settings.view',
     },
     soon('API tokens', 'api-tokens'),
-    soon('Activity log', 'activity'),
+    {
+        label: 'Activity log',
+        routeName: 'console.activity.index',
+        activeMatch: 'console.activity.*',
+        permission: 'activity.view',
+    },
 ];
 
 const nav = computed(() => {

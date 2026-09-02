@@ -53,6 +53,9 @@ final class Rbac
     /** Create, rename, recolour and delete tags. */
     public const PERM_TAGS_MANAGE = 'tags.manage';
 
+    /** View the activity log. */
+    public const PERM_ACTIVITY_VIEW = 'activity.view';
+
     /**
      * Every permission the application knows about.
      *
@@ -71,6 +74,7 @@ final class Rbac
             self::PERM_SETTINGS_MANAGE,
             self::PERM_TAGS_VIEW,
             self::PERM_TAGS_MANAGE,
+            self::PERM_ACTIVITY_VIEW,
         ];
     }
 
@@ -94,6 +98,7 @@ final class Rbac
                 self::PERM_SETTINGS_MANAGE,
                 self::PERM_TAGS_VIEW,
                 self::PERM_TAGS_MANAGE,
+                self::PERM_ACTIVITY_VIEW,
             ],
         ];
     }

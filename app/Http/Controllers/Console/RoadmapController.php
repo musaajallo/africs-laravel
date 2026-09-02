@@ -55,11 +55,6 @@ class RoadmapController extends Controller
             'phase' => 'Phase 0b',
             'blurb' => 'Issue and revoke scoped API tokens so other applications can integrate over the versioned /api/v1 endpoints.',
         ],
-        'activity' => [
-            'title' => 'Activity log',
-            'phase' => 'Phase 0e',
-            'blurb' => 'A searchable record of who changed what across clients, documents, payments and secrets.',
-        ],
     ];
 
     public function show(Request $request, string $module): Response

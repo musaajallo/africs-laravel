@@ -7,6 +7,7 @@ use App\Http\Requests\Console\ClientRequest;
 use App\Models\Client;
 use App\Models\Tag;
 use App\Models\User;
+use App\Support\ActivityPresenter;
 use App\Support\ClientTypes;
 use App\Support\Settings;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Activitylog\Models\Activity;
 
 class ClientController extends Controller
 {
@@ -90,6 +92,8 @@ class ClientController extends Controller
             return $client;
         });
 
+        $this->logTagChange($client, [], $request->tagNames());
+
         return redirect()
             ->route('console.clients.show', $client)
             ->with('success', 'Client created.');
@@ -104,8 +108,16 @@ class ClientController extends Controller
             'owner:id,name', 'createdBy:id,name', 'tags:id,name,slug,color',
         ]);
 
+        $activity = Activity::forSubject($client)
+            ->with('causer:id,name')
+            ->latest()
+            ->limit(20)
+            ->get()
+            ->map(fn (Activity $a) => ActivityPresenter::present($a));
+
         return Inertia::render('Console/Clients/Show', [
             'client' => $this->present($client),
+            'activity' => $activity,
         ]);
     }
 
@@ -128,11 +140,15 @@ class ClientController extends Controller
     {
         $this->authorize('update', $client);
 
+        $tagsBefore = $client->tags()->pluck('name')->all();
+
         DB::transaction(function () use ($request, $client) {
             $client->update($request->clientAttributes());
             $this->syncContacts($client, $request->contactRows());
             $client->syncTagsByName($request->tagNames());
         });
+
+        $this->logTagChange($client, $tagsBefore, $request->tagNames());
 
         return redirect()
             ->route('console.clients.show', $client)
@@ -160,6 +176,30 @@ class ClientController extends Controller
         return redirect()
             ->route('console.clients.show', $client)
             ->with('success', 'Client restored.');
+    }
+
+    /**
+     * @param  list<string>  $before
+     * @param  list<string>  $after
+     */
+    protected function logTagChange(Client $client, array $before, array $after): void
+    {
+        $normalise = function (array $tags) {
+            $tags = array_map('strtolower', $tags);
+            sort($tags);
+
+            return $tags;
+        };
+
+        if ($normalise($before) === $normalise($after)) {
+            return;
+        }
+
+        $description = $after === []
+            ? 'All tags removed'
+            : 'Tags set to '.implode(', ', $after);
+
+        activity()->performedOn($client)->event('tags')->log($description);
     }
 
     /**

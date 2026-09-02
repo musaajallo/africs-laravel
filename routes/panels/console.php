@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Console\ActivityController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
@@ -48,4 +49,7 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // Tags — managed inline on the index page.
     Route::resource('tags', TagController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    // Activity log (read-only).
+    Route::get('activity', [ActivityController::class, 'index'])->name('activity.index');
 });

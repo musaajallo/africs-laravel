@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'name', 'type', 'category', 'status', 'email', 'phone', 'website',
@@ -19,13 +21,32 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 ])]
 class Client extends Model
 {
-    use HasFactory, HasTags, SoftDeletes;
+    use HasFactory, HasTags, LogsActivity, SoftDeletes;
 
     protected function casts(): array
     {
         return [
             'country' => 'string',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name', 'type', 'category', 'status', 'email', 'phone', 'website',
+                'tax_number', 'currency', 'billing_address', 'city', 'country',
+                'owner_id', 'notes',
+            ])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $event) => match ($event) {
+                'created' => 'Client created',
+                'updated' => 'Client details updated',
+                'deleted' => 'Client archived',
+                'restored' => 'Client restored',
+                default => "Client {$event}",
+            });
     }
 
     public function contacts(): HasMany
