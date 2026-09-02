@@ -47,7 +47,7 @@ Laravel's filesystem and database abstractions mean both of these are config cha
 - Single codebase/repo, single deploy — matches "keep cost low early" goal.
 - No need to hand-roll auth token handling, CORS, or a separate API versioning strategy.
 - Still gives full Vue component interactivity for CMS/admin screens and any dynamic public pages.
-- If Phase 2 ERP ever needs a true separate API (e.g. for a mobile app), Laravel Sanctum can be added on top later without discarding this.
+- Phase 2 ERP **will** need a public API for third-party app integration (confirmed — see [answers.md](./answers.md)). Laravel Sanctum (or Passport for full OAuth2 client flows) can be added on top later without discarding the Inertia setup; the API and web app should share the same domain/service layer.
 
 ## Decisions Still Open
 

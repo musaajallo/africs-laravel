@@ -29,16 +29,30 @@ Rough build order:
 
 Goal: extend the same application into an internal ERP for running the business.
 
-Not yet scoped in detail — to be planned once Phase 1 ships and real operational needs are clearer. Likely candidate modules (to validate with the user before committing):
+Partially scoped — see [answers.md](./answers.md) for the user's answers to the
+first round of ERP questions. Candidate modules (to validate further before committing):
 
-- Client/project management
-- Finance (invoicing, expenses)
-- HR (staff, contracts)
-- Inventory/assets (if applicable to Business pillar work)
+- Client/project management — clients are first-class entities that can later be
+  given portal logins (client login is a *later* phase, not now)
+- Finance — **multi-currency (GMD, USD, EUR)**; **proforma invoices** and **tax
+  invoices** tracked as separate documents with separate numbering, with the
+  ability to **convert a proforma into an invoice** while keeping the link;
+  expenses
+- Asset & subscription register — **physical** (laptops, desktops, printers) and
+  **digital** (software licences, SaaS subscriptions); plus **client subscription
+  accounts** that Africs runs on a client's behalf, tracked under the client
+- HR (staff, contracts) — no staff yet, but the system is built for a company and
+  staff will be added later
+- **Public API for integration** — a first-class requirement: the app must expose
+  a versioned REST API (Sanctum/Passport) so other applications can integrate
+  with it, ideally with outbound webhooks for events. Design the ERP domain and
+  service layer so the API sits on shared business logic, not a duplicate.
 
 **Architectural note for Phase 1:** since Phase 2 builds on the same codebase, prefer:
 - A `users` table/roles design that can extend from "public + admin" to distinct internal-staff roles later
 - Clean module boundaries (e.g. namespaced controllers/models per domain) so ERP modules can be added alongside the CMS without entangling with public-website code
+- Money always stored with an explicit currency code — no implicit single-currency assumption
+- A service layer that the web (Inertia/Vue) and a future API can both call
 
 ## Infra Roadmap
 
