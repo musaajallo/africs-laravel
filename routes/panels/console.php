@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Console\ActivityController;
+use App\Http\Controllers\Console\ApiTokenController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
@@ -52,4 +53,9 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // Activity log (read-only).
     Route::get('activity', [ActivityController::class, 'index'])->name('activity.index');
+
+    // API tokens — a user manages their own.
+    Route::get('api-tokens', [ApiTokenController::class, 'index'])->name('api-tokens.index');
+    Route::post('api-tokens', [ApiTokenController::class, 'store'])->name('api-tokens.store');
+    Route::delete('api-tokens/{token}', [ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');
 });

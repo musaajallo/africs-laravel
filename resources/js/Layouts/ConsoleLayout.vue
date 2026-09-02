@@ -56,7 +56,12 @@ const allNav = [
         activeMatch: 'console.settings.*',
         permission: 'settings.view',
     },
-    soon('API tokens', 'api-tokens'),
+    {
+        label: 'API tokens',
+        routeName: 'console.api-tokens.index',
+        activeMatch: 'console.api-tokens.*',
+        permission: 'api-tokens.manage',
+    },
     {
         label: 'Activity log',
         routeName: 'console.activity.index',

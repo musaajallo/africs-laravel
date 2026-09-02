@@ -56,6 +56,9 @@ final class Rbac
     /** View the activity log. */
     public const PERM_ACTIVITY_VIEW = 'activity.view';
 
+    /** Issue and revoke API tokens. */
+    public const PERM_API_TOKENS_MANAGE = 'api-tokens.manage';
+
     /**
      * Every permission the application knows about.
      *
@@ -75,7 +78,22 @@ final class Rbac
             self::PERM_TAGS_VIEW,
             self::PERM_TAGS_MANAGE,
             self::PERM_ACTIVITY_VIEW,
+            self::PERM_API_TOKENS_MANAGE,
         ];
+    }
+
+    /**
+     * Permissions that can be granted to an API token as an "ability".
+     * Panel-access gates are excluded — a token targets resources, not panels.
+     *
+     * @return list<string>
+     */
+    public static function apiAbilities(): array
+    {
+        return array_values(array_diff(self::permissions(), [
+            self::PERM_CMS_ACCESS,
+            self::PERM_CONSOLE_ACCESS,
+        ]));
     }
 
     /**
@@ -99,6 +117,7 @@ final class Rbac
                 self::PERM_TAGS_VIEW,
                 self::PERM_TAGS_MANAGE,
                 self::PERM_ACTIVITY_VIEW,
+                self::PERM_API_TOKENS_MANAGE,
             ],
         ];
     }

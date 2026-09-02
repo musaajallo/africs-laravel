@@ -50,11 +50,6 @@ class RoadmapController extends Controller
             'phase' => 'Phase 7',
             'blurb' => 'Physical equipment Africs owns — laptops, desktops, printers — with purchase details, serial numbers, assignees and condition.',
         ],
-        'api-tokens' => [
-            'title' => 'API tokens',
-            'phase' => 'Phase 0b',
-            'blurb' => 'Issue and revoke scoped API tokens so other applications can integrate over the versioned /api/v1 endpoints.',
-        ],
     ];
 
     public function show(Request $request, string $module): Response
