@@ -3554,3 +3554,75 @@ textarea.field-input {
     word-break: break-all;
     color: var(--pnl-ink);
 }
+
+/* ---------- Lead status ---------- */
+
+.lead-status {
+    --h: #8a8f86;
+    display: inline-block;
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--h) 15%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--h) 72%, var(--pnl-ink));
+    border: 1px solid color-mix(in srgb, var(--h) 32%, transparent);
+}
+
+.lead-status[data-status='new'] { --h: #3b7fd6; }
+.lead-status[data-status='contacted'] { --h: #d18b1e; }
+.lead-status[data-status='qualified'] { --h: #2f9e60; }
+.lead-status[data-status='lost'] { --h: #b3261e; }
+.lead-status[data-status='converted'] { --h: #8156d9; }
+
+.lead-converted {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+    border-color: color-mix(in srgb, #8156d9 40%, var(--pnl-line));
+}
+
+.lead-converted p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--pnl-ink-soft);
+}
+
+/* ---------- Project badges ---------- */
+
+.proj-status {
+    --h: #8a8f86;
+    display: inline-block;
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--h) 15%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--h) 72%, var(--pnl-ink));
+    border: 1px solid color-mix(in srgb, var(--h) 32%, transparent);
+}
+
+.proj-status[data-status='proposed'] { --h: #3b7fd6; }
+.proj-status[data-status='active'] { --h: #2f9e60; }
+.proj-status[data-status='on_hold'] { --h: #d18b1e; }
+.proj-status[data-status='completed'] { --h: #5f6b7a; }
+.proj-status[data-status='cancelled'] { --h: #b3261e; }
+
+.proj-line {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pnl-muted);
+}
+
+.project-member-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.project-member-row .panel-field {
+    flex: 1;
+}

@@ -20,12 +20,23 @@ const allNav = [
     { heading: 'Operations' },
     { label: 'Dashboard', routeName: 'console.dashboard', permission: null },
     {
+        label: 'Leads',
+        routeName: 'console.leads.index',
+        activeMatch: 'console.leads.*',
+        permission: 'leads.view',
+    },
+    {
         label: 'Clients',
         routeName: 'console.clients.index',
         activeMatch: 'console.clients.*',
         permission: 'clients.view',
     },
-    soon('Projects', 'projects'),
+    {
+        label: 'Projects',
+        routeName: 'console.projects.index',
+        activeMatch: 'console.projects.*',
+        permission: 'projects.view',
+    },
     soon('Subscriptions & infra', 'subscriptions'),
     soon('Assets', 'assets'),
 

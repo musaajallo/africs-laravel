@@ -35,11 +35,23 @@ final class Rbac
     /** Create, edit, deactivate users and assign their roles. */
     public const PERM_USERS_MANAGE = 'users.manage';
 
+    /** View the leads inbox. */
+    public const PERM_LEADS_VIEW = 'leads.view';
+
+    /** Triage leads — assign, set status, add notes, convert to a client. */
+    public const PERM_LEADS_MANAGE = 'leads.manage';
+
     /** View the client register. */
     public const PERM_CLIENTS_VIEW = 'clients.view';
 
     /** Create, edit, archive clients and manage their contacts. */
     public const PERM_CLIENTS_MANAGE = 'clients.manage';
+
+    /** View projects. */
+    public const PERM_PROJECTS_VIEW = 'projects.view';
+
+    /** Create, edit, archive projects and manage their team. */
+    public const PERM_PROJECTS_MANAGE = 'projects.manage';
 
     /** View the Settings screen. */
     public const PERM_SETTINGS_VIEW = 'settings.view';
@@ -71,8 +83,12 @@ final class Rbac
             self::PERM_CONSOLE_ACCESS,
             self::PERM_USERS_VIEW,
             self::PERM_USERS_MANAGE,
+            self::PERM_LEADS_VIEW,
+            self::PERM_LEADS_MANAGE,
             self::PERM_CLIENTS_VIEW,
             self::PERM_CLIENTS_MANAGE,
+            self::PERM_PROJECTS_VIEW,
+            self::PERM_PROJECTS_MANAGE,
             self::PERM_SETTINGS_VIEW,
             self::PERM_SETTINGS_MANAGE,
             self::PERM_TAGS_VIEW,
@@ -110,8 +126,12 @@ final class Rbac
             ],
             self::ROLE_CONSOLE_MANAGER => [
                 self::PERM_CONSOLE_ACCESS,
+                self::PERM_LEADS_VIEW,
+                self::PERM_LEADS_MANAGE,
                 self::PERM_CLIENTS_VIEW,
                 self::PERM_CLIENTS_MANAGE,
+                self::PERM_PROJECTS_VIEW,
+                self::PERM_PROJECTS_MANAGE,
                 self::PERM_SETTINGS_VIEW,
                 self::PERM_SETTINGS_MANAGE,
                 self::PERM_TAGS_VIEW,

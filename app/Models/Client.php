@@ -54,6 +54,11 @@ class Client extends Model
         return $this->hasMany(Contact::class);
     }
 
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+
     public function primaryContact(): HasMany
     {
         return $this->contacts()->where('is_primary', true);

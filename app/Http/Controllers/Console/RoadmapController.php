@@ -15,11 +15,6 @@ use Inertia\Response;
 class RoadmapController extends Controller
 {
     public const MODULES = [
-        'projects' => [
-            'title' => 'Projects',
-            'phase' => 'Phase 2',
-            'blurb' => 'Engagements linked to a client and a service line (Business / Technology / Design), with status, dates, budget and an assigned team.',
-        ],
         'proformas' => [
             'title' => 'Proformas',
             'phase' => 'Phase 3',

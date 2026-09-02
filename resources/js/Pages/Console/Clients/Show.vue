@@ -163,6 +163,30 @@ const details = computed(() => [
                 </section>
             </div>
 
+            <section class="panel-card" style="margin-bottom: 1rem">
+                <div class="client-card-head">
+                    <h2 class="panel-card-title">Projects</h2>
+                    <Link
+                        v-if="can('projects.manage') && !client.archived"
+                        :href="route('console.projects.create', { client: client.id })"
+                        class="panel-link"
+                    >
+                        + New project
+                    </Link>
+                </div>
+                <p v-if="!client.projects.length" class="panel-cell-muted">No projects yet.</p>
+                <ul v-else class="client-contact-list">
+                    <li v-for="p in client.projects" :key="p.id">
+                        <div class="client-contact-name">
+                            <Link :href="route('console.projects.show', p.id)" class="panel-link" style="padding: 0">{{ p.name }}</Link>
+                        </div>
+                        <div class="panel-cell-muted" style="text-transform: capitalize">
+                            {{ p.service_line }} &middot; {{ p.status.replace('_', ' ') }}
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
             <div class="client-detail-grid">
                 <section class="panel-card">
                     <h2 class="panel-card-title">Recent activity</h2>
@@ -170,8 +194,8 @@ const details = computed(() => [
                 </section>
 
                 <section class="panel-card client-future">
-                    <h2 class="panel-card-title">Projects, proformas &amp; invoices</h2>
-                    <p>These appear here as the billing and projects modules come online.</p>
+                    <h2 class="panel-card-title">Proformas &amp; invoices</h2>
+                    <p>These appear here as the billing module comes online.</p>
                 </section>
             </div>
         </div>

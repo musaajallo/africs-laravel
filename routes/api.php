@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ClientController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\ProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,18 @@ Route::prefix('v1')
 
         Route::middleware('abilities:leads.manage')->group(function () {
             Route::post('leads', [LeadController::class, 'store'])->name('api.v1.leads.store');
+        });
+
+        Route::middleware('abilities:projects.view')->group(function () {
+            Route::get('projects', [ProjectController::class, 'index'])->name('api.v1.projects.index');
+            Route::get('projects/{project}', [ProjectController::class, 'show'])->name('api.v1.projects.show');
+        });
+
+        Route::middleware('abilities:projects.manage')->group(function () {
+            Route::post('projects', [ProjectController::class, 'store'])->name('api.v1.projects.store');
+            Route::put('projects/{project}', [ProjectController::class, 'update'])->name('api.v1.projects.update');
+            Route::patch('projects/{project}', [ProjectController::class, 'update']);
+            Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('api.v1.projects.destroy');
         });
 
         Route::middleware('abilities:clients.manage')->group(function () {

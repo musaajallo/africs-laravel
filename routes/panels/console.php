@@ -6,6 +6,7 @@ use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\LeadController;
+use App\Http\Controllers\Console\ProjectController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
 use App\Http\Controllers\Console\TagController;
@@ -39,6 +40,10 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     Route::put('leads/{lead}/triage', [LeadController::class, 'triage'])->name('leads.triage');
     Route::post('leads/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
     Route::delete('leads/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy');
+
+    // Projects.
+    Route::put('projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
+    Route::resource('projects', ProjectController::class)->withTrashed(['show']);
 
     // Clients & contacts. Actions are authorised by ClientPolicy.
     Route::put('clients/{client}/restore', [ClientController::class, 'restore'])

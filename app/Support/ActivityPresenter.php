@@ -3,6 +3,8 @@
 namespace App\Support;
 
 use App\Models\Client;
+use App\Models\Lead;
+use App\Models\Project;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 
@@ -49,6 +51,8 @@ final class ActivityPresenter
 
         return match (true) {
             $subject instanceof Client => $subject->name,
+            $subject instanceof Project => $subject->name,
+            $subject instanceof Lead => $subject->company ?: $subject->name,
             $subject === null => null,
             default => class_basename($subject).' #'.$subject->getKey(),
         };
@@ -58,11 +62,12 @@ final class ActivityPresenter
     {
         $subject = $activity->subject;
 
-        if ($subject instanceof Client) {
-            return route('console.clients.show', $subject->id);
-        }
-
-        return null;
+        return match (true) {
+            $subject instanceof Client => route('console.clients.show', $subject->id),
+            $subject instanceof Project => route('console.projects.show', $subject->id),
+            $subject instanceof Lead => route('console.leads.show', $subject->id),
+            default => null,
+        };
     }
 
     /**

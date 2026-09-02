@@ -106,6 +106,7 @@ class ClientController extends Controller
         $client->load([
             'contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name'),
             'owner:id,name', 'createdBy:id,name', 'tags:id,name,slug,color',
+            'projects' => fn ($q) => $q->orderByDesc('created_at'),
         ]);
 
         $activity = Activity::forSubject($client)
@@ -270,6 +271,14 @@ class ClientController extends Controller
                 'name' => $tag->name,
                 'color' => $tag->color,
             ])->all(),
+            'projects' => $client->relationLoaded('projects')
+                ? $client->projects->map(fn ($project) => [
+                    'id' => $project->id,
+                    'name' => $project->name,
+                    'service_line' => $project->service_line,
+                    'status' => $project->status,
+                ])->all()
+                : [],
             'contacts' => $client->contacts->map(fn ($contact) => [
                 'id' => $contact->id,
                 'name' => $contact->name,

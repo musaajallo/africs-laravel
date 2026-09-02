@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ContactSubmission;
+use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +28,7 @@ class ContactController extends Controller
             'message' => 'required|string|max:5000',
         ]);
 
-        ContactSubmission::create($validated);
+        Lead::create($validated);
 
         return redirect()->route('contact')->with('success', "Thanks — we've received your message and will be in touch soon.");
     }
