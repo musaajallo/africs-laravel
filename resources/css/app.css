@@ -952,6 +952,41 @@ textarea.field-input {
     color: var(--color-ink);
 }
 
+/* ---------- Signed-in account menu ---------- */
+
+.site-account-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+
+/* Anchor the panel list to the right edge of the trigger, not its centre. */
+.site-account-menu-list {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+/* The logout item is an Inertia <Link as="button"> — strip the button chrome. */
+.site-account-logout {
+    width: 100%;
+    background: none;
+    border: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.site-mobile-logout {
+    background: none;
+    border: none;
+    font: inherit;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+}
+
 .site-mobile-group-trigger {
     display: flex;
     align-items: center;

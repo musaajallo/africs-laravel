@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavDropdown from '@/Components/NavDropdown.vue';
 import NavMobileGroup from '@/Components/NavMobileGroup.vue';
+import SiteAccountMenu from '@/Components/SiteAccountMenu.vue';
+import { useAuth } from '@/Composables/useAuth';
 
 defineProps({
     canLogin: {
@@ -13,6 +15,29 @@ defineProps({
 
 const mobileMenuOpen = ref(false);
 const isDark = ref(false);
+
+const { user, can } = useAuth();
+
+// Panels the signed-in user is allowed to open, in landing-priority order
+// (mirrors App\Support\PanelRouter). Drives whether the nav shows a single
+// link straight to their panel or a dropdown of the panels they can reach.
+const panels = computed(() => {
+    const list = [];
+
+    if (can('console.access')) {
+        list.push({ label: 'Console', href: route('console.dashboard') });
+    }
+
+    if (can('cms.access')) {
+        list.push({ label: 'Website CMS', href: route('cms.dashboard') });
+    }
+
+    return list;
+});
+
+const accountLabel = computed(
+    () => user.value?.name?.trim().split(/\s+/)[0] || 'Account',
+);
 
 const servicesItems = [
     { label: 'Business', href: route('services.business') },
@@ -67,8 +92,22 @@ const moreItems = [
                     </svg>
                 </button>
 
+                <template v-if="user">
+                    <Link
+                        v-if="panels.length === 1"
+                        :href="panels[0].href"
+                        class="btn btn-secondary site-nav-login"
+                    >
+                        {{ panels[0].label }}
+                    </Link>
+                    <SiteAccountMenu
+                        v-else
+                        :label="accountLabel"
+                        :panels="panels"
+                    />
+                </template>
                 <Link
-                    v-if="canLogin"
+                    v-else-if="canLogin"
                     :href="route('login')"
                     class="btn btn-secondary site-nav-login"
                 >
@@ -123,8 +162,28 @@ const moreItems = [
             <Link :href="route('contact')" class="site-nav-link" @click="mobileMenuOpen = false">Contact</Link>
             <Link :href="route('academy')" class="btn btn-accent site-nav-btn" @click="mobileMenuOpen = false">Academy</Link>
             <Link :href="route('limitless-africs')" class="btn btn-primary site-nav-btn" @click="mobileMenuOpen = false">Limitless Africs</Link>
+            <template v-if="user">
+                <Link
+                    v-for="panel in panels"
+                    :key="panel.href"
+                    :href="panel.href"
+                    class="site-nav-link"
+                    @click="mobileMenuOpen = false"
+                >
+                    {{ panel.label }}
+                </Link>
+                <Link
+                    :href="route('logout')"
+                    method="post"
+                    as="button"
+                    class="site-nav-link site-mobile-logout"
+                    @click="mobileMenuOpen = false"
+                >
+                    Log out
+                </Link>
+            </template>
             <Link
-                v-if="canLogin"
+                v-else-if="canLogin"
                 :href="route('login')"
                 class="site-nav-link"
                 @click="mobileMenuOpen = false"
