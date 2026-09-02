@@ -9,6 +9,12 @@ const { can } = useAuth();
 const allNav = [
     { label: 'Dashboard', routeName: 'console.dashboard', permission: null },
     {
+        label: 'Clients',
+        routeName: 'console.clients.index',
+        activeMatch: 'console.clients.*',
+        permission: 'clients.view',
+    },
+    {
         label: 'Users & access',
         routeName: 'console.users.index',
         activeMatch: 'console.users.*',

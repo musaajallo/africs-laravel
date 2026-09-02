@@ -35,6 +35,12 @@ final class Rbac
     /** Create, edit, deactivate users and assign their roles. */
     public const PERM_USERS_MANAGE = 'users.manage';
 
+    /** View the client register. */
+    public const PERM_CLIENTS_VIEW = 'clients.view';
+
+    /** Create, edit, archive clients and manage their contacts. */
+    public const PERM_CLIENTS_MANAGE = 'clients.manage';
+
     /**
      * Every permission the application knows about.
      *
@@ -47,6 +53,8 @@ final class Rbac
             self::PERM_CONSOLE_ACCESS,
             self::PERM_USERS_VIEW,
             self::PERM_USERS_MANAGE,
+            self::PERM_CLIENTS_VIEW,
+            self::PERM_CLIENTS_MANAGE,
         ];
     }
 
@@ -64,6 +72,8 @@ final class Rbac
             ],
             self::ROLE_CONSOLE_MANAGER => [
                 self::PERM_CONSOLE_ACCESS,
+                self::PERM_CLIENTS_VIEW,
+                self::PERM_CLIENTS_MANAGE,
             ],
         ];
     }

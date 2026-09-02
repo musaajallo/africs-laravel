@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\UserController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Clients & contacts. Actions are authorised by ClientPolicy.
+    Route::put('clients/{client}/restore', [ClientController::class, 'restore'])
+        ->name('clients.restore');
+    Route::resource('clients', ClientController::class)->withTrashed(['show']);
 
     // User & access management. Individual actions are authorised by UserPolicy.
     Route::resource('users', UserController::class)->except('show');

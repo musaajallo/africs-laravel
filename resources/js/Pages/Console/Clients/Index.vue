@@ -1,0 +1,101 @@
+<script setup>
+import { ref, watch } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
+import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
+import PanelTable from '@/Components/Panel/PanelTable.vue';
+import PanelPagination from '@/Components/Panel/PanelPagination.vue';
+import PanelButton from '@/Components/Panel/PanelButton.vue';
+import { useAuth } from '@/Composables/useAuth.js';
+
+const props = defineProps({
+    clients: { type: Object, required: true },
+    filters: { type: Object, default: () => ({}) },
+});
+
+const { can } = useAuth();
+const search = ref(props.filters.search ?? '');
+const status = ref(props.filters.status ?? '');
+let timer = null;
+
+function apply() {
+    router.get(
+        route('console.clients.index'),
+        { search: search.value || undefined, status: status.value || undefined },
+        { preserveState: true, preserveScroll: true, replace: true },
+    );
+}
+
+watch(search, () => {
+    clearTimeout(timer);
+    timer = setTimeout(apply, 300);
+});
+watch(status, apply);
+</script>
+
+<template>
+    <Head title="Clients" />
+
+    <ConsoleLayout>
+        <template #title>Clients</template>
+
+        <div class="panel-page">
+            <PanelPageHeader
+                title="Clients"
+                subtitle="The companies and people Africs does work for."
+            >
+                <template #actions>
+                    <PanelButton v-if="can('clients.manage')" :href="route('console.clients.create')">
+                        New client
+                    </PanelButton>
+                </template>
+            </PanelPageHeader>
+
+            <div class="panel-toolbar">
+                <input
+                    v-model="search"
+                    type="search"
+                    class="field-input panel-toolbar-search"
+                    placeholder="Search name, email or city"
+                />
+                <select v-model="status" class="field-input" style="max-width: 12rem">
+                    <option value="">All statuses</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <PanelTable
+                :columns="['Name', 'Location', 'Currency', 'Account manager', { label: 'Contacts', align: 'right' }]"
+                :rows="clients.data"
+                empty="No clients match your search."
+            >
+                <template #row="{ row }">
+                    <td>
+                        <Link :href="route('console.clients.show', row.id)" class="panel-link" style="padding: 0">
+                            {{ row.name }}
+                        </Link>
+                        <div class="panel-cell-muted">
+                            {{ row.type === 'individual' ? 'Individual' : 'Company' }}
+                            <span v-if="row.status === 'inactive'"> &middot; inactive</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span v-if="row.city || row.country">{{ [row.city, row.country].filter(Boolean).join(', ') }}</span>
+                        <span v-else class="panel-cell-muted">—</span>
+                    </td>
+                    <td>{{ row.currency || '—' }}</td>
+                    <td>{{ row.owner || '—' }}</td>
+                    <td class="panel-row-actions">{{ row.contacts_count }}</td>
+                </template>
+            </PanelTable>
+
+            <PanelPagination
+                :links="clients.links"
+                :from="clients.from"
+                :to="clients.to"
+                :total="clients.total"
+            />
+        </div>
+    </ConsoleLayout>
+</template>
