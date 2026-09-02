@@ -5,6 +5,7 @@ import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
+import TagBadge from '@/Components/Panel/TagBadge.vue';
 import ContactDialog from './Partials/ContactDialog.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
@@ -96,6 +97,10 @@ const details = computed(() => [
                     </PanelButton>
                 </template>
             </PanelPageHeader>
+
+            <div v-if="client.tags.length" class="tag-badge-list" style="margin: -0.5rem 0 1.25rem">
+                <TagBadge v-for="t in client.tags" :key="t.name" :name="t.name" :color="t.color" />
+            </div>
 
             <div class="client-detail-grid">
                 <section class="panel-card">

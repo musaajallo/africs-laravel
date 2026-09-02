@@ -55,6 +55,9 @@ class ClientRequest extends FormRequest
             'contacts.*.phone' => ['nullable', 'string', 'max:50'],
             'contacts.*.is_primary' => ['boolean'],
             'contacts.*.notes' => ['nullable', 'string', 'max:2000'],
+
+            'tags' => ['array'],
+            'tags.*' => ['string', 'max:50'],
         ];
     }
 
@@ -63,7 +66,19 @@ class ClientRequest extends FormRequest
      */
     public function clientAttributes(): array
     {
-        return $this->safe()->except('contacts');
+        return $this->safe()->except(['contacts', 'tags']);
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function tagNames(): array
+    {
+        return collect($this->input('tags', []))
+            ->map(fn ($tag) => trim((string) $tag))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     /**

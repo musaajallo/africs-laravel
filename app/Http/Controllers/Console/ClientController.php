@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Console;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Console\ClientRequest;
 use App\Models\Client;
+use App\Models\Tag;
 use App\Models\User;
 use App\Support\ClientTypes;
 use App\Support\Settings;
@@ -24,10 +25,11 @@ class ClientController extends Controller
             'search' => $request->string('search')->trim()->value(),
             'status' => $request->string('status')->trim()->value(),
             'type' => $request->string('type')->trim()->value(),
+            'tag' => $request->string('tag')->trim()->value(),
         ];
 
         $clients = Client::query()
-            ->with('owner:id,name')
+            ->with(['owner:id,name', 'tags:id,name,slug,color'])
             ->withCount('contacts')
             ->search($filters['search'])
             ->when(
@@ -38,6 +40,7 @@ class ClientController extends Controller
                 in_array($filters['type'], ClientTypes::TYPES, true),
                 fn ($query) => $query->where('type', $filters['type']),
             )
+            ->tagged($filters['tag'] ?: null)
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString()
@@ -52,12 +55,16 @@ class ClientController extends Controller
                 'currency' => $client->currency,
                 'owner' => $client->owner?->name,
                 'contacts_count' => $client->contacts_count,
+                'tags' => $client->tags->map(fn (Tag $tag) => [
+                    'name' => $tag->name, 'color' => $tag->color,
+                ])->all(),
             ]);
 
         return Inertia::render('Console/Clients/Index', [
             'clients' => $clients,
             'filters' => $filters,
             'types' => ClientTypes::TYPES,
+            'tags' => Tag::orderBy('name')->get(['name', 'slug', 'color']),
         ]);
     }
 
@@ -78,6 +85,7 @@ class ClientController extends Controller
             $client->save();
 
             $this->syncContacts($client, $request->contactRows());
+            $client->syncTagsByName($request->tagNames());
 
             return $client;
         });
@@ -91,7 +99,10 @@ class ClientController extends Controller
     {
         $this->authorize('view', $client);
 
-        $client->load(['contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name'), 'owner:id,name', 'createdBy:id,name']);
+        $client->load([
+            'contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name'),
+            'owner:id,name', 'createdBy:id,name', 'tags:id,name,slug,color',
+        ]);
 
         return Inertia::render('Console/Clients/Show', [
             'client' => $this->present($client),
@@ -102,7 +113,10 @@ class ClientController extends Controller
     {
         $this->authorize('update', $client);
 
-        $client->load(['contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name')]);
+        $client->load([
+            'contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name'),
+            'tags:id,name,slug,color',
+        ]);
 
         return Inertia::render('Console/Clients/Edit', [
             'client' => $this->present($client),
@@ -117,6 +131,7 @@ class ClientController extends Controller
         DB::transaction(function () use ($request, $client) {
             $client->update($request->clientAttributes());
             $this->syncContacts($client, $request->contactRows());
+            $client->syncTagsByName($request->tagNames());
         });
 
         return redirect()
@@ -182,6 +197,7 @@ class ClientController extends Controller
             'currencies' => Settings::enabledCurrencies(),
             'categories' => ClientTypes::CATEGORIES,
             'owners' => User::query()->active()->orderBy('name')->get(['id', 'name']),
+            'allTags' => Tag::orderBy('name')->pluck('name'),
         ];
     }
 
@@ -210,6 +226,10 @@ class ClientController extends Controller
             'created_by' => $client->createdBy?->name,
             'created_at' => $client->created_at?->toDateString(),
             'archived' => $client->trashed(),
+            'tags' => $client->tags->map(fn (Tag $tag) => [
+                'name' => $tag->name,
+                'color' => $tag->color,
+            ])->all(),
             'contacts' => $client->contacts->map(fn ($contact) => [
                 'id' => $contact->id,
                 'name' => $contact->name,

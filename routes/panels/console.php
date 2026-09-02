@@ -5,6 +5,7 @@ use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
+use App\Http\Controllers\Console\TagController;
 use App\Http\Controllers\Console\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,4 +45,7 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     // Settings.
     Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
+
+    // Tags — managed inline on the index page.
+    Route::resource('tags', TagController::class)->only(['index', 'store', 'update', 'destroy']);
 });

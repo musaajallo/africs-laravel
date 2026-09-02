@@ -8,6 +8,7 @@ defineProps({
     currencies: { type: Array, default: () => [] },
     categories: { type: Object, default: () => ({}) },
     owners: { type: Array, default: () => [] },
+    allTags: { type: Array, default: () => [] },
 });
 </script>
 
@@ -23,7 +24,7 @@ defineProps({
                 subtitle="Add a company or individual you do work for."
             />
             <div class="panel-card">
-                <ClientForm :currencies="currencies" :categories="categories" :owners="owners" />
+                <ClientForm :currencies="currencies" :categories="categories" :owners="owners" :all-tags="allTags" />
             </div>
         </div>
     </ConsoleLayout>

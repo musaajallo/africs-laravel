@@ -47,6 +47,12 @@ final class Rbac
     /** Change company details, currencies, tax and payment defaults. */
     public const PERM_SETTINGS_MANAGE = 'settings.manage';
 
+    /** View the tag list. */
+    public const PERM_TAGS_VIEW = 'tags.view';
+
+    /** Create, rename, recolour and delete tags. */
+    public const PERM_TAGS_MANAGE = 'tags.manage';
+
     /**
      * Every permission the application knows about.
      *
@@ -63,6 +69,8 @@ final class Rbac
             self::PERM_CLIENTS_MANAGE,
             self::PERM_SETTINGS_VIEW,
             self::PERM_SETTINGS_MANAGE,
+            self::PERM_TAGS_VIEW,
+            self::PERM_TAGS_MANAGE,
         ];
     }
 
@@ -84,6 +92,8 @@ final class Rbac
                 self::PERM_CLIENTS_MANAGE,
                 self::PERM_SETTINGS_VIEW,
                 self::PERM_SETTINGS_MANAGE,
+                self::PERM_TAGS_VIEW,
+                self::PERM_TAGS_MANAGE,
             ],
         ];
     }

@@ -45,6 +45,12 @@ const allNav = [
         permission: 'users.view',
     },
     {
+        label: 'Tags',
+        routeName: 'console.tags.index',
+        activeMatch: 'console.tags.*',
+        permission: 'tags.view',
+    },
+    {
         label: 'Settings',
         routeName: 'console.settings.edit',
         activeMatch: 'console.settings.*',

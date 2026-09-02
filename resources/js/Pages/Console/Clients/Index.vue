@@ -7,18 +7,21 @@ import PanelTable from '@/Components/Panel/PanelTable.vue';
 import PanelPagination from '@/Components/Panel/PanelPagination.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
+import TagBadge from '@/Components/Panel/TagBadge.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
     clients: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
     types: { type: Array, default: () => [] },
+    tags: { type: Array, default: () => [] },
 });
 
 const { can } = useAuth();
 const search = ref(props.filters.search ?? '');
 const status = ref(props.filters.status ?? '');
 const type = ref(props.filters.type ?? '');
+const tag = ref(props.filters.tag ?? '');
 let timer = null;
 
 const typeLabels = {
@@ -34,6 +37,7 @@ function apply() {
             search: search.value || undefined,
             status: status.value || undefined,
             type: type.value || undefined,
+            tag: tag.value || undefined,
         },
         { preserveState: true, preserveScroll: true, replace: true },
     );
@@ -43,7 +47,7 @@ watch(search, () => {
     clearTimeout(timer);
     timer = setTimeout(apply, 300);
 });
-watch([status, type], apply);
+watch([status, type, tag], apply);
 
 function archive(client) {
     router.delete(route('console.clients.destroy', client.id), { preserveScroll: true });
@@ -84,6 +88,10 @@ function archive(client) {
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>
+                <select v-if="tags.length" v-model="tag" class="field-input" style="max-width: 11rem">
+                    <option value="">Any tag</option>
+                    <option v-for="t in tags" :key="t.slug" :value="t.slug">{{ t.name }}</option>
+                </select>
             </div>
 
             <PanelTable
@@ -106,6 +114,9 @@ function archive(client) {
                         <div class="panel-cell-muted">
                             {{ typeLabels[row.type] }}<span v-if="row.category"> &middot; {{ row.category }}</span>
                             <span v-if="row.status === 'inactive'"> &middot; inactive</span>
+                        </div>
+                        <div v-if="row.tags.length" class="tag-badge-list" style="margin-top: 0.35rem">
+                            <TagBadge v-for="t in row.tags" :key="t.name" :name="t.name" :color="t.color" />
                         </div>
                     </td>
                     <td>

@@ -3,12 +3,14 @@ import { computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import PanelField from '@/Components/Panel/PanelField.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
+import TagChipsInput from '@/Components/Panel/TagChipsInput.vue';
 
 const props = defineProps({
     client: { type: Object, default: null },
     currencies: { type: Array, default: () => [] },
     categories: { type: Object, default: () => ({}) },
     owners: { type: Array, default: () => [] },
+    allTags: { type: Array, default: () => [] },
 });
 
 const isEdit = !!props.client;
@@ -41,6 +43,7 @@ const form = useForm({
     contacts: props.client?.contacts?.length
         ? props.client.contacts.map((c) => ({ ...c }))
         : [blankContact()],
+    tags: props.client?.tags?.map((t) => t.name) ?? [],
 });
 
 const categoryOptions = computed(() => props.categories[form.type] ?? []);
@@ -186,6 +189,13 @@ function submit() {
                 </div>
             </div>
             <button type="button" class="panel-link" @click="addContact">+ Add another contact</button>
+        </fieldset>
+
+        <fieldset class="panel-form-section">
+            <legend>Tags</legend>
+            <PanelField :error="form.errors.tags" hint="New tags are created automatically.">
+                <TagChipsInput v-model="form.tags" :suggestions="allTags" />
+            </PanelField>
         </fieldset>
 
         <fieldset class="panel-form-section">
