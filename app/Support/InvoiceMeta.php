@@ -26,6 +26,9 @@ final class InvoiceMeta
      */
     public const MANUAL_STATUSES = ['sent', 'partially_paid', 'paid', 'overdue', 'void'];
 
+    /** A proforma can be converted to an invoice only once it has been sent. */
+    public const CONVERTIBLE_PROFORMA_STATUSES = ['sent', 'accepted'];
+
     /** @return list<string> */
     public static function statusKeys(): array
     {

@@ -199,14 +199,14 @@ class ProformaController extends Controller
         return back()->with('success', "Proforma marked {$data['status']}.");
     }
 
-    /** Convert a proforma into a draft invoice. */
+    /** Convert a sent or accepted proforma into a draft invoice. */
     public function convert(Request $request, Proforma $proforma): RedirectResponse
     {
         $this->authorize('manage', $proforma);
 
         if (! $proforma->canBeConverted()) {
             throw ValidationException::withMessages([
-                'status' => 'This proforma has already been converted to an invoice.',
+                'status' => 'Only a sent or accepted proforma that has not been converted can become an invoice.',
             ]);
         }
 

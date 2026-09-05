@@ -58,7 +58,7 @@ function convert(proforma) {
         <div class="panel-page">
             <PanelPageHeader
                 title="Proformas"
-                subtitle="Preliminary quotes you can convert to an invoice."
+                subtitle="Preliminary quotes. Convert one to an invoice once it's been sent."
             >
                 <template #actions>
                     <PanelButton v-if="can('proformas.manage')" :href="route('console.proformas.create')">

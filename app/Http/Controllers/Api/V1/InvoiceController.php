@@ -103,7 +103,7 @@ class InvoiceController extends Controller
 
         if (! $proforma->canBeConverted()) {
             throw ValidationException::withMessages([
-                'status' => 'This proforma has already been converted to an invoice.',
+                'status' => 'Only a sent or accepted proforma that has not been converted can become an invoice.',
             ]);
         }
 
