@@ -195,23 +195,34 @@ const details = computed(() => [
 
                 <section class="panel-card">
                     <div class="client-card-head">
-                        <h2 class="panel-card-title">Proformas</h2>
-                        <Link
-                            v-if="can('proformas.manage') && !client.archived"
-                            :href="route('console.proformas.create', { client: client.id })"
-                            class="panel-link"
-                        >
-                            + New proforma
-                        </Link>
+                        <h2 class="panel-card-title">Billing</h2>
+                        <span>
+                            <Link
+                                v-if="can('proformas.manage') && !client.archived"
+                                :href="route('console.proformas.create', { client: client.id })"
+                                class="panel-link"
+                            >+ Proforma</Link>
+                            <Link
+                                v-if="can('invoices.manage') && !client.archived"
+                                :href="route('console.invoices.create', { client: client.id })"
+                                class="panel-link"
+                            >+ Invoice</Link>
+                        </span>
                     </div>
-                    <p v-if="!client.proformas.length" class="panel-cell-muted">No proformas yet.</p>
+                    <p v-if="!client.proformas.length && !client.invoices.length" class="panel-cell-muted">
+                        No proformas or invoices yet.
+                    </p>
                     <ul v-else class="client-contact-list">
-                        <li v-for="p in client.proformas" :key="p.id">
+                        <li v-for="d in [...client.invoices, ...client.proformas]" :key="d.number">
                             <div class="client-contact-name">
-                                <Link :href="route('console.proformas.show', p.id)" class="panel-link" style="padding: 0">{{ p.number }}</Link>
+                                <Link
+                                    :href="route(d.number.startsWith('INV') ? 'console.invoices.show' : 'console.proformas.show', d.id)"
+                                    class="panel-link"
+                                    style="padding: 0"
+                                >{{ d.number }}</Link>
                             </div>
                             <div class="panel-cell-muted">
-                                {{ p.currency }} {{ Number(p.total).toLocaleString() }} &middot; {{ p.status }}
+                                {{ d.currency }} {{ Number(d.total).toLocaleString() }} &middot; {{ d.status }}
                             </div>
                         </li>
                     </ul>

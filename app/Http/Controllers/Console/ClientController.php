@@ -108,6 +108,7 @@ class ClientController extends Controller
             'owner:id,name', 'createdBy:id,name', 'tags:id,name,slug,color',
             'projects' => fn ($q) => $q->orderByDesc('created_at'),
             'proformas' => fn ($q) => $q->latest('issue_date')->latest('id')->limit(10),
+            'invoices' => fn ($q) => $q->latest('issue_date')->latest('id')->limit(10),
         ]);
 
         $activity = Activity::forSubject($client)
@@ -288,6 +289,16 @@ class ClientController extends Controller
                     'currency' => $proforma->currency,
                     'total' => $proforma->total,
                     'issue_date' => $proforma->issue_date?->toDateString(),
+                ])->all()
+                : [],
+            'invoices' => $client->relationLoaded('invoices')
+                ? $client->invoices->map(fn ($invoice) => [
+                    'id' => $invoice->id,
+                    'number' => $invoice->number,
+                    'status' => $invoice->status,
+                    'currency' => $invoice->currency,
+                    'total' => $invoice->total,
+                    'issue_date' => $invoice->issue_date?->toDateString(),
                 ])->all()
                 : [],
             'contacts' => $client->contacts->map(fn ($contact) => [

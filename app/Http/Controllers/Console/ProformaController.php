@@ -196,6 +196,24 @@ class ProformaController extends Controller
         return back()->with('success', "Proforma marked {$data['status']}.");
     }
 
+    /** Convert an accepted proforma into a draft invoice. */
+    public function convert(Request $request, Proforma $proforma): RedirectResponse
+    {
+        $this->authorize('manage', $proforma);
+
+        if (! $proforma->canBeConverted()) {
+            throw ValidationException::withMessages([
+                'status' => 'Only a sent or accepted proforma that has not been converted can become an invoice.',
+            ]);
+        }
+
+        $invoice = $proforma->convertToInvoice($request->user()->id);
+
+        return redirect()
+            ->route('console.invoices.show', $invoice)
+            ->with('success', "{$proforma->number} converted to {$invoice->number}.");
+    }
+
     public function pdf(Proforma $proforma): HttpResponse
     {
         $this->authorize('view', $proforma);
@@ -259,6 +277,7 @@ class ProformaController extends Controller
             'created_by' => $proforma->createdBy?->name,
             'created_at' => $proforma->created_at?->toDateString(),
             'editable' => $proforma->isEditable(),
+            'can_convert' => $proforma->canBeConverted(),
             'archived' => $proforma->trashed(),
             'lines' => $proforma->lines->map(fn ($line) => [
                 'id' => $line->id,

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasDocumentTotals;
+use App\Support\InvoiceMeta;
 use App\Support\ProformaMeta;
+use App\Support\Sequence;
+use App\Support\Settings;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +25,12 @@ use Spatie\Activitylog\Support\LogOptions;
 class Proforma extends Model
 {
     use HasDocumentTotals, HasFactory, LogsActivity, SoftDeletes;
+
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'status' => 'draft',
+        'fx_rate' => 1,
+    ];
 
     protected function casts(): array
     {
@@ -70,6 +79,60 @@ class Proforma extends Model
     public function isConverted(): bool
     {
         return $this->status === 'converted';
+    }
+
+    public function canBeConverted(): bool
+    {
+        return ! $this->isConverted()
+            && $this->converted_invoice_id === null
+            && in_array($this->status, InvoiceMeta::CONVERTIBLE_PROFORMA_STATUSES, true);
+    }
+
+    /**
+     * Create a draft invoice from this proforma, copying the client, project,
+     * currency, snapshotted FX rate, tax and line items, and record a two-way
+     * link. The proforma moves to the "converted" status.
+     */
+    public function convertToInvoice(?int $userId = null): Invoice
+    {
+        return $this->getConnection()->transaction(function () use ($userId) {
+            $invoice = new Invoice([
+                'client_id' => $this->client_id,
+                'project_id' => $this->project_id,
+                'proforma_id' => $this->id,
+                'status' => 'draft',
+                'currency' => $this->currency,
+                'fx_rate' => $this->fx_rate,
+                'issue_date' => now()->toDateString(),
+                'due_date' => now()->addDays(Settings::paymentTermsDays())->toDateString(),
+                'tax_label' => $this->tax_label,
+                'tax_rate' => $this->tax_rate,
+                'notes' => $this->notes,
+                'terms' => $this->terms,
+            ]);
+            $invoice->number = Sequence::next('invoice', 'INV');
+            $invoice->created_by = $userId;
+            $invoice->save();
+
+            foreach ($this->lines as $line) {
+                $invoice->lines()->create([
+                    'description' => $line->description,
+                    'quantity' => $line->quantity,
+                    'unit_price' => $line->unit_price,
+                    'position' => $line->position,
+                ]);
+            }
+
+            $invoice->load('lines');
+            $invoice->saveWithTotals();
+
+            $this->forceFill([
+                'status' => 'converted',
+                'converted_invoice_id' => $invoice->id,
+            ])->save();
+
+            return $invoice;
+        });
     }
 
     #[Scope]

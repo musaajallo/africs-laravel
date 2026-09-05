@@ -5,27 +5,28 @@ import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import DocumentForm from '@/Components/Panel/DocumentForm.vue';
 
 const props = defineProps({
-    proforma: { type: Object, required: true },
+    invoice: { type: Object, required: true },
     currencies: { type: Array, default: () => [] },
     baseCurrency: { type: String, required: true },
     defaultTax: { type: Object, default: () => ({ label: 'VAT', rate: 0 }) },
+    paymentTermsDays: { type: Number, default: 30 },
     clients: { type: Array, default: () => [] },
     projects: { type: Array, default: () => [] },
 });
 
 const form = useForm({
-    client_id: props.proforma.client_id,
-    project_id: props.proforma.project_id ?? '',
-    currency: props.proforma.currency,
-    fx_rate: props.proforma.fx_rate,
-    issue_date: props.proforma.issue_date,
-    valid_until: props.proforma.valid_until ?? '',
-    tax_label: props.proforma.tax_label,
-    tax_rate: props.proforma.tax_rate,
-    notes: props.proforma.notes ?? '',
-    terms: props.proforma.terms ?? '',
-    lines: props.proforma.lines.length
-        ? props.proforma.lines.map((l) => ({
+    client_id: props.invoice.client_id,
+    project_id: props.invoice.project_id ?? '',
+    currency: props.invoice.currency,
+    fx_rate: props.invoice.fx_rate,
+    issue_date: props.invoice.issue_date,
+    due_date: props.invoice.due_date ?? '',
+    tax_label: props.invoice.tax_label,
+    tax_rate: props.invoice.tax_rate,
+    notes: props.invoice.notes ?? '',
+    terms: props.invoice.terms ?? '',
+    lines: props.invoice.lines.length
+        ? props.invoice.lines.map((l) => ({
               description: l.description,
               quantity: l.quantity,
               unit_price: l.unit_price,
@@ -34,20 +35,20 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(route('console.proformas.update', props.proforma.id));
+    form.put(route('console.invoices.update', props.invoice.id));
 }
 </script>
 
 <template>
-    <Head :title="`Edit ${proforma.number}`" />
+    <Head :title="`Edit ${invoice.number}`" />
 
     <ConsoleLayout>
-        <template #title>Edit {{ proforma.number }}</template>
+        <template #title>Edit {{ invoice.number }}</template>
 
         <div class="panel-page">
-            <PanelPageHeader :title="`Edit ${proforma.number}`" subtitle="Only drafts can be edited.">
+            <PanelPageHeader :title="`Edit ${invoice.number}`" subtitle="Only drafts can be edited.">
                 <template #actions>
-                    <Link :href="route('console.proformas.show', proforma.id)" class="panel-link">Cancel</Link>
+                    <Link :href="route('console.invoices.show', invoice.id)" class="panel-link">Cancel</Link>
                 </template>
             </PanelPageHeader>
 
@@ -57,8 +58,8 @@ function submit() {
                 :base-currency="baseCurrency"
                 :clients="clients"
                 :projects="projects"
-                date-field="valid_until"
-                date-label="Valid until"
+                date-field="due_date"
+                date-label="Due date"
                 submit-label="Save changes"
                 @submit="submit"
             />

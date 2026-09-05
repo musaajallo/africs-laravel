@@ -53,7 +53,12 @@ const allNav = [
         activeMatch: 'console.proformas.*',
         permission: 'proformas.view',
     },
-    soon('Invoices', 'invoices'),
+    {
+        label: 'Invoices',
+        routeName: 'console.invoices.index',
+        activeMatch: 'console.invoices.*',
+        permission: 'invoices.view',
+    },
     soon('Payments & receipts', 'payments'),
 
     { heading: 'Security' },

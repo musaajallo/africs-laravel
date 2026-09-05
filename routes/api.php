@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ClientController;
 use App\Http\Controllers\Api\V1\ExchangeRateController;
+use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ProformaController;
 use App\Http\Controllers\Api\V1\ProjectController;
@@ -72,6 +73,19 @@ Route::prefix('v1')
             Route::put('proformas/{proforma}', [ProformaController::class, 'update'])->name('api.v1.proformas.update');
             Route::patch('proformas/{proforma}', [ProformaController::class, 'update']);
             Route::delete('proformas/{proforma}', [ProformaController::class, 'destroy'])->name('api.v1.proformas.destroy');
+        });
+
+        Route::middleware('abilities:invoices.view')->group(function () {
+            Route::get('invoices', [InvoiceController::class, 'index'])->name('api.v1.invoices.index');
+            Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('api.v1.invoices.show');
+        });
+
+        Route::middleware('abilities:invoices.manage')->group(function () {
+            Route::post('invoices', [InvoiceController::class, 'store'])->name('api.v1.invoices.store');
+            Route::put('invoices/{invoice}', [InvoiceController::class, 'update'])->name('api.v1.invoices.update');
+            Route::patch('invoices/{invoice}', [InvoiceController::class, 'update']);
+            Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('api.v1.invoices.destroy');
+            Route::post('proformas/{proforma}/convert', [InvoiceController::class, 'convert'])->name('api.v1.proformas.convert');
         });
 
         Route::middleware('abilities:clients.manage')->group(function () {

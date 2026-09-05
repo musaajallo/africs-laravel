@@ -59,6 +59,12 @@ final class Rbac
     /** Create, edit, send, archive proformas and convert them to invoices. */
     public const PERM_PROFORMAS_MANAGE = 'proformas.manage';
 
+    /** View invoices. */
+    public const PERM_INVOICES_VIEW = 'invoices.view';
+
+    /** Create, edit, send, void and archive invoices. */
+    public const PERM_INVOICES_MANAGE = 'invoices.manage';
+
     /** View the exchange-rate screen. */
     public const PERM_EXCHANGE_RATES_VIEW = 'exchange-rates.view';
 
@@ -103,6 +109,8 @@ final class Rbac
             self::PERM_PROJECTS_MANAGE,
             self::PERM_PROFORMAS_VIEW,
             self::PERM_PROFORMAS_MANAGE,
+            self::PERM_INVOICES_VIEW,
+            self::PERM_INVOICES_MANAGE,
             self::PERM_EXCHANGE_RATES_VIEW,
             self::PERM_EXCHANGE_RATES_MANAGE,
             self::PERM_SETTINGS_VIEW,
@@ -150,6 +158,8 @@ final class Rbac
                 self::PERM_PROJECTS_MANAGE,
                 self::PERM_PROFORMAS_VIEW,
                 self::PERM_PROFORMAS_MANAGE,
+                self::PERM_INVOICES_VIEW,
+                self::PERM_INVOICES_MANAGE,
                 self::PERM_EXCHANGE_RATES_VIEW,
                 self::PERM_EXCHANGE_RATES_MANAGE,
                 self::PERM_SETTINGS_VIEW,

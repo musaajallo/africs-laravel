@@ -9,6 +9,8 @@ const props = defineProps({
     baseCurrency: { type: String, required: true },
     clients: { type: Array, default: () => [] },
     projects: { type: Array, default: () => [] },
+    dateField: { type: String, default: 'valid_until' },
+    dateLabel: { type: String, default: 'Valid until' },
     submitLabel: { type: String, default: 'Save' },
 });
 
@@ -18,7 +20,6 @@ const clientProjects = computed(() =>
     props.projects.filter((p) => p.client_id === Number(props.form.client_id)),
 );
 
-// Clear a project that no longer belongs to the chosen client.
 watch(
     () => props.form.client_id,
     () => {
@@ -73,8 +74,8 @@ function lineError(i, field) {
                 <PanelField label="Issue date" :error="form.errors.issue_date" required>
                     <input v-model="form.issue_date" type="date" class="field-input" />
                 </PanelField>
-                <PanelField label="Valid until" :error="form.errors.valid_until" hint="Optional">
-                    <input v-model="form.valid_until" type="date" class="field-input" />
+                <PanelField :label="dateLabel" :error="form.errors[dateField]" hint="Optional">
+                    <input v-model="form[dateField]" type="date" class="field-input" />
                 </PanelField>
                 <PanelField label="Currency" :error="form.errors.currency" required>
                     <select v-model="form.currency" class="field-input">
@@ -84,7 +85,7 @@ function lineError(i, field) {
                 <PanelField
                     label="Exchange rate"
                     :error="form.errors.fx_rate"
-                    :hint="isBase ? 'Base currency — always 1' : `1 ${form.currency} in ${baseCurrency}, snapshotted on this proforma`"
+                    :hint="isBase ? 'Base currency — always 1' : `1 ${form.currency} in ${baseCurrency}, snapshotted on this document`"
                     required
                 >
                     <input v-model="form.fx_rate" type="number" step="0.0001" min="0" class="field-input" :disabled="isBase" />
@@ -115,7 +116,7 @@ function lineError(i, field) {
                 <tbody>
                     <tr v-for="(line, i) in form.lines" :key="i">
                         <td>
-                            <input v-model="line.description" type="text" class="field-input" placeholder="What is being quoted" />
+                            <input v-model="line.description" type="text" class="field-input" placeholder="What is being billed" />
                             <p v-if="lineError(i, 'description')" class="panel-field-error">{{ lineError(i, 'description') }}</p>
                         </td>
                         <td class="num">

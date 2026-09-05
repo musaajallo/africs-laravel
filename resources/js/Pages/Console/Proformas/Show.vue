@@ -42,6 +42,9 @@ const details = computed(() => [
 function setStatus(status) {
     router.put(route('console.proformas.status', props.proforma.id), { status }, { preserveScroll: true });
 }
+function convert() {
+    router.post(route('console.proformas.convert', props.proforma.id));
+}
 function archive() {
     router.delete(route('console.proformas.destroy', props.proforma.id));
 }
@@ -69,6 +72,17 @@ function restore() {
                         :href="route('console.proformas.edit', proforma.id)"
                     >Edit</PanelButton>
                     <PanelConfirm
+                        v-if="canManage && proforma.can_convert"
+                        title="Convert to an invoice?"
+                        :message="`A draft invoice will be created from ${proforma.number}. This proforma is then locked.`"
+                        confirm-label="Convert"
+                        @confirm="convert"
+                    >
+                        <template #trigger>
+                            <button type="button" class="btn btn-primary btn-sm">Convert to invoice</button>
+                        </template>
+                    </PanelConfirm>
+                    <PanelConfirm
                         v-if="canManage"
                         title="Archive this proforma?"
                         :message="`${proforma.number} will be hidden from the list. It can be restored.`"
@@ -82,7 +96,10 @@ function restore() {
             <div style="margin: -0.25rem 0 1.25rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
                 <DocumentStatusBadge :status="proforma.status" />
                 <span v-if="proforma.converted_invoice" class="panel-cell-muted">
-                    Converted to {{ proforma.converted_invoice.number }}
+                    Converted to
+                    <Link :href="route('console.invoices.show', proforma.converted_invoice.id)" class="panel-link" style="padding: 0">
+                        {{ proforma.converted_invoice.number }}
+                    </Link>
                 </span>
             </div>
 
