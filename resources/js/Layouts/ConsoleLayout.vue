@@ -42,12 +42,6 @@ const allNav = [
 
     { heading: 'Finance' },
     {
-        label: 'Exchange rates',
-        routeName: 'console.exchange-rates.index',
-        activeMatch: 'console.exchange-rates.*',
-        permission: 'exchange-rates.view',
-    },
-    {
         label: 'Proformas',
         routeName: 'console.proformas.index',
         activeMatch: 'console.proformas.*',
@@ -81,6 +75,12 @@ const allNav = [
         routeName: 'console.users.index',
         activeMatch: 'console.users.*',
         permission: 'users.view',
+    },
+    {
+        label: 'Exchange rates',
+        routeName: 'console.exchange-rates.index',
+        activeMatch: 'console.exchange-rates.*',
+        permission: 'exchange-rates.view',
     },
     {
         label: 'Tags',
