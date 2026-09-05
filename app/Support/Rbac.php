@@ -65,6 +65,15 @@ final class Rbac
     /** Create, edit, send, void and archive invoices. */
     public const PERM_INVOICES_MANAGE = 'invoices.manage';
 
+    /** View recorded payments and receipts. */
+    public const PERM_PAYMENTS_VIEW = 'payments.view';
+
+    /** Record, edit and remove payments; allocate them to invoices. */
+    public const PERM_PAYMENTS_MANAGE = 'payments.manage';
+
+    /** View the accounts-receivable summary. */
+    public const PERM_RECEIVABLES_VIEW = 'receivables.view';
+
     /** View the exchange-rate screen. */
     public const PERM_EXCHANGE_RATES_VIEW = 'exchange-rates.view';
 
@@ -111,6 +120,9 @@ final class Rbac
             self::PERM_PROFORMAS_MANAGE,
             self::PERM_INVOICES_VIEW,
             self::PERM_INVOICES_MANAGE,
+            self::PERM_PAYMENTS_VIEW,
+            self::PERM_PAYMENTS_MANAGE,
+            self::PERM_RECEIVABLES_VIEW,
             self::PERM_EXCHANGE_RATES_VIEW,
             self::PERM_EXCHANGE_RATES_MANAGE,
             self::PERM_SETTINGS_VIEW,
@@ -160,6 +172,9 @@ final class Rbac
                 self::PERM_PROFORMAS_MANAGE,
                 self::PERM_INVOICES_VIEW,
                 self::PERM_INVOICES_MANAGE,
+                self::PERM_PAYMENTS_VIEW,
+                self::PERM_PAYMENTS_MANAGE,
+                self::PERM_RECEIVABLES_VIEW,
                 self::PERM_EXCHANGE_RATES_VIEW,
                 self::PERM_EXCHANGE_RATES_MANAGE,
                 self::PERM_SETTINGS_VIEW,

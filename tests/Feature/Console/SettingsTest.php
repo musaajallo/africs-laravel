@@ -49,6 +49,7 @@ class SettingsTest extends TestCase
                 'tax_label' => 'VAT',
                 'tax_rate' => 15,
                 'payment_terms_days' => 21,
+                'payment_methods' => ['Bank transfer', 'Cash'],
             ],
         ];
 

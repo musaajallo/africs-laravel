@@ -40,6 +40,7 @@ final class Settings
                 'tax_label' => 'VAT',
                 'tax_rate' => 0,
                 'payment_terms_days' => 30,
+                'payment_methods' => ['Bank transfer', 'Cash', 'Cheque', 'Mobile money', 'Card'],
             ],
         ];
     }
@@ -111,6 +112,14 @@ final class Settings
     public static function paymentTermsDays(): int
     {
         return (int) self::get('billing.payment_terms_days', 30);
+    }
+
+    /** @return list<string> */
+    public static function paymentMethods(): array
+    {
+        $methods = self::get('billing.payment_methods', []);
+
+        return array_values(array_filter(array_map('strval', is_array($methods) ? $methods : [])));
     }
 
     /** Tax rate as a percentage, e.g. 15 for 15%. */

@@ -69,6 +69,10 @@ function restore() {
                         v-if="canManage && invoice.editable"
                         :href="route('console.invoices.edit', invoice.id)"
                     >Edit</PanelButton>
+                    <PanelButton
+                        v-if="can('payments.manage') && !invoice.archived && Number(invoice.balance) > 0 && !['draft', 'void'].includes(invoice.status)"
+                        :href="route('console.payments.create', { invoice: invoice.id })"
+                    >Record payment</PanelButton>
                     <PanelConfirm
                         v-if="canManage"
                         title="Archive this invoice?"
@@ -149,7 +153,29 @@ function restore() {
                     <div v-if="Number(invoice.amount_paid) > 0" class="doc-totals-row">
                         <span>Paid</span><span>{{ money(invoice.amount_paid) }}</span>
                     </div>
+                    <div v-if="Number(invoice.amount_paid) > 0" class="doc-totals-row is-grand">
+                        <span>Balance</span><span>{{ money(invoice.balance) }}</span>
+                    </div>
                 </div>
+            </section>
+
+            <section v-if="invoice.payments.length" class="panel-card">
+                <h2 class="panel-card-title">Payments</h2>
+                <table class="doc-lines">
+                    <thead>
+                        <tr><th>Receipt</th><th>Date</th><th>Method</th><th class="num">Amount</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="p in invoice.payments" :key="p.id">
+                            <td>
+                                <Link :href="route('console.payments.show', p.id)" class="panel-link" style="padding: 0">{{ p.number }}</Link>
+                            </td>
+                            <td class="panel-cell-muted">{{ p.paid_on }}</td>
+                            <td>{{ p.method }}</td>
+                            <td class="num">{{ money(p.amount) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section v-if="invoice.notes || invoice.terms" class="panel-card">

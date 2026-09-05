@@ -106,7 +106,10 @@ class InvoiceController extends Controller
     {
         $this->authorize('view', $invoice);
 
-        $invoice->load(['client:id,name', 'project:id,name', 'lines', 'createdBy:id,name', 'proforma:id,number']);
+        $invoice->load([
+            'client:id,name', 'project:id,name', 'lines', 'createdBy:id,name', 'proforma:id,number',
+            'allocations.payment' => fn ($q) => $q->select('id', 'number', 'paid_on', 'method', 'currency'),
+        ]);
 
         return Inertia::render('Console/Invoices/Show', [
             'invoice' => $this->present($invoice),
@@ -250,6 +253,16 @@ class InvoiceController extends Controller
             'total' => $invoice->total,
             'base_total' => $invoice->base_total,
             'amount_paid' => $invoice->amount_paid,
+            'balance' => $invoice->balance(),
+            'payments' => $invoice->relationLoaded('allocations')
+                ? $invoice->allocations->map(fn ($allocation) => [
+                    'id' => $allocation->payment?->id,
+                    'number' => $allocation->payment?->number,
+                    'paid_on' => $allocation->payment?->paid_on?->toDateString(),
+                    'method' => $allocation->payment?->method,
+                    'amount' => $allocation->amount,
+                ])->filter(fn ($row) => $row['id'] !== null)->values()->all()
+                : [],
             'created_by' => $invoice->createdBy?->name,
             'created_at' => $invoice->created_at?->toDateString(),
             'editable' => $invoice->isEditable(),

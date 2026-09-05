@@ -15,11 +15,6 @@ use Inertia\Response;
 class RoadmapController extends Controller
 {
     public const MODULES = [
-        'payments' => [
-            'title' => 'Payments & receipts',
-            'phase' => 'Phase 4',
-            'blurb' => 'Record payments against invoices in any currency; invoice status updates itself; generate a receipt PDF; an accounts-receivable view.',
-        ],
         'subscriptions' => [
             'title' => 'Subscriptions & infrastructure',
             'phase' => 'Phase 5',

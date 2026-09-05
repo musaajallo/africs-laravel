@@ -21,7 +21,20 @@ const form = useForm({
         enabled: [...props.settings.currency.enabled],
         base: props.settings.currency.base,
     },
-    billing: { ...props.settings.billing },
+    billing: {
+        ...props.settings.billing,
+        payment_methods: [...(props.settings.billing.payment_methods ?? [])],
+    },
+});
+
+const paymentMethodsText = computed({
+    get: () => (form.billing.payment_methods ?? []).join('\n'),
+    set: (value) => {
+        form.billing.payment_methods = value
+            .split('\n')
+            .map((m) => m.trim())
+            .filter(Boolean);
+    },
 });
 
 function toggleCurrency(code) {
@@ -136,6 +149,14 @@ function submit() {
                             <input v-model="form.billing.payment_terms_days" type="number" min="0" max="365" class="field-input" :disabled="!canManage" />
                         </PanelField>
                     </div>
+                    <PanelField
+                        label="Payment methods"
+                        :error="err('billing.payment_methods') || err('billing.payment_methods.0')"
+                        hint="One per line. Offered when recording a payment."
+                        style="margin-top: 1rem; max-width: 24rem"
+                    >
+                        <textarea v-model="paymentMethodsText" rows="5" class="field-input" :disabled="!canManage"></textarea>
+                    </PanelField>
                 </div>
 
                 <div v-if="canManage" class="panel-form-actions">

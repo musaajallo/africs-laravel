@@ -18,12 +18,30 @@ class SettingsRequest extends FormRequest
         $country = trim((string) ($company['country'] ?? ''));
         $company['country'] = $country === '' ? null : strtoupper($country);
 
+        $methods = $this->input('billing.payment_methods');
+
+        if (is_string($methods)) {
+            $methods = preg_split('/\r\n|\r|\n/', $methods) ?: [];
+        }
+
+        $methods = collect(is_array($methods) ? $methods : [])
+            ->map(fn ($m) => trim((string) $m))
+            ->filter()
+            ->values()
+            ->all();
+
+        // Keep the current list if the request didn't carry one.
+        if ($methods === []) {
+            $methods = Settings::paymentMethods();
+        }
+
         $this->merge([
             'currency' => [
                 'enabled' => $enabled,
                 'base' => strtoupper((string) $this->input('currency.base')),
             ],
             'company' => $company,
+            'billing' => array_merge((array) $this->input('billing', []), ['payment_methods' => $methods]),
         ]);
     }
 
@@ -46,6 +64,8 @@ class SettingsRequest extends FormRequest
             'billing.tax_label' => ['nullable', 'string', 'max:20'],
             'billing.tax_rate' => ['nullable', 'numeric', 'between:0,100'],
             'billing.payment_terms_days' => ['nullable', 'integer', 'between:0,365'],
+            'billing.payment_methods' => ['array', 'min:1'],
+            'billing.payment_methods.*' => ['string', 'max:50'],
         ];
     }
 
@@ -73,6 +93,7 @@ class SettingsRequest extends FormRequest
                 'tax_label' => $validated['billing']['tax_label'] ?? 'VAT',
                 'tax_rate' => (float) ($validated['billing']['tax_rate'] ?? 0),
                 'payment_terms_days' => (int) ($validated['billing']['payment_terms_days'] ?? 30),
+                'payment_methods' => array_values(array_unique($validated['billing']['payment_methods'] ?? [])),
             ],
         ];
     }

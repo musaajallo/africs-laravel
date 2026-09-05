@@ -59,7 +59,18 @@ const allNav = [
         activeMatch: 'console.invoices.*',
         permission: 'invoices.view',
     },
-    soon('Payments & receipts', 'payments'),
+    {
+        label: 'Payments',
+        routeName: 'console.payments.index',
+        activeMatch: 'console.payments.*',
+        permission: 'payments.view',
+    },
+    {
+        label: 'Receivables',
+        routeName: 'console.receivables.index',
+        activeMatch: 'console.receivables.*',
+        permission: 'receivables.view',
+    },
 
     { heading: 'Security' },
     soon('Secrets vault', 'secrets'),

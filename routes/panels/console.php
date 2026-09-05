@@ -8,8 +8,10 @@ use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\ExchangeRateController;
 use App\Http\Controllers\Console\InvoiceController;
 use App\Http\Controllers\Console\LeadController;
+use App\Http\Controllers\Console\PaymentController;
 use App\Http\Controllers\Console\ProformaController;
 use App\Http\Controllers\Console\ProjectController;
+use App\Http\Controllers\Console\ReceivablesController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
 use App\Http\Controllers\Console\TagController;
@@ -76,6 +78,15 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     Route::put('invoices/{invoice}/status', [InvoiceController::class, 'status'])->name('invoices.status');
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
     Route::resource('invoices', InvoiceController::class)->withTrashed(['show']);
+
+    // Payments & receipts (Finance).
+    Route::get('payments/invoices-for-client', [PaymentController::class, 'invoicesForClient'])->name('payments.invoices-for-client');
+    Route::put('payments/{payment}/restore', [PaymentController::class, 'restore'])->name('payments.restore');
+    Route::get('payments/{payment}/pdf', [PaymentController::class, 'pdf'])->name('payments.pdf');
+    Route::resource('payments', PaymentController::class)->withTrashed(['show']);
+
+    // Accounts receivable (Finance).
+    Route::get('receivables', [ReceivablesController::class, 'index'])->name('receivables.index');
 
     // Exchange rates (Finance).
     Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('exchange-rates.index');

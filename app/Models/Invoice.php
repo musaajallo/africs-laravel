@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Concerns\HasDocumentTotals;
 use App\Support\InvoiceMeta;
+use App\Support\Money;
+use Brick\Math\BigDecimal;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -70,9 +72,43 @@ class Invoice extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function allocations(): HasMany
+    {
+        return $this->hasMany(PaymentAllocation::class);
+    }
+
     public function isEditable(): bool
     {
         return in_array($this->status, InvoiceMeta::EDITABLE_STATUSES, true);
+    }
+
+    /** Outstanding amount in the invoice currency. */
+    public function balance(): string
+    {
+        return Money::sum([$this->total, '-'.$this->amount_paid], $this->currency);
+    }
+
+    /**
+     * Refresh amount_paid from the allocations and move the status between
+     * sent / partially_paid / paid accordingly. Draft and void are left alone.
+     */
+    public function recalculatePayment(): void
+    {
+        $paid = (string) $this->allocations()->sum('amount');
+        $this->amount_paid = $paid;
+
+        if (! in_array($this->status, ['draft', 'void'], true)) {
+            $paidDec = BigDecimal::of($paid);
+
+            $this->status = match (true) {
+                $paidDec->isGreaterThanOrEqualTo($this->total) && $paidDec->isPositive() => 'paid',
+                $paidDec->isPositive() => 'partially_paid',
+                in_array($this->status, ['paid', 'partially_paid'], true) => 'sent',
+                default => $this->status,
+            };
+        }
+
+        $this->save();
     }
 
     #[Scope]

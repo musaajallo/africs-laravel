@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\ClientController;
 use App\Http\Controllers\Api\V1\ExchangeRateController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\ProformaController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use Illuminate\Http\Request;
@@ -86,6 +87,16 @@ Route::prefix('v1')
             Route::patch('invoices/{invoice}', [InvoiceController::class, 'update']);
             Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('api.v1.invoices.destroy');
             Route::post('proformas/{proforma}/convert', [InvoiceController::class, 'convert'])->name('api.v1.proformas.convert');
+        });
+
+        Route::middleware('abilities:payments.view')->group(function () {
+            Route::get('payments', [PaymentController::class, 'index'])->name('api.v1.payments.index');
+            Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('api.v1.payments.show');
+        });
+
+        Route::middleware('abilities:payments.manage')->group(function () {
+            Route::post('payments', [PaymentController::class, 'store'])->name('api.v1.payments.store');
+            Route::delete('payments/{payment}', [PaymentController::class, 'destroy'])->name('api.v1.payments.destroy');
         });
 
         Route::middleware('abilities:clients.manage')->group(function () {
