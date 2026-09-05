@@ -44,6 +44,9 @@ watch([status, client], apply);
 function archive(proforma) {
     router.delete(route('console.proformas.destroy', proforma.id), { preserveScroll: true });
 }
+function convert(proforma) {
+    router.post(route('console.proformas.convert', proforma.id));
+}
 </script>
 
 <template>
@@ -55,7 +58,7 @@ function archive(proforma) {
         <div class="panel-page">
             <PanelPageHeader
                 title="Proformas"
-                subtitle="Preliminary quotes. Convert one to an invoice once it's accepted."
+                subtitle="Preliminary quotes you can convert to an invoice."
             >
                 <template #actions>
                     <PanelButton v-if="can('proformas.manage')" :href="route('console.proformas.create')">
@@ -104,6 +107,18 @@ function archive(proforma) {
                             :href="route('console.proformas.edit', row.id)"
                             class="panel-link"
                         >Edit</Link>
+                        <PanelConfirm
+                            v-if="can('proformas.manage') && row.can_convert"
+                            title="Convert to an invoice?"
+                            :message="`A draft invoice will be created from ${row.number}. This proforma is then locked.`"
+                            confirm-label="Convert"
+                            confirm-variant="primary"
+                            @confirm="convert(row)"
+                        >
+                            <template #trigger>
+                                <button type="button" class="panel-link">Convert</button>
+                            </template>
+                        </PanelConfirm>
                         <PanelConfirm
                             v-if="can('proformas.manage')"
                             title="Archive this proforma?"

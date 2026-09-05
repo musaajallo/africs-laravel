@@ -56,6 +56,7 @@ class ProformaController extends Controller
                 'total' => $proforma->total,
                 'issue_date' => $proforma->issue_date?->toDateString(),
                 'valid_until' => $proforma->valid_until?->toDateString(),
+                'can_convert' => $proforma->canBeConverted(),
             ]);
 
         return Inertia::render('Console/Proformas/Index', [
