@@ -26,9 +26,6 @@ final class InvoiceMeta
      */
     public const MANUAL_STATUSES = ['sent', 'partially_paid', 'paid', 'overdue', 'void'];
 
-    /** Proforma statuses from which a conversion to an invoice is allowed. */
-    public const CONVERTIBLE_PROFORMA_STATUSES = ['sent', 'accepted'];
-
     /** @return list<string> */
     public static function statusKeys(): array
     {

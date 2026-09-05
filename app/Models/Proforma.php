@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasDocumentTotals;
-use App\Support\InvoiceMeta;
 use App\Support\ProformaMeta;
 use App\Support\Sequence;
 use App\Support\Settings;
@@ -81,11 +80,10 @@ class Proforma extends Model
         return $this->status === 'converted';
     }
 
+    /** Any proforma can become an invoice, once, regardless of its status. */
     public function canBeConverted(): bool
     {
-        return ! $this->isConverted()
-            && $this->converted_invoice_id === null
-            && in_array($this->status, InvoiceMeta::CONVERTIBLE_PROFORMA_STATUSES, true);
+        return ! $this->isConverted() && $this->converted_invoice_id === null;
     }
 
     /**

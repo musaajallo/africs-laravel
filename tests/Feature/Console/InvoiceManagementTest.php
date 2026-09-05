@@ -127,13 +127,16 @@ class InvoiceManagementTest extends TestCase
         $this->assertCount(1, $invoice->lines);
     }
 
-    public function test_a_draft_proforma_cannot_be_converted(): void
+    public function test_a_proforma_can_be_converted_from_any_status(): void
     {
         $proforma = Proforma::factory()->status('draft')->withLine()->create();
 
         $this->actingAs($this->manager())
             ->post("/console/proformas/{$proforma->id}/convert")
-            ->assertSessionHasErrors('status');
+            ->assertRedirect();
+
+        $this->assertSame('converted', $proforma->fresh()->status);
+        $this->assertSame(1, Invoice::count());
     }
 
     public function test_a_proforma_cannot_be_converted_twice(): void
