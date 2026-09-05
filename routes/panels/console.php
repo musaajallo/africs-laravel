@@ -5,6 +5,7 @@ use App\Http\Controllers\Console\ApiTokenController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
+use App\Http\Controllers\Console\ExchangeRateController;
 use App\Http\Controllers\Console\LeadController;
 use App\Http\Controllers\Console\ProjectController;
 use App\Http\Controllers\Console\RoadmapController;
@@ -60,6 +61,11 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // User & access management. Individual actions are authorised by UserPolicy.
     Route::resource('users', UserController::class)->except('show');
+
+    // Exchange rates (Finance).
+    Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('exchange-rates.index');
+    Route::post('exchange-rates', [ExchangeRateController::class, 'store'])->name('exchange-rates.store');
+    Route::post('exchange-rates/refresh', [ExchangeRateController::class, 'refresh'])->name('exchange-rates.refresh');
 
     // Settings.
     Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');

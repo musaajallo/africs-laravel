@@ -3077,6 +3077,11 @@ textarea.field-input {
     font-size: 0.875rem;
 }
 
+.panel-flash.is-error {
+    background: #7f1d1d;
+    color: #fee2e2;
+}
+
 .panel-flash-close {
     background: none;
     border: none;

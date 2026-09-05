@@ -4,23 +4,24 @@ import { usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 const message = ref(null);
+const tone = ref('success');
 let timer = null;
 
-watch(
-    () => page.props.flash?.success,
-    (value) => {
-        if (!value) return;
-        message.value = value;
-        clearTimeout(timer);
-        timer = setTimeout(() => (message.value = null), 4000);
-    },
-    { immediate: true },
-);
+function show(value, kind) {
+    if (!value) return;
+    message.value = value;
+    tone.value = kind;
+    clearTimeout(timer);
+    timer = setTimeout(() => (message.value = null), kind === 'error' ? 6000 : 4000);
+}
+
+watch(() => page.props.flash?.success, (value) => show(value, 'success'), { immediate: true });
+watch(() => page.props.flash?.error, (value) => show(value, 'error'), { immediate: true });
 </script>
 
 <template>
     <Transition name="fade">
-        <div v-if="message" class="panel-flash" role="status">
+        <div v-if="message" class="panel-flash" :class="`is-${tone}`" role="status">
             {{ message }}
             <button type="button" class="panel-flash-close" @click="message = null">
                 &times;

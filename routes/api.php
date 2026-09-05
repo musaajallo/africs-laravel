@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\ClientController;
+use App\Http\Controllers\Api\V1\ExchangeRateController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use Illuminate\Http\Request;
@@ -42,6 +43,10 @@ Route::prefix('v1')
 
         Route::middleware('abilities:leads.manage')->group(function () {
             Route::post('leads', [LeadController::class, 'store'])->name('api.v1.leads.store');
+        });
+
+        Route::middleware('abilities:exchange-rates.view')->group(function () {
+            Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('api.v1.exchange-rates.index');
         });
 
         Route::middleware('abilities:projects.view')->group(function () {

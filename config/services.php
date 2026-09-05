@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'exchangerate' => [
+        'url' => env('EXCHANGERATE_URL', 'https://api.exchangerate.host'),
+        'key' => env('EXCHANGERATE_ACCESS_KEY'),
+    ],
+
 ];
