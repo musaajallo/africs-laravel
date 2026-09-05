@@ -7,8 +7,9 @@ const { can } = useAuth();
 
 // `heading` rows are section labels. `permission: null` = visible to any
 // Console user. `soon` items link to a placeholder — remove as each ships.
-const soon = (label, key) => ({
+const soon = (label, key, icon) => ({
     label,
+    icon,
     routeName: 'console.roadmap',
     routeParams: { module: key },
     activeMatch: 'console.roadmap',
@@ -18,90 +19,103 @@ const soon = (label, key) => ({
 
 const allNav = [
     { heading: 'Operations' },
-    { label: 'Dashboard', routeName: 'console.dashboard', permission: null },
+    { label: 'Dashboard', icon: 'dashboard', routeName: 'console.dashboard', permission: null },
     {
         label: 'Leads',
+        icon: 'leads',
         routeName: 'console.leads.index',
         activeMatch: 'console.leads.*',
         permission: 'leads.view',
     },
     {
         label: 'Clients',
+        icon: 'clients',
         routeName: 'console.clients.index',
         activeMatch: 'console.clients.*',
         permission: 'clients.view',
     },
     {
         label: 'Projects',
+        icon: 'projects',
         routeName: 'console.projects.index',
         activeMatch: 'console.projects.*',
         permission: 'projects.view',
     },
-    soon('Subscriptions & infra', 'subscriptions'),
-    soon('Assets', 'assets'),
+    soon('Subscriptions & infra', 'subscriptions', 'subscriptions'),
+    soon('Assets', 'assets', 'assets'),
 
     { heading: 'Finance' },
     {
         label: 'Proformas',
+        icon: 'proformas',
         routeName: 'console.proformas.index',
         activeMatch: 'console.proformas.*',
         permission: 'proformas.view',
     },
     {
         label: 'Invoices',
+        icon: 'invoices',
         routeName: 'console.invoices.index',
         activeMatch: 'console.invoices.*',
         permission: 'invoices.view',
     },
     {
         label: 'Payments',
+        icon: 'payments',
         routeName: 'console.payments.index',
         activeMatch: 'console.payments.*',
         permission: 'payments.view',
     },
     {
         label: 'Receivables',
+        icon: 'receivables',
         routeName: 'console.receivables.index',
         activeMatch: 'console.receivables.*',
         permission: 'receivables.view',
     },
 
     { heading: 'Security' },
-    soon('Secrets vault', 'secrets'),
+    soon('Secrets vault', 'secrets', 'secrets'),
 
     { heading: 'Administration' },
     {
         label: 'Users & access',
+        icon: 'users',
         routeName: 'console.users.index',
         activeMatch: 'console.users.*',
         permission: 'users.view',
     },
     {
         label: 'Exchange rates',
+        icon: 'exchange-rates',
         routeName: 'console.exchange-rates.index',
         activeMatch: 'console.exchange-rates.*',
         permission: 'exchange-rates.view',
     },
     {
         label: 'Tags',
+        icon: 'tags',
         routeName: 'console.tags.index',
         activeMatch: 'console.tags.*',
         permission: 'tags.view',
     },
     {
         label: 'Settings',
+        icon: 'settings',
         routeName: 'console.settings.edit',
         activeMatch: 'console.settings.*',
         permission: 'settings.view',
     },
     {
         label: 'API tokens',
+        icon: 'api-tokens',
         routeName: 'console.api-tokens.index',
         activeMatch: 'console.api-tokens.*',
         permission: 'api-tokens.manage',
     },
     {
         label: 'Activity log',
+        icon: 'activity',
         routeName: 'console.activity.index',
         activeMatch: 'console.activity.*',
         permission: 'activity.view',

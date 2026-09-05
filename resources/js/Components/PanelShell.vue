@@ -5,6 +5,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import PanelFlash from '@/Components/Panel/PanelFlash.vue';
+import PanelNavIcon from '@/Components/Panel/PanelNavIcon.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
 const props = defineProps({
@@ -18,9 +19,32 @@ const props = defineProps({
 
 const { user } = useAuth();
 const sidebarOpen = ref(false);
+const collapsed = ref(false);
 const searchInput = ref(null);
 const isMac = ref(false);
 const theme = ref('light');
+
+const tip = ref({ show: false, text: '', top: 0 });
+
+function showTip(event, text) {
+    if (!collapsed.value || window.innerWidth <= 900) return;
+    const r = event.currentTarget.getBoundingClientRect();
+    tip.value = { show: true, text, top: r.top + r.height / 2 };
+}
+
+function hideTip() {
+    tip.value.show = false;
+}
+
+function toggleCollapsed() {
+    collapsed.value = !collapsed.value;
+    document.documentElement.dataset.sidebarCollapsed = collapsed.value ? 'true' : '';
+    try {
+        localStorage.setItem('africs.panelSidebar', collapsed.value ? 'collapsed' : 'expanded');
+    } catch (e) {
+        // storage unavailable — the choice just won't persist
+    }
+}
 
 function applyTheme(value) {
     theme.value = value;
@@ -73,6 +97,9 @@ onMounted(() => {
     theme.value = stored === 'dark' ? 'dark' : 'light';
     document.documentElement.dataset.panelTheme =
         theme.value === 'dark' ? 'dark' : '';
+
+    collapsed.value = document.documentElement.dataset.sidebarCollapsed === 'true';
+
     window.addEventListener('keydown', onKeydown);
 });
 
@@ -178,24 +205,56 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
         <aside class="panel-sidebar" :class="{ 'is-open': sidebarOpen }">
             <nav class="panel-nav">
                 <template v-for="(item, i) in props.nav" :key="i">
-                    <p v-if="item.heading" class="panel-nav-heading">{{ item.heading }}</p>
+                    <p v-if="item.heading" class="panel-nav-heading">
+                        <span>{{ item.heading }}</span>
+                    </p>
                     <Link
                         v-else
                         :href="route(item.routeName, item.routeParams)"
                         class="panel-nav-link"
                         :class="{ 'is-active': isActive(item) }"
-                        @click="sidebarOpen = false"
+                        @click="sidebarOpen = false; hideTip()"
+                        @mouseenter="showTip($event, item.label)"
+                        @mouseleave="hideTip"
                     >
-                        <span>{{ item.label }}</span>
+                        <PanelNavIcon v-if="item.icon" :name="item.icon" />
+                        <span class="panel-nav-label">{{ item.label }}</span>
                         <span v-if="item.soon" class="panel-nav-soon">soon</span>
                     </Link>
                 </template>
             </nav>
 
             <div class="panel-sidebar-foot">
-                <Link href="/" class="panel-nav-link is-muted">← Back to site</Link>
+                <Link
+                    href="/"
+                    class="panel-nav-link is-muted"
+                    @mouseenter="showTip($event, 'Back to site')"
+                    @mouseleave="hideTip"
+                >
+                    <PanelNavIcon name="back" />
+                    <span class="panel-nav-label">Back to site</span>
+                </Link>
+                <button
+                    type="button"
+                    class="panel-nav-link panel-collapse-toggle"
+                    :aria-label="collapsed ? 'Expand menu' : 'Collapse menu'"
+                    @click="toggleCollapsed"
+                    @mouseenter="showTip($event, 'Expand menu')"
+                    @mouseleave="hideTip"
+                >
+                    <PanelNavIcon name="collapse" :class="{ 'is-flipped': collapsed }" />
+                    <span class="panel-nav-label">Collapse</span>
+                </button>
             </div>
         </aside>
+
+        <div
+            v-if="tip.show"
+            class="panel-nav-tip"
+            :style="{ top: tip.top + 'px' }"
+        >
+            {{ tip.text }}
+        </div>
 
         <div
             v-if="sidebarOpen"

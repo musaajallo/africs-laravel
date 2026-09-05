@@ -2633,18 +2633,42 @@ textarea.field-input {
 .panel-nav-link {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+    gap: 0.7rem;
+    width: 100%;
     padding: 0.55rem 0.8rem;
+    border: none;
     border-radius: var(--radius);
     border-left: 2px solid transparent;
+    font: inherit;
     font-size: 0.875rem;
     font-weight: 500;
     color: rgba(243, 239, 227, 0.58);
+    background: none;
+    text-align: left;
     text-decoration: none;
+    cursor: pointer;
+}
+
+.panel-nav-icon {
+    flex-shrink: 0;
+    opacity: 0.85;
+    transition: transform 0.15s ease;
+}
+
+.panel-nav-icon.is-flipped {
+    transform: rotate(180deg);
+}
+
+.panel-nav-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .panel-nav-soon {
+    flex-shrink: 0;
     font-size: 0.6rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -2678,6 +2702,89 @@ textarea.field-input {
 .panel-sidebar-foot {
     padding: 0.7rem;
     border-top: 1px solid var(--panel-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.panel-collapse-toggle {
+    color: rgba(243, 239, 227, 0.38);
+    font-size: 0.8rem;
+}
+
+.panel-collapse-toggle:hover {
+    color: rgba(243, 239, 227, 0.7);
+}
+
+/* ---------- collapsed rail (desktop only) ---------- */
+
+@media (min-width: 901px) {
+    :root[data-sidebar-collapsed='true'] .panel-shell {
+        --panel-sidebar-width: 3.75rem;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav {
+        padding: 0.9rem 0.55rem;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-sidebar-foot {
+        padding: 0.55rem;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-link {
+        justify-content: center;
+        gap: 0;
+        padding: 0.6rem 0;
+        border-left-width: 0;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-label,
+    :root[data-sidebar-collapsed='true'] .panel-nav-soon {
+        display: none;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-icon {
+        opacity: 1;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-link.is-active {
+        border-left-width: 0;
+        box-shadow: inset 0 0 0 1px var(--panel-accent);
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-heading {
+        margin: 0.55rem 0.5rem;
+        padding: 0;
+        height: 1px;
+        overflow: hidden;
+        background: var(--panel-hairline);
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-heading span {
+        display: none;
+    }
+
+    :root[data-sidebar-collapsed='true'] .panel-nav-heading:first-child {
+        margin-top: 0;
+        height: 0;
+    }
+}
+
+/* Floating label shown while hovering a collapsed rail icon. */
+.panel-nav-tip {
+    position: fixed;
+    left: calc(var(--panel-sidebar-width) + 0.4rem);
+    transform: translateY(-50%);
+    z-index: 60;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    background: var(--pnl-ink);
+    color: var(--pnl-canvas);
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: var(--pnl-shadow);
+    pointer-events: none;
 }
 
 /* The console sidebar is gold, so its menu items switch to dark ink. */
@@ -2704,11 +2811,13 @@ textarea.field-input {
     border-left-color: #6b530f;
 }
 
-.panel-shell[data-panel='console'] .panel-nav-link.is-muted {
+.panel-shell[data-panel='console'] .panel-nav-link.is-muted,
+.panel-shell[data-panel='console'] .panel-collapse-toggle {
     color: rgba(41, 33, 10, 0.5);
 }
 
-.panel-shell[data-panel='console'] .panel-nav-link.is-muted:hover {
+.panel-shell[data-panel='console'] .panel-nav-link.is-muted:hover,
+.panel-shell[data-panel='console'] .panel-collapse-toggle:hover {
     color: rgba(41, 33, 10, 0.82);
 }
 
@@ -2719,6 +2828,20 @@ textarea.field-input {
 
 .panel-shell[data-panel='console'] .panel-sidebar-foot {
     border-top-color: rgba(41, 33, 10, 0.16);
+}
+
+@media (min-width: 901px) {
+    :root[data-sidebar-collapsed='true']
+        .panel-shell[data-panel='console']
+        .panel-nav-heading {
+        background: rgba(41, 33, 10, 0.18);
+    }
+
+    :root[data-sidebar-collapsed='true']
+        .panel-shell[data-panel='console']
+        .panel-nav-link.is-active {
+        box-shadow: inset 0 0 0 1px rgba(41, 33, 10, 0.4);
+    }
 }
 
 .panel-scrim {
@@ -2808,6 +2931,10 @@ textarea.field-input {
 
     .panel-menu-toggle {
         display: inline-flex;
+    }
+
+    .panel-collapse-toggle {
+        display: none;
     }
 
     .panel-content {

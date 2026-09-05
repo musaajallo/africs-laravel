@@ -23,11 +23,14 @@
             @endverbatim
         </script>
 
-        <!-- Apply the saved panel theme before paint to avoid a flash -->
+        <!-- Apply the saved panel theme / sidebar state before paint to avoid a flash -->
         <script>
             try {
                 if (localStorage.getItem('africs.panelTheme') === 'dark') {
                     document.documentElement.dataset.panelTheme = 'dark';
+                }
+                if (localStorage.getItem('africs.panelSidebar') === 'collapsed') {
+                    document.documentElement.dataset.sidebarCollapsed = 'true';
                 }
             } catch (e) {}
         </script>
