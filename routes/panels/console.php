@@ -7,6 +7,7 @@ use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
 use App\Http\Controllers\Console\ExchangeRateController;
 use App\Http\Controllers\Console\LeadController;
+use App\Http\Controllers\Console\ProformaController;
 use App\Http\Controllers\Console\ProjectController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
@@ -61,6 +62,12 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // User & access management. Individual actions are authorised by UserPolicy.
     Route::resource('users', UserController::class)->except('show');
+
+    // Proformas (Finance).
+    Route::put('proformas/{proforma}/restore', [ProformaController::class, 'restore'])->name('proformas.restore');
+    Route::put('proformas/{proforma}/status', [ProformaController::class, 'status'])->name('proformas.status');
+    Route::get('proformas/{proforma}/pdf', [ProformaController::class, 'pdf'])->name('proformas.pdf');
+    Route::resource('proformas', ProformaController::class)->withTrashed(['show']);
 
     // Exchange rates (Finance).
     Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('exchange-rates.index');

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\ClientController;
 use App\Http\Controllers\Api\V1\ExchangeRateController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\ProformaController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,18 @@ Route::prefix('v1')
             Route::put('projects/{project}', [ProjectController::class, 'update'])->name('api.v1.projects.update');
             Route::patch('projects/{project}', [ProjectController::class, 'update']);
             Route::delete('projects/{project}', [ProjectController::class, 'destroy'])->name('api.v1.projects.destroy');
+        });
+
+        Route::middleware('abilities:proformas.view')->group(function () {
+            Route::get('proformas', [ProformaController::class, 'index'])->name('api.v1.proformas.index');
+            Route::get('proformas/{proforma}', [ProformaController::class, 'show'])->name('api.v1.proformas.show');
+        });
+
+        Route::middleware('abilities:proformas.manage')->group(function () {
+            Route::post('proformas', [ProformaController::class, 'store'])->name('api.v1.proformas.store');
+            Route::put('proformas/{proforma}', [ProformaController::class, 'update'])->name('api.v1.proformas.update');
+            Route::patch('proformas/{proforma}', [ProformaController::class, 'update']);
+            Route::delete('proformas/{proforma}', [ProformaController::class, 'destroy'])->name('api.v1.proformas.destroy');
         });
 
         Route::middleware('abilities:clients.manage')->group(function () {

@@ -47,7 +47,12 @@ const allNav = [
         activeMatch: 'console.exchange-rates.*',
         permission: 'exchange-rates.view',
     },
-    soon('Proformas', 'proformas'),
+    {
+        label: 'Proformas',
+        routeName: 'console.proformas.index',
+        activeMatch: 'console.proformas.*',
+        permission: 'proformas.view',
+    },
     soon('Invoices', 'invoices'),
     soon('Payments & receipts', 'payments'),
 

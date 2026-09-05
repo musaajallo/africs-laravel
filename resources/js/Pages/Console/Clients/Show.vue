@@ -193,9 +193,28 @@ const details = computed(() => [
                     <ActivityFeed :items="activity" empty="No changes recorded yet." />
                 </section>
 
-                <section class="panel-card client-future">
-                    <h2 class="panel-card-title">Proformas &amp; invoices</h2>
-                    <p>These appear here as the billing module comes online.</p>
+                <section class="panel-card">
+                    <div class="client-card-head">
+                        <h2 class="panel-card-title">Proformas</h2>
+                        <Link
+                            v-if="can('proformas.manage') && !client.archived"
+                            :href="route('console.proformas.create', { client: client.id })"
+                            class="panel-link"
+                        >
+                            + New proforma
+                        </Link>
+                    </div>
+                    <p v-if="!client.proformas.length" class="panel-cell-muted">No proformas yet.</p>
+                    <ul v-else class="client-contact-list">
+                        <li v-for="p in client.proformas" :key="p.id">
+                            <div class="client-contact-name">
+                                <Link :href="route('console.proformas.show', p.id)" class="panel-link" style="padding: 0">{{ p.number }}</Link>
+                            </div>
+                            <div class="panel-cell-muted">
+                                {{ p.currency }} {{ Number(p.total).toLocaleString() }} &middot; {{ p.status }}
+                            </div>
+                        </li>
+                    </ul>
                 </section>
             </div>
         </div>
