@@ -42,6 +42,17 @@ const details = computed(() => [
 ]);
 
 const confirmArchive = ref(false);
+const preview = ref(null); // null | 'pdf' | 'receipt'
+
+const hasReceipt = computed(() => Number(props.invoice.amount_paid) > 0);
+
+const pdfUrl = (extra = {}) => route('console.invoices.pdf', { invoice: props.invoice.id, ...extra });
+const receiptUrl = (extra = {}) => route('console.invoices.receipt', { invoice: props.invoice.id, ...extra });
+const previewSrc = computed(() => (preview.value === 'receipt' ? receiptUrl() : pdfUrl()));
+
+function togglePreview(which) {
+    preview.value = preview.value === which ? null : which;
+}
 
 const canRecordPayment = computed(
     () =>
@@ -75,6 +86,10 @@ function restore() {
             >
                 <template #actions>
                     <PanelButton variant="secondary" :href="route('console.invoices.index')">All invoices</PanelButton>
+                    <PanelButton
+                        :variant="preview === 'pdf' ? 'primary' : 'secondary'"
+                        @click="togglePreview('pdf')"
+                    >{{ preview === 'pdf' ? 'Hide preview' : 'Preview' }}</PanelButton>
 
                     <PanelActions>
                         <Link
@@ -82,7 +97,12 @@ function restore() {
                             :href="route('console.payments.create', { invoice: invoice.id })"
                             class="panel-actions-item"
                         >Record payment</Link>
-                        <a :href="route('console.invoices.pdf', invoice.id)" class="panel-actions-item">Download PDF</a>
+                        <button type="button" class="panel-actions-item" @click="togglePreview('pdf')">View invoice</button>
+                        <a :href="pdfUrl({ download: 1 })" class="panel-actions-item">Download invoice PDF</a>
+                        <template v-if="hasReceipt">
+                            <button type="button" class="panel-actions-item" @click="togglePreview('receipt')">View receipt</button>
+                            <a :href="receiptUrl({ download: 1 })" class="panel-actions-item">Download receipt</a>
+                        </template>
                         <Link
                             v-if="canManage && invoice.editable"
                             :href="route('console.invoices.edit', invoice.id)"
@@ -115,6 +135,14 @@ function restore() {
             <div style="margin: -0.25rem 0 1.25rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
                 <DocumentStatusBadge :status="invoice.status" />
             </div>
+
+            <section v-if="preview" class="panel-card pdf-preview">
+                <div class="pdf-preview-bar">
+                    <span>{{ preview === 'receipt' ? 'Receipt preview' : 'Invoice preview' }}</span>
+                    <button type="button" class="panel-link" @click="preview = null">Close</button>
+                </div>
+                <iframe :src="previewSrc" class="pdf-frame" title="Document preview"></iframe>
+            </section>
 
             <div v-if="canManage" class="panel-toolbar" style="margin-bottom: 1.25rem">
                 <PanelButton

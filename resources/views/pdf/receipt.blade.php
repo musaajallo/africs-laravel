@@ -25,10 +25,15 @@
 </style>
 </head>
 <body>
+    @php $logo = public_path('images/logo.png'); @endphp
     <div class="row">
         <div class="col-left">
-            <h1>{{ $company['name'] ?? 'Africs' }}</h1>
-            @if(!empty($company['address']))<div class="muted">{{ $company['address'] }}</div>@endif
+            @if(file_exists($logo))
+                <img src="{{ $logo }}" alt="{{ $company['name'] ?? 'Africs' }}" style="height:42px">
+            @else
+                <h1>{{ $company['name'] ?? 'Africs' }}</h1>
+            @endif
+            @if(!empty($company['address']))<div class="muted" style="margin-top:4px">{{ $company['address'] }}</div>@endif
             <div class="muted">
                 {{ $company['city'] ?? '' }}{{ !empty($company['country']) ? ', '.$company['country'] : '' }}
             </div>

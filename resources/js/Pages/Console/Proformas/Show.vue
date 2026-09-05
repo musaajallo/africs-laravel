@@ -42,6 +42,9 @@ const details = computed(() => [
 
 const confirmConvert = ref(false);
 const confirmArchive = ref(false);
+const preview = ref(false);
+
+const pdfUrl = (extra = {}) => route('console.proformas.pdf', { proforma: props.proforma.id, ...extra });
 
 function setStatus(status) {
     router.put(route('console.proformas.status', props.proforma.id), { status }, { preserveScroll: true });
@@ -70,6 +73,10 @@ function restore() {
             >
                 <template #actions>
                     <PanelButton variant="secondary" :href="route('console.proformas.index')">All proformas</PanelButton>
+                    <PanelButton
+                        :variant="preview ? 'primary' : 'secondary'"
+                        @click="preview = !preview"
+                    >{{ preview ? 'Hide preview' : 'Preview' }}</PanelButton>
 
                     <PanelActions>
                         <button
@@ -78,7 +85,8 @@ function restore() {
                             class="panel-actions-item"
                             @click="confirmConvert = true"
                         >Convert to invoice</button>
-                        <a :href="route('console.proformas.pdf', proforma.id)" class="panel-actions-item">Download PDF</a>
+                        <button type="button" class="panel-actions-item" @click="preview = true">View proforma</button>
+                        <a :href="pdfUrl({ download: 1 })" class="panel-actions-item">Download PDF</a>
                         <Link
                             v-if="canManage && proforma.editable"
                             :href="route('console.proformas.edit', proforma.id)"
@@ -115,6 +123,14 @@ function restore() {
                 confirm-label="Archive"
                 @confirm="archive"
             />
+
+            <section v-if="preview" class="panel-card pdf-preview">
+                <div class="pdf-preview-bar">
+                    <span>Proforma preview</span>
+                    <button type="button" class="panel-link" @click="preview = false">Close</button>
+                </div>
+                <iframe :src="pdfUrl()" class="pdf-frame" title="Proforma preview"></iframe>
+            </section>
 
             <div style="margin: -0.25rem 0 1.25rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
                 <DocumentStatusBadge :status="proforma.status" />

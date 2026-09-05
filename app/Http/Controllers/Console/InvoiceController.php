@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Console;
 
+use App\Http\Controllers\Concerns\RendersPdf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Console\InvoiceRequest;
 use App\Models\Client;
@@ -11,7 +12,6 @@ use App\Support\ActivityPresenter;
 use App\Support\InvoiceMeta;
 use App\Support\Sequence;
 use App\Support\Settings;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -23,6 +23,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class InvoiceController extends Controller
 {
+    use RendersPdf;
+
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', Invoice::class);
@@ -191,19 +193,33 @@ class InvoiceController extends Controller
         return back()->with('success', "Invoice marked {$data['status']}.");
     }
 
-    public function pdf(Invoice $invoice): HttpResponse
+    public function pdf(Request $request, Invoice $invoice): HttpResponse
     {
         $this->authorize('view', $invoice);
 
         $invoice->load(['client', 'project:id,name', 'lines']);
 
-        $pdf = Pdf::loadView('pdf.document', [
+        return $this->pdfResponse($request, 'pdf.document', [
             'doc' => $invoice,
             'kind' => 'Invoice',
             'company' => Settings::get('company'),
-        ]);
+            'base' => Settings::baseCurrency(),
+        ], "{$invoice->number}.pdf");
+    }
 
-        return $pdf->download("{$invoice->number}.pdf");
+    public function receipt(Request $request, Invoice $invoice): HttpResponse
+    {
+        $this->authorize('view', $invoice);
+
+        abort_if((float) $invoice->amount_paid <= 0, 404);
+
+        $invoice->load(['client', 'allocations.payment']);
+
+        return $this->pdfResponse($request, 'pdf.invoice-receipt', [
+            'invoice' => $invoice,
+            'company' => Settings::get('company'),
+            'base' => Settings::baseCurrency(),
+        ], "{$invoice->number}-receipt.pdf");
     }
 
     /**

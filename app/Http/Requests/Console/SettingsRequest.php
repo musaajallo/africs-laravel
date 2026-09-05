@@ -50,12 +50,14 @@ class SettingsRequest extends FormRequest
         return [
             'company.name' => ['required', 'string', 'max:255'],
             'company.legal_name' => ['nullable', 'string', 'max:255'],
+            'company.registration_number' => ['nullable', 'string', 'max:100'],
             'company.email' => ['nullable', 'email', 'max:255'],
             'company.phone' => ['nullable', 'string', 'max:50'],
             'company.tax_number' => ['nullable', 'string', 'max:100'],
             'company.address' => ['nullable', 'string', 'max:2000'],
             'company.city' => ['nullable', 'string', 'max:120'],
             'company.country' => ['nullable', 'string', 'size:2'],
+            'company.bank_details' => ['nullable', 'string', 'max:2000'],
 
             'currency.enabled' => ['required', 'array', 'min:1'],
             'currency.enabled.*' => [Rule::in(Settings::SUPPORTED_CURRENCIES)],

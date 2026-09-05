@@ -99,6 +99,13 @@ function archive(invoice) {
                     <td class="panel-cell-muted">{{ row.due_date || '—' }}</td>
                     <td class="panel-row-actions">
                         <Link :href="route('console.invoices.show', row.id)" class="panel-link">View</Link>
+                        <a
+                            v-if="['paid', 'partially_paid'].includes(row.status)"
+                            :href="route('console.invoices.receipt', row.id)"
+                            target="_blank"
+                            rel="noopener"
+                            class="panel-link"
+                        >Receipt</a>
                         <Link
                             v-if="can('invoices.manage') && row.status === 'draft'"
                             :href="route('console.invoices.edit', row.id)"

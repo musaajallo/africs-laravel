@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
     Route::put('invoices/{invoice}/restore', [InvoiceController::class, 'restore'])->name('invoices.restore');
     Route::put('invoices/{invoice}/status', [InvoiceController::class, 'status'])->name('invoices.status');
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::get('invoices/{invoice}/receipt', [InvoiceController::class, 'receipt'])->name('invoices.receipt');
     Route::resource('invoices', InvoiceController::class)->withTrashed(['show']);
 
     // Payments & receipts (Finance).

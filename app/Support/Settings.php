@@ -25,12 +25,14 @@ final class Settings
             'company' => [
                 'name' => 'Africs',
                 'legal_name' => '',
+                'registration_number' => '',
                 'email' => '',
                 'phone' => '',
                 'tax_number' => '',
                 'address' => '',
                 'city' => '',
                 'country' => 'GM',
+                'bank_details' => '',
             ],
             'currency' => [
                 'enabled' => ['GMD', 'USD', 'EUR'],

@@ -3979,6 +3979,35 @@ textarea.field-input {
     font-weight: 700;
 }
 
+/* ---------- in-app PDF preview ---------- */
+
+.pdf-preview {
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+}
+
+.pdf-preview-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid var(--pnl-line);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--pnl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pdf-frame {
+    display: block;
+    width: 100%;
+    height: 82vh;
+    border: 0;
+    background: var(--pnl-surface-2);
+}
+
 .project-member-row {
     display: flex;
     gap: 0.75rem;

@@ -4,6 +4,7 @@ namespace Tests\Feature\Console;
 
 use App\Models\Client;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Proforma;
 use App\Models\User;
 use App\Support\Rbac;
@@ -153,14 +154,39 @@ class InvoiceManagementTest extends TestCase
         $this->assertSame(1, Invoice::count());
     }
 
-    public function test_the_pdf_downloads(): void
+    public function test_the_pdf_streams_inline_and_downloads_on_request(): void
     {
         $invoice = Invoice::factory()->withLine()->create();
+        $manager = $this->manager();
 
-        $response = $this->actingAs($this->manager())->get("/console/invoices/{$invoice->id}/pdf");
+        $inline = $this->actingAs($manager)->get("/console/invoices/{$invoice->id}/pdf");
+        $inline->assertOk();
+        $this->assertSame('application/pdf', $inline->headers->get('content-type'));
+        $this->assertStringContainsString('inline', $inline->headers->get('content-disposition'));
+
+        $download = $this->actingAs($manager)->get("/console/invoices/{$invoice->id}/pdf?download=1");
+        $this->assertStringContainsString('attachment', $download->headers->get('content-disposition'));
+    }
+
+    public function test_a_paid_invoice_has_a_receipt(): void
+    {
+        $invoice = Invoice::factory()->status('sent')->withLine('Work', '1', '1000')->create();
+        $payment = Payment::factory()->create(['client_id' => $invoice->client_id, 'amount' => '1000']);
+        $payment->applyAllocations([['invoice_id' => $invoice->id, 'amount' => '1000']]);
+
+        $response = $this->actingAs($this->manager())->get("/console/invoices/{$invoice->id}/receipt");
 
         $response->assertOk();
         $this->assertSame('application/pdf', $response->headers->get('content-type'));
+    }
+
+    public function test_an_unpaid_invoice_has_no_receipt(): void
+    {
+        $invoice = Invoice::factory()->status('sent')->withLine()->create();
+
+        $this->actingAs($this->manager())
+            ->get("/console/invoices/{$invoice->id}/receipt")
+            ->assertNotFound();
     }
 
     public function test_the_api_converts_a_proforma(): void

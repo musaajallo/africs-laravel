@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Console;
 
+use App\Http\Controllers\Concerns\RendersPdf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Console\ProformaRequest;
 use App\Models\Client;
@@ -11,7 +12,6 @@ use App\Support\ActivityPresenter;
 use App\Support\ProformaMeta;
 use App\Support\Sequence;
 use App\Support\Settings;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -24,6 +24,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class ProformaController extends Controller
 {
+    use RendersPdf;
+
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', Proforma::class);
@@ -215,19 +217,18 @@ class ProformaController extends Controller
             ->with('success', "{$proforma->number} converted to {$invoice->number}.");
     }
 
-    public function pdf(Proforma $proforma): HttpResponse
+    public function pdf(Request $request, Proforma $proforma): HttpResponse
     {
         $this->authorize('view', $proforma);
 
         $proforma->load(['client', 'project:id,name', 'lines']);
 
-        $pdf = Pdf::loadView('pdf.document', [
+        return $this->pdfResponse($request, 'pdf.document', [
             'doc' => $proforma,
             'kind' => 'Proforma',
             'company' => Settings::get('company'),
-        ]);
-
-        return $pdf->download("{$proforma->number}.pdf");
+            'base' => Settings::baseCurrency(),
+        ], "{$proforma->number}.pdf");
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Console;
 
+use App\Http\Controllers\Concerns\RendersPdf;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Console\PaymentRequest;
 use App\Models\Client;
@@ -10,7 +11,6 @@ use App\Models\Payment;
 use App\Support\ActivityPresenter;
 use App\Support\Sequence;
 use App\Support\Settings;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -21,6 +21,8 @@ use Spatie\Activitylog\Models\Activity;
 
 class PaymentController extends Controller
 {
+    use RendersPdf;
+
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', Payment::class);
@@ -172,18 +174,16 @@ class PaymentController extends Controller
             ->with('success', 'Payment restored. Re-allocate it to invoices as needed.');
     }
 
-    public function pdf(Payment $payment): HttpResponse
+    public function pdf(Request $request, Payment $payment): HttpResponse
     {
         $this->authorize('view', $payment);
 
         $payment->load(['client', 'allocations.invoice:id,number']);
 
-        $pdf = Pdf::loadView('pdf.receipt', [
+        return $this->pdfResponse($request, 'pdf.receipt', [
             'payment' => $payment,
             'company' => Settings::get('company'),
-        ]);
-
-        return $pdf->download("{$payment->number}.pdf");
+        ], "{$payment->number}.pdf");
     }
 
     /**

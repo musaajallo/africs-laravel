@@ -81,8 +81,11 @@ function submit() {
                         <PanelField label="Trading name" :error="err('company.name')" required>
                             <input v-model="form.company.name" type="text" class="field-input" :disabled="!canManage" />
                         </PanelField>
-                        <PanelField label="Legal name" :error="err('company.legal_name')">
+                        <PanelField label="Legal name" :error="err('company.legal_name')" hint="Registered name shown on invoices.">
                             <input v-model="form.company.legal_name" type="text" class="field-input" :disabled="!canManage" />
+                        </PanelField>
+                        <PanelField label="Registration number" :error="err('company.registration_number')" hint="Company / trade registration.">
+                            <input v-model="form.company.registration_number" type="text" class="field-input" :disabled="!canManage" />
                         </PanelField>
                         <PanelField label="Email" :error="err('company.email')">
                             <input v-model="form.company.email" type="email" class="field-input" :disabled="!canManage" />
@@ -102,6 +105,13 @@ function submit() {
                     </div>
                     <PanelField label="Address" :error="err('company.address')">
                         <textarea v-model="form.company.address" rows="3" class="field-input" :disabled="!canManage"></textarea>
+                    </PanelField>
+                    <PanelField
+                        label="Bank / payment details"
+                        :error="err('company.bank_details')"
+                        hint="Printed on invoices so clients know how to pay. Bank name, account name & number, IBAN/SWIFT, mobile-money number…"
+                    >
+                        <textarea v-model="form.company.bank_details" rows="4" class="field-input" :disabled="!canManage"></textarea>
                     </PanelField>
                 </div>
 
