@@ -41,8 +41,24 @@ const allNav = [
     soon('Assets', 'assets'),
 
     { heading: 'Finance' },
-    soon('Proformas', 'proformas'),
-    soon('Invoices', 'invoices'),
+    {
+        label: 'Exchange rates',
+        routeName: 'console.exchange-rates.index',
+        activeMatch: 'console.exchange-rates.*',
+        permission: 'exchange-rates.view',
+    },
+    {
+        label: 'Proformas',
+        routeName: 'console.proformas.index',
+        activeMatch: 'console.proformas.*',
+        permission: 'proformas.view',
+    },
+    {
+        label: 'Invoices',
+        routeName: 'console.invoices.index',
+        activeMatch: 'console.invoices.*',
+        permission: 'invoices.view',
+    },
     soon('Payments & receipts', 'payments'),
 
     { heading: 'Security' },

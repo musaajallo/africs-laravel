@@ -3077,6 +3077,11 @@ textarea.field-input {
     font-size: 0.875rem;
 }
 
+.panel-flash.is-error {
+    background: #7f1d1d;
+    color: #fee2e2;
+}
+
 .panel-flash-close {
     background: none;
     border: none;
@@ -3650,6 +3655,74 @@ textarea.field-input {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--pnl-muted);
+}
+
+/* ---------- Finance document status ---------- */
+
+.doc-status {
+    --h: #8a8f86;
+    display: inline-block;
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--h) 15%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--h) 72%, var(--pnl-ink));
+    border: 1px solid color-mix(in srgb, var(--h) 32%, transparent);
+}
+
+.doc-status[data-status='draft'] { --h: #8a8f86; }
+.doc-status[data-status='sent'] { --h: #3b7fd6; }
+.doc-status[data-status='accepted'] { --h: #2f9e60; }
+.doc-status[data-status='declined'] { --h: #b3261e; }
+.doc-status[data-status='expired'] { --h: #d18b1e; }
+.doc-status[data-status='converted'] { --h: #8156d9; }
+.doc-status[data-status='partially_paid'] { --h: #d18b1e; }
+.doc-status[data-status='paid'] { --h: #2f9e60; }
+.doc-status[data-status='overdue'] { --h: #b3261e; }
+.doc-status[data-status='void'] { --h: #5f6b7a; }
+
+.doc-lines {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0 1rem;
+}
+
+.doc-lines th,
+.doc-lines td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--pnl-border);
+    text-align: left;
+}
+
+.doc-lines th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pnl-muted);
+}
+
+.doc-lines .num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.doc-totals {
+    margin-left: auto;
+    width: min(20rem, 100%);
+}
+
+.doc-totals-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+}
+
+.doc-totals-row.is-grand {
+    border-top: 2px solid var(--pnl-ink);
+    margin-top: 0.25rem;
+    padding-top: 0.5rem;
+    font-weight: 700;
 }
 
 .project-member-row {

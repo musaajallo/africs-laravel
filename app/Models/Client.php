@@ -59,6 +59,16 @@ class Client extends Model
         return $this->hasMany(Project::class);
     }
 
+    public function proformas(): HasMany
+    {
+        return $this->hasMany(Proforma::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function primaryContact(): HasMany
     {
         return $this->contacts()->where('is_primary', true);

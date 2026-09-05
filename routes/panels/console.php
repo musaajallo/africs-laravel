@@ -5,7 +5,10 @@ use App\Http\Controllers\Console\ApiTokenController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
+use App\Http\Controllers\Console\ExchangeRateController;
+use App\Http\Controllers\Console\InvoiceController;
 use App\Http\Controllers\Console\LeadController;
+use App\Http\Controllers\Console\ProformaController;
 use App\Http\Controllers\Console\ProjectController;
 use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
@@ -60,6 +63,24 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // User & access management. Individual actions are authorised by UserPolicy.
     Route::resource('users', UserController::class)->except('show');
+
+    // Proformas (Finance).
+    Route::put('proformas/{proforma}/restore', [ProformaController::class, 'restore'])->name('proformas.restore');
+    Route::put('proformas/{proforma}/status', [ProformaController::class, 'status'])->name('proformas.status');
+    Route::post('proformas/{proforma}/convert', [ProformaController::class, 'convert'])->name('proformas.convert');
+    Route::get('proformas/{proforma}/pdf', [ProformaController::class, 'pdf'])->name('proformas.pdf');
+    Route::resource('proformas', ProformaController::class)->withTrashed(['show']);
+
+    // Invoices (Finance).
+    Route::put('invoices/{invoice}/restore', [InvoiceController::class, 'restore'])->name('invoices.restore');
+    Route::put('invoices/{invoice}/status', [InvoiceController::class, 'status'])->name('invoices.status');
+    Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('invoices.pdf');
+    Route::resource('invoices', InvoiceController::class)->withTrashed(['show']);
+
+    // Exchange rates (Finance).
+    Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('exchange-rates.index');
+    Route::post('exchange-rates', [ExchangeRateController::class, 'store'])->name('exchange-rates.store');
+    Route::post('exchange-rates/refresh', [ExchangeRateController::class, 'refresh'])->name('exchange-rates.refresh');
 
     // Settings.
     Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');

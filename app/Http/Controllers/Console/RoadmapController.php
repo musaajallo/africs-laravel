@@ -15,16 +15,6 @@ use Inertia\Response;
 class RoadmapController extends Controller
 {
     public const MODULES = [
-        'proformas' => [
-            'title' => 'Proformas',
-            'phase' => 'Phase 3',
-            'blurb' => 'Preliminary quotes with line items, per-document currency and tax. A proforma can be converted into an invoice while keeping the link.',
-        ],
-        'invoices' => [
-            'title' => 'Invoices',
-            'phase' => 'Phase 3',
-            'blurb' => 'Tax invoices with their own numbering and lifecycle, PDF output on Africs letterhead, and states from draft through paid or overdue.',
-        ],
         'payments' => [
             'title' => 'Payments & receipts',
             'phase' => 'Phase 4',

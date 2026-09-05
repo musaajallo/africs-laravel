@@ -107,6 +107,8 @@ class ClientController extends Controller
             'contacts' => fn ($q) => $q->orderByDesc('is_primary')->orderBy('name'),
             'owner:id,name', 'createdBy:id,name', 'tags:id,name,slug,color',
             'projects' => fn ($q) => $q->orderByDesc('created_at'),
+            'proformas' => fn ($q) => $q->latest('issue_date')->latest('id')->limit(10),
+            'invoices' => fn ($q) => $q->latest('issue_date')->latest('id')->limit(10),
         ]);
 
         $activity = Activity::forSubject($client)
@@ -277,6 +279,26 @@ class ClientController extends Controller
                     'name' => $project->name,
                     'service_line' => $project->service_line,
                     'status' => $project->status,
+                ])->all()
+                : [],
+            'proformas' => $client->relationLoaded('proformas')
+                ? $client->proformas->map(fn ($proforma) => [
+                    'id' => $proforma->id,
+                    'number' => $proforma->number,
+                    'status' => $proforma->status,
+                    'currency' => $proforma->currency,
+                    'total' => $proforma->total,
+                    'issue_date' => $proforma->issue_date?->toDateString(),
+                ])->all()
+                : [],
+            'invoices' => $client->relationLoaded('invoices')
+                ? $client->invoices->map(fn ($invoice) => [
+                    'id' => $invoice->id,
+                    'number' => $invoice->number,
+                    'status' => $invoice->status,
+                    'currency' => $invoice->currency,
+                    'total' => $invoice->total,
+                    'issue_date' => $invoice->issue_date?->toDateString(),
                 ])->all()
                 : [],
             'contacts' => $client->contacts->map(fn ($contact) => [
