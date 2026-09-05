@@ -26,5 +26,9 @@ class DatabaseSeeder extends Seeder
 
         $admin->forceFill(['email_verified_at' => $admin->email_verified_at ?? now()])->save();
         $admin->syncRoles([Rbac::ROLE_SUPER_ADMIN]);
+
+        if (app()->environment('local')) {
+            $this->call(FinanceDemoSeeder::class);
+        }
     }
 }
