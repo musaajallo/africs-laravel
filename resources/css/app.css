@@ -8,6 +8,8 @@
     --color-cream-text: #f3efe3;
     --color-amber: #d4a24c;
     --color-amber-dark: #b4863a;
+    --color-gold: #e7bb41; /* brand gold — the dot on the "i" in the logo */
+    --color-gold-dark: #c99f2e;
     --color-danger: #b3261e;
     --color-danger-dark: #8c1d17;
     --color-border: #e2ddcf;
@@ -2346,6 +2348,17 @@ textarea.field-input {
     --panel-accent: #d4a24c;
 }
 
+/* Console keeps the green header but its sidebar menu is the brand gold.
+   The CMS panel is unaffected. */
+.panel-shell[data-panel='console'] {
+    --panel-accent: var(--color-gold);
+    --panel-sidebar-bg: var(--color-gold);
+}
+
+:root[data-panel-theme='dark'] .panel-shell[data-panel='console'] {
+    --panel-sidebar-bg: var(--color-gold);
+}
+
 :root[data-panel-theme='dark'] .panel-shell {
     --panel-header-bg: #0a3d22;
     --panel-sidebar-bg: #08301b;
@@ -2665,6 +2678,47 @@ textarea.field-input {
 .panel-sidebar-foot {
     padding: 0.7rem;
     border-top: 1px solid var(--panel-hairline);
+}
+
+/* The console sidebar is gold, so its menu items switch to dark ink. */
+.panel-shell[data-panel='console'] .panel-sidebar {
+    border-right-color: rgba(41, 33, 10, 0.2);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-heading {
+    color: rgba(41, 33, 10, 0.55);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-link {
+    color: rgba(41, 33, 10, 0.78);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-link:hover {
+    color: #241d06;
+    background: rgba(41, 33, 10, 0.09);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-link.is-active {
+    color: #211a04;
+    background: rgba(41, 33, 10, 0.14);
+    border-left-color: #6b530f;
+}
+
+.panel-shell[data-panel='console'] .panel-nav-link.is-muted {
+    color: rgba(41, 33, 10, 0.5);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-link.is-muted:hover {
+    color: rgba(41, 33, 10, 0.82);
+}
+
+.panel-shell[data-panel='console'] .panel-nav-soon {
+    color: rgba(41, 33, 10, 0.6);
+    background: rgba(41, 33, 10, 0.1);
+}
+
+.panel-shell[data-panel='console'] .panel-sidebar-foot {
+    border-top-color: rgba(41, 33, 10, 0.16);
 }
 
 .panel-scrim {
