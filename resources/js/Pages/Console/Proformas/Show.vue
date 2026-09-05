@@ -1,9 +1,10 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
+import PanelActions from '@/Components/Panel/PanelActions.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
 import DocumentStatusBadge from '@/Components/Panel/DocumentStatusBadge.vue';
 import ActivityFeed from '@/Components/Panel/ActivityFeed.vue';
@@ -39,6 +40,9 @@ const details = computed(() => [
     { label: 'Created by', value: props.proforma.created_by },
 ]);
 
+const confirmConvert = ref(false);
+const confirmArchive = ref(false);
+
 function setStatus(status) {
     router.put(route('console.proformas.status', props.proforma.id), { status }, { preserveScroll: true });
 }
@@ -65,33 +69,45 @@ function restore() {
                 :subtitle="proforma.archived ? 'Archived proforma' : null"
             >
                 <template #actions>
-                    <PanelButton variant="secondary" :href="route('console.proformas.index')">All proformas</PanelButton>
-                    <a :href="route('console.proformas.pdf', proforma.id)" class="btn btn-secondary btn-sm">Download PDF</a>
                     <PanelButton
-                        v-if="canManage && proforma.editable"
-                        :href="route('console.proformas.edit', proforma.id)"
-                    >Edit</PanelButton>
-                    <PanelConfirm
                         v-if="canManage && proforma.can_convert"
-                        title="Convert to an invoice?"
-                        :message="`A draft invoice will be created from ${proforma.number}. This proforma is then locked.`"
-                        confirm-label="Convert"
-                        @confirm="convert"
-                    >
-                        <template #trigger>
-                            <button type="button" class="btn btn-primary btn-sm">Convert to invoice</button>
-                        </template>
-                    </PanelConfirm>
-                    <PanelConfirm
-                        v-if="canManage"
-                        title="Archive this proforma?"
-                        :message="`${proforma.number} will be hidden from the list. It can be restored.`"
-                        confirm-label="Archive"
-                        @confirm="archive"
-                    />
+                        @click="confirmConvert = true"
+                    >Convert to invoice</PanelButton>
                     <PanelButton v-if="can('proformas.manage') && proforma.archived" @click="restore">Restore</PanelButton>
+
+                    <PanelActions>
+                        <Link :href="route('console.proformas.index')" class="panel-actions-item">All proformas</Link>
+                        <a :href="route('console.proformas.pdf', proforma.id)" class="panel-actions-item">Download PDF</a>
+                        <Link
+                            v-if="canManage && proforma.editable"
+                            :href="route('console.proformas.edit', proforma.id)"
+                            class="panel-actions-item"
+                        >Edit</Link>
+                        <template v-if="canManage">
+                            <div class="panel-actions-sep"></div>
+                            <button type="button" class="panel-actions-item is-danger" @click="confirmArchive = true">
+                                Archive
+                            </button>
+                        </template>
+                    </PanelActions>
                 </template>
             </PanelPageHeader>
+
+            <PanelConfirm
+                v-model="confirmConvert"
+                title="Convert to an invoice?"
+                :message="`A draft invoice will be created from ${proforma.number}. This proforma is then locked.`"
+                confirm-label="Convert"
+                confirm-variant="primary"
+                @confirm="convert"
+            />
+            <PanelConfirm
+                v-model="confirmArchive"
+                title="Archive this proforma?"
+                :message="`${proforma.number} will be hidden from the list. It can be restored.`"
+                confirm-label="Archive"
+                @confirm="archive"
+            />
 
             <div style="margin: -0.25rem 0 1.25rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
                 <DocumentStatusBadge :status="proforma.status" />

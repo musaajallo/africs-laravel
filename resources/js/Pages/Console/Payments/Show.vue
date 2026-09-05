@@ -1,9 +1,10 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
+import PanelActions from '@/Components/Panel/PanelActions.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
 import DocumentStatusBadge from '@/Components/Panel/DocumentStatusBadge.vue';
 import ActivityFeed from '@/Components/Panel/ActivityFeed.vue';
@@ -28,6 +29,8 @@ const details = computed(() => [
     { label: 'Recorded by', value: props.payment.created_by },
 ]);
 
+const confirmRemove = ref(false);
+
 function remove() {
     router.delete(route('console.payments.destroy', props.payment.id));
 }
@@ -48,19 +51,33 @@ function restore() {
                 :subtitle="payment.archived ? 'Removed payment' : null"
             >
                 <template #actions>
-                    <PanelButton variant="secondary" :href="route('console.payments.index')">All payments</PanelButton>
-                    <a :href="route('console.payments.pdf', payment.id)" class="btn btn-secondary btn-sm">Download receipt</a>
-                    <PanelButton v-if="canManage" :href="route('console.payments.edit', payment.id)">Edit</PanelButton>
-                    <PanelConfirm
-                        v-if="canManage"
-                        title="Remove this payment?"
-                        message="The invoices it was applied to will be re-opened by the amount released."
-                        confirm-label="Remove"
-                        @confirm="remove"
-                    />
                     <PanelButton v-if="can('payments.manage') && payment.archived" @click="restore">Restore</PanelButton>
+
+                    <PanelActions>
+                        <Link :href="route('console.payments.index')" class="panel-actions-item">All payments</Link>
+                        <a :href="route('console.payments.pdf', payment.id)" class="panel-actions-item">Download receipt</a>
+                        <Link
+                            v-if="canManage"
+                            :href="route('console.payments.edit', payment.id)"
+                            class="panel-actions-item"
+                        >Edit</Link>
+                        <template v-if="canManage">
+                            <div class="panel-actions-sep"></div>
+                            <button type="button" class="panel-actions-item is-danger" @click="confirmRemove = true">
+                                Remove
+                            </button>
+                        </template>
+                    </PanelActions>
                 </template>
             </PanelPageHeader>
+
+            <PanelConfirm
+                v-model="confirmRemove"
+                title="Remove this payment?"
+                message="The invoices it was applied to will be re-opened by the amount released."
+                confirm-label="Remove"
+                @confirm="remove"
+            />
 
             <div class="client-detail-grid">
                 <section class="panel-card">

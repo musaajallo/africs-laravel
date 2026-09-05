@@ -1,9 +1,10 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
 import PanelPageHeader from '@/Components/Panel/PanelPageHeader.vue';
 import PanelButton from '@/Components/Panel/PanelButton.vue';
+import PanelActions from '@/Components/Panel/PanelActions.vue';
 import PanelConfirm from '@/Components/Panel/PanelConfirm.vue';
 import DocumentStatusBadge from '@/Components/Panel/DocumentStatusBadge.vue';
 import ActivityFeed from '@/Components/Panel/ActivityFeed.vue';
@@ -40,6 +41,16 @@ const details = computed(() => [
     { label: 'Created by', value: props.invoice.created_by },
 ]);
 
+const confirmArchive = ref(false);
+
+const canRecordPayment = computed(
+    () =>
+        can('payments.manage') &&
+        !props.invoice.archived &&
+        Number(props.invoice.balance) > 0 &&
+        !['draft', 'void'].includes(props.invoice.status),
+);
+
 function setStatus(status) {
     router.put(route('console.invoices.status', props.invoice.id), { status }, { preserveScroll: true });
 }
@@ -63,26 +74,37 @@ function restore() {
                 :subtitle="invoice.archived ? 'Archived invoice' : null"
             >
                 <template #actions>
-                    <PanelButton variant="secondary" :href="route('console.invoices.index')">All invoices</PanelButton>
-                    <a :href="route('console.invoices.pdf', invoice.id)" class="btn btn-secondary btn-sm">Download PDF</a>
                     <PanelButton
-                        v-if="canManage && invoice.editable"
-                        :href="route('console.invoices.edit', invoice.id)"
-                    >Edit</PanelButton>
-                    <PanelButton
-                        v-if="can('payments.manage') && !invoice.archived && Number(invoice.balance) > 0 && !['draft', 'void'].includes(invoice.status)"
+                        v-if="canRecordPayment"
                         :href="route('console.payments.create', { invoice: invoice.id })"
                     >Record payment</PanelButton>
-                    <PanelConfirm
-                        v-if="canManage"
-                        title="Archive this invoice?"
-                        :message="`${invoice.number} will be hidden from the list. It can be restored.`"
-                        confirm-label="Archive"
-                        @confirm="archive"
-                    />
                     <PanelButton v-if="can('invoices.manage') && invoice.archived" @click="restore">Restore</PanelButton>
+
+                    <PanelActions>
+                        <Link :href="route('console.invoices.index')" class="panel-actions-item">All invoices</Link>
+                        <a :href="route('console.invoices.pdf', invoice.id)" class="panel-actions-item">Download PDF</a>
+                        <Link
+                            v-if="canManage && invoice.editable"
+                            :href="route('console.invoices.edit', invoice.id)"
+                            class="panel-actions-item"
+                        >Edit</Link>
+                        <template v-if="canManage">
+                            <div class="panel-actions-sep"></div>
+                            <button type="button" class="panel-actions-item is-danger" @click="confirmArchive = true">
+                                Archive
+                            </button>
+                        </template>
+                    </PanelActions>
                 </template>
             </PanelPageHeader>
+
+            <PanelConfirm
+                v-model="confirmArchive"
+                title="Archive this invoice?"
+                :message="`${invoice.number} will be hidden from the list. It can be restored.`"
+                confirm-label="Archive"
+                @confirm="archive"
+            />
 
             <div style="margin: -0.25rem 0 1.25rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap">
                 <DocumentStatusBadge :status="invoice.status" />
