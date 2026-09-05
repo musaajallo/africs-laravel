@@ -51,16 +51,21 @@ function restore() {
                 :subtitle="payment.archived ? 'Removed payment' : null"
             >
                 <template #actions>
-                    <PanelButton v-if="can('payments.manage') && payment.archived" @click="restore">Restore</PanelButton>
+                    <PanelButton variant="secondary" :href="route('console.payments.index')">All payments</PanelButton>
 
                     <PanelActions>
-                        <Link :href="route('console.payments.index')" class="panel-actions-item">All payments</Link>
                         <a :href="route('console.payments.pdf', payment.id)" class="panel-actions-item">Download receipt</a>
                         <Link
                             v-if="canManage"
                             :href="route('console.payments.edit', payment.id)"
                             class="panel-actions-item"
                         >Edit</Link>
+                        <button
+                            v-if="can('payments.manage') && payment.archived"
+                            type="button"
+                            class="panel-actions-item"
+                            @click="restore"
+                        >Restore</button>
                         <template v-if="canManage">
                             <div class="panel-actions-sep"></div>
                             <button type="button" class="panel-actions-item is-danger" @click="confirmRemove = true">

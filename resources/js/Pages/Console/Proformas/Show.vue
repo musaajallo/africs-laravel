@@ -69,20 +69,27 @@ function restore() {
                 :subtitle="proforma.archived ? 'Archived proforma' : null"
             >
                 <template #actions>
-                    <PanelButton
-                        v-if="canManage && proforma.can_convert"
-                        @click="confirmConvert = true"
-                    >Convert to invoice</PanelButton>
-                    <PanelButton v-if="can('proformas.manage') && proforma.archived" @click="restore">Restore</PanelButton>
+                    <PanelButton variant="secondary" :href="route('console.proformas.index')">All proformas</PanelButton>
 
                     <PanelActions>
-                        <Link :href="route('console.proformas.index')" class="panel-actions-item">All proformas</Link>
+                        <button
+                            v-if="canManage && proforma.can_convert"
+                            type="button"
+                            class="panel-actions-item"
+                            @click="confirmConvert = true"
+                        >Convert to invoice</button>
                         <a :href="route('console.proformas.pdf', proforma.id)" class="panel-actions-item">Download PDF</a>
                         <Link
                             v-if="canManage && proforma.editable"
                             :href="route('console.proformas.edit', proforma.id)"
                             class="panel-actions-item"
                         >Edit</Link>
+                        <button
+                            v-if="can('proformas.manage') && proforma.archived"
+                            type="button"
+                            class="panel-actions-item"
+                            @click="restore"
+                        >Restore</button>
                         <template v-if="canManage">
                             <div class="panel-actions-sep"></div>
                             <button type="button" class="panel-actions-item is-danger" @click="confirmArchive = true">

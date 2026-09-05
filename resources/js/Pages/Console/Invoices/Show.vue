@@ -74,20 +74,26 @@ function restore() {
                 :subtitle="invoice.archived ? 'Archived invoice' : null"
             >
                 <template #actions>
-                    <PanelButton
-                        v-if="canRecordPayment"
-                        :href="route('console.payments.create', { invoice: invoice.id })"
-                    >Record payment</PanelButton>
-                    <PanelButton v-if="can('invoices.manage') && invoice.archived" @click="restore">Restore</PanelButton>
+                    <PanelButton variant="secondary" :href="route('console.invoices.index')">All invoices</PanelButton>
 
                     <PanelActions>
-                        <Link :href="route('console.invoices.index')" class="panel-actions-item">All invoices</Link>
+                        <Link
+                            v-if="canRecordPayment"
+                            :href="route('console.payments.create', { invoice: invoice.id })"
+                            class="panel-actions-item"
+                        >Record payment</Link>
                         <a :href="route('console.invoices.pdf', invoice.id)" class="panel-actions-item">Download PDF</a>
                         <Link
                             v-if="canManage && invoice.editable"
                             :href="route('console.invoices.edit', invoice.id)"
                             class="panel-actions-item"
                         >Edit</Link>
+                        <button
+                            v-if="can('invoices.manage') && invoice.archived"
+                            type="button"
+                            class="panel-actions-item"
+                            @click="restore"
+                        >Restore</button>
                         <template v-if="canManage">
                             <div class="panel-actions-sep"></div>
                             <button type="button" class="panel-actions-item is-danger" @click="confirmArchive = true">
