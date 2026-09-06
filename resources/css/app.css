@@ -2888,6 +2888,123 @@ textarea.field-input {
     grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
 }
 
+/* ---------- dashboard ---------- */
+
+.dash-tiles {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+}
+
+.dash-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.1rem;
+    background: var(--pnl-surface);
+    border: 1px solid var(--pnl-line);
+    border-radius: 12px;
+    box-shadow: var(--pnl-shadow);
+    text-decoration: none;
+    color: inherit;
+}
+
+.dash-tile.is-link:hover {
+    border-color: var(--pnl-line-strong);
+    transform: translateY(-1px);
+}
+
+.dash-tile-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pnl-muted);
+}
+
+.dash-tile-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--pnl-ink);
+    white-space: nowrap;
+}
+
+.dash-tile-cur {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--pnl-muted);
+    margin-right: 0.28rem;
+}
+
+.dash-tile.is-danger .dash-tile-value {
+    color: var(--pnl-danger);
+}
+
+.dash-tile.is-danger .dash-tile-cur {
+    color: color-mix(in srgb, var(--pnl-danger) 70%, var(--pnl-muted));
+}
+
+.dash-tile-sub {
+    font-size: 0.8rem;
+    color: var(--pnl-muted);
+}
+
+.dash-sub {
+    margin: 1rem 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pnl-muted);
+}
+
+.dash-sub:first-of-type {
+    margin-top: 0.25rem;
+}
+
+.dash-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dash-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--pnl-line);
+    font-size: 0.875rem;
+}
+
+.dash-list li:last-child {
+    border-bottom: 0;
+}
+
+.dash-list-right {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.dash-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: var(--pnl-surface-2);
+    color: var(--pnl-muted);
+}
+
+.dash-badge.is-danger {
+    background: color-mix(in srgb, var(--pnl-danger) 14%, var(--pnl-surface));
+    color: var(--pnl-danger);
+}
+
 .panel-card {
     background: var(--pnl-surface);
     border: 1px solid var(--pnl-line);
