@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Console\ActivityController;
 use App\Http\Controllers\Console\ApiTokenController;
+use App\Http\Controllers\Console\AssetController;
 use App\Http\Controllers\Console\ClientController;
 use App\Http\Controllers\Console\ContactController;
 use App\Http\Controllers\Console\DashboardController;
@@ -88,6 +89,13 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // Accounts receivable (Finance).
     Route::get('receivables', [ReceivablesController::class, 'index'])->name('receivables.index');
+
+    // Asset register (Operations).
+    Route::put('assets/{asset}/restore', [AssetController::class, 'restore'])->name('assets.restore');
+    Route::post('assets/{asset}/assign', [AssetController::class, 'assign'])->name('assets.assign');
+    Route::post('assets/{asset}/unassign', [AssetController::class, 'unassign'])->name('assets.unassign');
+    Route::put('assets/{asset}/status', [AssetController::class, 'status'])->name('assets.status');
+    Route::resource('assets', AssetController::class)->withTrashed(['show']);
 
     // Exchange rates (Finance).
     Route::get('exchange-rates', [ExchangeRateController::class, 'index'])->name('exchange-rates.index');

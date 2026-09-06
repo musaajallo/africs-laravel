@@ -42,7 +42,13 @@ const allNav = [
         permission: 'projects.view',
     },
     soon('Subscriptions & infra', 'subscriptions', 'subscriptions'),
-    soon('Assets', 'assets', 'assets'),
+    {
+        label: 'Assets',
+        icon: 'assets',
+        routeName: 'console.assets.index',
+        activeMatch: 'console.assets.*',
+        permission: 'assets.view',
+    },
 
     { heading: 'Finance' },
     {

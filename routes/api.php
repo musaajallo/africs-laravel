@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AssetController;
 use App\Http\Controllers\Api\V1\ClientController;
 use App\Http\Controllers\Api\V1\ExchangeRateController;
 use App\Http\Controllers\Api\V1\InvoiceController;
@@ -87,6 +88,18 @@ Route::prefix('v1')
             Route::patch('invoices/{invoice}', [InvoiceController::class, 'update']);
             Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('api.v1.invoices.destroy');
             Route::post('proformas/{proforma}/convert', [InvoiceController::class, 'convert'])->name('api.v1.proformas.convert');
+        });
+
+        Route::middleware('abilities:assets.view')->group(function () {
+            Route::get('assets', [AssetController::class, 'index'])->name('api.v1.assets.index');
+            Route::get('assets/{asset}', [AssetController::class, 'show'])->name('api.v1.assets.show');
+        });
+
+        Route::middleware('abilities:assets.manage')->group(function () {
+            Route::post('assets', [AssetController::class, 'store'])->name('api.v1.assets.store');
+            Route::put('assets/{asset}', [AssetController::class, 'update'])->name('api.v1.assets.update');
+            Route::patch('assets/{asset}', [AssetController::class, 'update']);
+            Route::delete('assets/{asset}', [AssetController::class, 'destroy'])->name('api.v1.assets.destroy');
         });
 
         Route::middleware('abilities:payments.view')->group(function () {

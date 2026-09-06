@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Asset;
 use App\Models\Client;
 use App\Models\ExchangeRate;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Proforma;
 use App\Models\Project;
+use App\Models\User;
 use App\Support\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -24,6 +26,7 @@ class FinanceDemoSeeder extends Seeder
     public function run(): void
     {
         $this->seedExchangeRates();
+        $this->seedAssets();
 
         $clients = collect([
             ['name' => 'Banjul City Council', 'type' => 'government', 'currency' => 'GMD'],
@@ -76,6 +79,50 @@ class FinanceDemoSeeder extends Seeder
             $this->pay($client, $currency, $converted, $this->half($converted->total), now()->subDays(4));
             // overdue30, overdue60, overdue90 and notDue are left outstanding
         }
+    }
+
+    private function seedAssets(): void
+    {
+        $people = User::query()->limit(3)->get();
+
+        $items = [
+            ['name' => 'MacBook Pro 14" — Design', 'category' => 'laptop', 'make' => 'Apple', 'model' => 'M3 Pro', 'cost' => 165000],
+            ['name' => 'Dell Latitude 7440 — Dev', 'category' => 'laptop', 'make' => 'Dell', 'model' => 'Latitude 7440', 'cost' => 92000],
+            ['name' => 'ThinkPad X1 Carbon — Ops', 'category' => 'laptop', 'make' => 'Lenovo', 'model' => 'X1 Carbon G11', 'cost' => 110000],
+            ['name' => 'Mac mini — Build server', 'category' => 'desktop', 'make' => 'Apple', 'model' => 'M2', 'cost' => 78000],
+            ['name' => 'Dell UltraSharp 27"', 'category' => 'monitor', 'make' => 'Dell', 'model' => 'U2723QE', 'cost' => 34000],
+            ['name' => 'Dell UltraSharp 27" (2)', 'category' => 'monitor', 'make' => 'Dell', 'model' => 'U2723QE', 'cost' => 34000],
+            ['name' => 'Canon imageCLASS MF445dw', 'category' => 'printer', 'make' => 'Canon', 'model' => 'MF445dw', 'cost' => 21000],
+            ['name' => 'MikroTik hEX router', 'category' => 'network', 'make' => 'MikroTik', 'model' => 'RB750Gr3', 'cost' => 4200],
+            ['name' => 'iPhone 13 — On-call', 'category' => 'phone', 'make' => 'Apple', 'model' => 'iPhone 13', 'cost' => 45000],
+            ['name' => 'Logitech MX Keys + MX Master', 'category' => 'peripheral', 'make' => 'Logitech', 'model' => 'MX combo', 'cost' => 6800],
+        ];
+
+        foreach ($items as $i => $item) {
+            $asset = Asset::create([
+                'name' => $item['name'],
+                'category' => $item['category'],
+                'make' => $item['make'],
+                'model' => $item['model'],
+                'serial_number' => 'SN-'.now()->timestamp.'-'.$i,
+                'asset_tag' => sprintf('AF-%04d', $i + 1),
+                'status' => 'spare',
+                'condition' => fake()->randomElement(['new', 'good', 'good', 'fair']),
+                'purchased_on' => now()->subMonths(fake()->numberBetween(2, 30))->toDateString(),
+                'purchase_cost' => $item['cost'],
+                'purchase_currency' => 'GMD',
+                'supplier' => fake()->randomElement(['Techno Gambia', 'Gamtech', 'Direct import']),
+                'location' => 'Head office',
+            ]);
+
+            // Assign the first few to whoever exists.
+            if ($i < 4 && $people->isNotEmpty()) {
+                $asset->assignTo($people[$i % $people->count()], now()->subMonths(fake()->numberBetween(1, 12)));
+            }
+        }
+
+        Asset::where('category', 'printer')->first()?->update(['status' => 'repair']);
+        Asset::factory()->status('retired')->create(['name' => 'Old ThinkCentre — retired', 'category' => 'desktop']);
     }
 
     private function seedExchangeRates(): void

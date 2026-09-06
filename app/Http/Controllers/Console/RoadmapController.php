@@ -25,11 +25,6 @@ class RoadmapController extends Controller
             'phase' => 'Phase 6',
             'blurb' => 'Encrypted credentials tied to subscriptions, revealed only after re-entering your password, with every reveal written to the audit trail.',
         ],
-        'assets' => [
-            'title' => 'Asset register',
-            'phase' => 'Phase 7',
-            'blurb' => 'Physical equipment Africs owns — laptops, desktops, printers — with purchase details, serial numbers, assignees and condition.',
-        ],
     ];
 
     public function show(Request $request, string $module): Response

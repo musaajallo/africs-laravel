@@ -3903,6 +3903,24 @@ textarea.field-input {
 .proj-status[data-status='completed'] { --h: #5f6b7a; }
 .proj-status[data-status='cancelled'] { --h: #b3261e; }
 
+.asset-status {
+    --h: #8a8f86;
+    display: inline-block;
+    padding: 0.12rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--h) 15%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--h) 72%, var(--pnl-ink));
+    border: 1px solid color-mix(in srgb, var(--h) 32%, transparent);
+}
+
+.asset-status[data-status='in_use'] { --h: #2f9e60; }
+.asset-status[data-status='spare'] { --h: #3b7fd6; }
+.asset-status[data-status='repair'] { --h: #d18b1e; }
+.asset-status[data-status='retired'] { --h: #5f6b7a; }
+.asset-status[data-status='lost'] { --h: #b3261e; }
+
 .proj-line {
     font-size: 0.72rem;
     font-weight: 600;

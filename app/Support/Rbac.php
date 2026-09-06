@@ -65,6 +65,12 @@ final class Rbac
     /** Create, edit, send, void and archive invoices. */
     public const PERM_INVOICES_MANAGE = 'invoices.manage';
 
+    /** View the asset register. */
+    public const PERM_ASSETS_VIEW = 'assets.view';
+
+    /** Add, edit, assign, retire and remove assets. */
+    public const PERM_ASSETS_MANAGE = 'assets.manage';
+
     /** View recorded payments and receipts. */
     public const PERM_PAYMENTS_VIEW = 'payments.view';
 
@@ -123,6 +129,8 @@ final class Rbac
             self::PERM_PAYMENTS_VIEW,
             self::PERM_PAYMENTS_MANAGE,
             self::PERM_RECEIVABLES_VIEW,
+            self::PERM_ASSETS_VIEW,
+            self::PERM_ASSETS_MANAGE,
             self::PERM_EXCHANGE_RATES_VIEW,
             self::PERM_EXCHANGE_RATES_MANAGE,
             self::PERM_SETTINGS_VIEW,
@@ -175,6 +183,8 @@ final class Rbac
                 self::PERM_PAYMENTS_VIEW,
                 self::PERM_PAYMENTS_MANAGE,
                 self::PERM_RECEIVABLES_VIEW,
+                self::PERM_ASSETS_VIEW,
+                self::PERM_ASSETS_MANAGE,
                 self::PERM_EXCHANGE_RATES_VIEW,
                 self::PERM_EXCHANGE_RATES_MANAGE,
                 self::PERM_SETTINGS_VIEW,
