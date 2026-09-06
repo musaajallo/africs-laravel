@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -19,6 +19,11 @@ const props = defineProps({
 
 const { user } = useAuth();
 const sidebarOpen = ref(false);
+
+// Real destinations only — no section headings, no "soon" placeholders.
+const launcherItems = computed(() =>
+    props.nav.filter((item) => !item.heading && !item.soon && item.routeName),
+);
 const collapsed = ref(false);
 const searchInput = ref(null);
 const isMac = ref(false);
@@ -144,6 +149,31 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
             </form>
 
             <div class="panel-header-right">
+                <Dropdown v-if="launcherItems.length" align="right">
+                    <template #trigger>
+                        <button type="button" class="panel-icon-button" aria-label="Open a module">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="5" cy="5" r="1.9" /><circle cx="12" cy="5" r="1.9" /><circle cx="19" cy="5" r="1.9" />
+                                <circle cx="5" cy="12" r="1.9" /><circle cx="12" cy="12" r="1.9" /><circle cx="19" cy="12" r="1.9" />
+                                <circle cx="5" cy="19" r="1.9" /><circle cx="12" cy="19" r="1.9" /><circle cx="19" cy="19" r="1.9" />
+                            </svg>
+                        </button>
+                    </template>
+                    <template #content>
+                        <div class="app-launcher">
+                            <Link
+                                v-for="item in launcherItems"
+                                :key="item.label"
+                                :href="route(item.routeName, item.routeParams)"
+                                class="app-launcher-item"
+                            >
+                                <PanelNavIcon v-if="item.icon" :name="item.icon" />
+                                <span>{{ item.label }}</span>
+                            </Link>
+                        </div>
+                    </template>
+                </Dropdown>
+
                 <button
                     type="button"
                     class="panel-icon-button panel-theme-toggle"
@@ -178,7 +208,6 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
                     <template #trigger>
                         <button type="button" class="panel-user-button">
                             <span class="panel-user-avatar">{{ initials(user?.name) }}</span>
-                            <span class="panel-user-name-inline">{{ user?.name }}</span>
                             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                                 <path
                                     fill-rule="evenodd"

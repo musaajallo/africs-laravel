@@ -2423,7 +2423,7 @@ textarea.field-input {
 }
 
 .panel-brand-logo {
-    height: 4.5rem;
+    height: 4rem;
     width: auto;
     filter: brightness(0) invert(1);
 }
@@ -3197,10 +3197,36 @@ textarea.field-input {
     }
 }
 
-@media (max-width: 560px) {
-    .panel-user-name-inline {
-        display: none;
-    }
+/* ---------- app launcher ---------- */
+
+.app-launcher {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.15rem;
+    padding: 0.4rem;
+    width: 15rem;
+}
+
+.app-launcher-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.7rem 0.35rem;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--pnl-ink);
+    font-size: 0.72rem;
+    line-height: 1.2;
+}
+
+.app-launcher-item svg {
+    opacity: 0.8;
+}
+
+.app-launcher-item:hover {
+    background: var(--pnl-surface-2);
 }
 
 /* ========================================================================
