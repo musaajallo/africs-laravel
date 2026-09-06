@@ -44,6 +44,14 @@ final class Settings
                 'payment_terms_days' => 30,
                 'payment_methods' => ['Bank transfer', 'Cash', 'Cheque', 'Mobile money', 'Card'],
             ],
+            'analytics' => [
+                // Assumed blended gross margin, used for gross-profit and
+                // LTV:CAC figures on the dashboard's Business insights tab.
+                'gross_margin_pct' => 45,
+                // Sales & marketing spend per month, in the base currency.
+                // Drives Customer Acquisition Cost. 0 = not configured.
+                'monthly_acquisition_spend' => 0,
+            ],
         ];
     }
 
@@ -128,5 +136,17 @@ final class Settings
     public static function taxRate(): float
     {
         return (float) self::get('billing.tax_rate', 0);
+    }
+
+    /** Assumed blended gross margin as a percentage, e.g. 45 for 45%. */
+    public static function grossMarginPct(): float
+    {
+        return (float) self::get('analytics.gross_margin_pct', 45);
+    }
+
+    /** Monthly sales & marketing spend in the base currency (0 = unset). */
+    public static function monthlyAcquisitionSpend(): float
+    {
+        return (float) self::get('analytics.monthly_acquisition_spend', 0);
     }
 }

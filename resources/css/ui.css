@@ -1,0 +1,161 @@
+/* ---------------------------------------------------------------------------
+   Path A — Tailwind v4, scoped.
+
+   The rest of the app is hand-written CSS in app.css. This file pulls in
+   Tailwind's *theme* and *utilities* layers only — no Preflight — so utility
+   classes are available to the new UI kit (resources/js/Components/Ui/*)
+   without resetting or restyling any existing page.
+
+   Everything the kit renders lives under an element carrying `.ui`, which is
+   where the semantic colour tokens are defined (and flipped for dark mode).
+--------------------------------------------------------------------------- */
+
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@source '../js';
+
+/* The Console shell sets <html data-panel-theme="dark"> for dark mode. */
+@custom-variant dark (&:where([data-panel-theme='dark'] *, [data-panel-theme='dark']));
+
+@theme inline {
+    --color-canvas: var(--ui-canvas);
+    --color-surface: var(--ui-surface);
+    --color-raised: var(--ui-raised);
+    --color-line: var(--ui-line);
+    --color-line-soft: var(--ui-line-soft);
+    --color-ink: var(--ui-ink);
+    --color-ink-soft: var(--ui-ink-soft);
+    --color-ink-faint: var(--ui-ink-faint);
+    --color-brand: var(--ui-brand);
+    --color-brand-ink: var(--ui-brand-ink);
+    --color-brand-wash: var(--ui-brand-wash);
+    --color-gold: var(--ui-gold);
+    --color-gold-wash: var(--ui-gold-wash);
+    --color-positive: var(--ui-positive);
+    --color-positive-wash: var(--ui-positive-wash);
+    --color-negative: var(--ui-negative);
+    --color-negative-wash: var(--ui-negative-wash);
+    --color-info: var(--ui-info);
+    --color-info-wash: var(--ui-info-wash);
+
+    --radius-card: 14px;
+    --radius-lg: 12px;
+    --radius-md: 9px;
+
+    --shadow-card: var(--ui-shadow-card);
+    --shadow-pop:
+        0 4px 12px -2px rgb(16 24 20 / 0.12), 0 16px 40px -12px rgb(16 24 20 / 0.22);
+
+    --font-sans:
+        'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+        Arial, sans-serif;
+}
+
+/* ---- semantic tokens: light ---- */
+.ui {
+    --ui-canvas: #f2f1ea;
+    --ui-surface: #ffffff;
+    --ui-raised: #f7f5ee;
+    --ui-line: #ddd6c4;
+    --ui-line-soft: #ebe6d8;
+    --ui-ink: #1a1e1b;
+    --ui-ink-soft: #565c55;
+    --ui-ink-faint: #8b9088;
+    --ui-brand: #0d4d2c;
+    --ui-brand-ink: #0a3a21;
+    --ui-brand-wash: #e7f0ea;
+    --ui-gold: #b98d16;
+    --ui-gold-wash: #fbf1d5;
+    --ui-positive: #157a3b;
+    --ui-positive-wash: #e4f2e8;
+    --ui-negative: #b3261e;
+    --ui-negative-wash: #fbe8e6;
+    --ui-info: #1d4ed8;
+    --ui-info-wash: #e6ecfc;
+    --ui-shadow-card:
+        0 1px 2px rgb(16 24 20 / 0.05), 0 1px 1px rgb(16 24 20 / 0.03);
+
+    color: var(--ui-ink);
+    font-family: var(--font-sans);
+}
+
+/* Scoped, minimal element resets — Preflight is intentionally not loaded. */
+.ui a {
+    text-decoration: none;
+    color: inherit;
+}
+.ui button {
+    font-family: inherit;
+}
+
+/* ---- semantic tokens: dark ---- */
+[data-panel-theme='dark'] .ui {
+    --ui-canvas: #12140f;
+    --ui-surface: #1c1f1a;
+    --ui-raised: #22261f;
+    --ui-line: #333730;
+    --ui-line-soft: #2b2f28;
+    --ui-ink: #f3efe3;
+    --ui-ink-soft: #b7b6a7;
+    --ui-ink-faint: #85857a;
+    --ui-brand: #4ea373;
+    --ui-brand-ink: #d9ecdf;
+    --ui-brand-wash: #1e2c23;
+    --ui-gold: #e7bb41;
+    --ui-gold-wash: #2c2411;
+    --ui-positive: #47b268;
+    --ui-positive-wash: #16281c;
+    --ui-negative: #e5776f;
+    --ui-negative-wash: #2e1c1a;
+    --ui-info: #7ea2f0;
+    --ui-info-wash: #1b2233;
+    --ui-shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -16px rgb(0 0 0 / 0.6);
+}
+
+/* The new dashboard sits on the canvas tone rather than plain white. */
+.ui[data-ui-root] {
+    box-sizing: border-box;
+}
+.ui[data-ui-root] *,
+.ui[data-ui-root] *::before,
+.ui[data-ui-root] *::after {
+    box-sizing: border-box;
+}
+
+@layer components {
+    .dash-section {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--ui-ink-faint);
+    }
+
+    .dash-stat-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--ui-ink-faint);
+    }
+
+    .dash-stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: var(--ui-ink);
+    }
+
+    .dash-mini-label {
+        margin-bottom: 0.5rem;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ui-ink-faint);
+    }
+}

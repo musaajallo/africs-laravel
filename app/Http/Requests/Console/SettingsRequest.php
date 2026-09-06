@@ -35,6 +35,8 @@ class SettingsRequest extends FormRequest
             $methods = Settings::paymentMethods();
         }
 
+        $analytics = (array) $this->input('analytics', []);
+
         $this->merge([
             'currency' => [
                 'enabled' => $enabled,
@@ -42,6 +44,10 @@ class SettingsRequest extends FormRequest
             ],
             'company' => $company,
             'billing' => array_merge((array) $this->input('billing', []), ['payment_methods' => $methods]),
+            'analytics' => [
+                'gross_margin_pct' => $analytics['gross_margin_pct'] ?? Settings::grossMarginPct(),
+                'monthly_acquisition_spend' => $analytics['monthly_acquisition_spend'] ?? Settings::monthlyAcquisitionSpend(),
+            ],
         ]);
     }
 
@@ -68,6 +74,9 @@ class SettingsRequest extends FormRequest
             'billing.payment_terms_days' => ['nullable', 'integer', 'between:0,365'],
             'billing.payment_methods' => ['array', 'min:1'],
             'billing.payment_methods.*' => ['string', 'max:50'],
+
+            'analytics.gross_margin_pct' => ['nullable', 'numeric', 'between:0,100'],
+            'analytics.monthly_acquisition_spend' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 
@@ -96,6 +105,10 @@ class SettingsRequest extends FormRequest
                 'tax_rate' => (float) ($validated['billing']['tax_rate'] ?? 0),
                 'payment_terms_days' => (int) ($validated['billing']['payment_terms_days'] ?? 30),
                 'payment_methods' => array_values(array_unique($validated['billing']['payment_methods'] ?? [])),
+            ],
+            'analytics' => [
+                'gross_margin_pct' => (float) ($validated['analytics']['gross_margin_pct'] ?? 45),
+                'monthly_acquisition_spend' => (float) ($validated['analytics']['monthly_acquisition_spend'] ?? 0),
             ],
         ];
     }

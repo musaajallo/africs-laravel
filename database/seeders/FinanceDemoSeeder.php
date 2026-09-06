@@ -6,6 +6,7 @@ use App\Models\Asset;
 use App\Models\Client;
 use App\Models\ExchangeRate;
 use App\Models\Invoice;
+use App\Models\Lead;
 use App\Models\Payment;
 use App\Models\Proforma;
 use App\Models\Project;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Models\VaultEntry;
 use App\Models\VaultFolder;
 use App\Support\Sequence;
+use App\Support\Settings;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -31,6 +33,12 @@ class FinanceDemoSeeder extends Seeder
         $this->seedAssets();
         $this->seedVault();
 
+        // Assumptions the Business insights tab reads.
+        Settings::put(['analytics' => [
+            'gross_margin_pct' => 52,
+            'monthly_acquisition_spend' => 45000,
+        ]]);
+
         $clients = collect([
             ['name' => 'Banjul City Council', 'type' => 'government', 'currency' => 'GMD'],
             ['name' => 'Kairaba Hotel Group', 'type' => 'organisation', 'currency' => 'GMD'],
@@ -48,9 +56,18 @@ class FinanceDemoSeeder extends Seeder
         ]));
 
         foreach ($clients as $client) {
+            // Keep the budget sensible for the client's currency — the factory
+            // generates a GMD-scale figure.
+            $budget = match ($client->currency) {
+                'USD' => fake()->numberBetween(8000, 60000),
+                'EUR' => fake()->numberBetween(8000, 55000),
+                default => fake()->numberBetween(150000, 3500000),
+            };
+
             $project = Project::factory()->create([
                 'client_id' => $client->id,
                 'status' => 'active',
+                'budget_amount' => $budget,
                 'budget_currency' => $client->currency,
             ]);
 
@@ -81,6 +98,31 @@ class FinanceDemoSeeder extends Seeder
             $this->pay($client, $currency, $partly, $this->half($partly->total), now()->subDays(9));
             $this->pay($client, $currency, $converted, $this->half($converted->total), now()->subDays(4));
             // overdue30, overdue60, overdue90 and notDue are left outstanding
+        }
+
+        $this->seedLeads($clients);
+    }
+
+    private function seedLeads($clients): void
+    {
+        $channels = ['website', 'referral', 'referral', 'linkedin', 'event', 'cold_outreach', 'website'];
+
+        for ($i = 0; $i < 26; $i++) {
+            $createdAt = now()->subDays(fake()->numberBetween(1, 110));
+            $channel = fake()->randomElement($channels);
+            // ~28% of leads become clients.
+            $converted = fake()->boolean(28);
+
+            Lead::factory()->create([
+                'source' => $channel,
+                'status' => $converted ? 'converted' : fake()->randomElement(['new', 'contacted', 'qualified', 'lost']),
+                'converted_client_id' => $converted ? $clients->random()->id : null,
+                'referred_by_client_id' => $channel === 'referral' && fake()->boolean(60)
+                    ? $clients->random()->id
+                    : null,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
+            ]);
         }
     }
 

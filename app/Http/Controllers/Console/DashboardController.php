@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Proforma;
 use App\Models\Project;
 use App\Support\ActivityPresenter;
+use App\Support\Analytics;
 use App\Support\AssetMeta;
 use App\Support\Money;
 use App\Support\ProjectMeta;
@@ -30,8 +31,23 @@ class DashboardController extends Controller
         $base = Settings::baseCurrency();
         $today = now()->startOfDay();
 
+        $canInsights = $user->can(Rbac::PERM_INVOICES_VIEW)
+            || $user->can(Rbac::PERM_PAYMENTS_VIEW)
+            || $user->can(Rbac::PERM_PROJECTS_VIEW);
+
+        $range = Analytics::normaliseRange($request->query('range'));
+
         return Inertia::render('Console/Dashboard', [
             'base' => $base,
+            'canInsights' => $canInsights,
+            'insightsRange' => $range,
+            'insightsRanges' => collect(Analytics::RANGES)
+                ->map(fn ($label, $key) => ['key' => $key, 'label' => $label])
+                ->values(),
+            // Resolved only on a partial reload from the Business insights tab.
+            'insights' => Inertia::optional(
+                fn () => $canInsights ? (new Analytics)->insights($range) : null,
+            ),
             'metrics' => $this->metrics($user, $base, $today),
             'overdueInvoices' => $user->can(Rbac::PERM_INVOICES_VIEW)
                 ? $this->overdueInvoices($today)

@@ -13,8 +13,20 @@ are wired in `bootstrap/app.php`. `routes/console.php` stays the Artisan file.
 
 ## Stack
 
-PHP 8.3 · Laravel 13 · Inertia 2 + Vue 3 (`<script setup>`) · **plain CSS**
-in `resources/css/app.css` (no Tailwind/utility framework) · MySQL · Vite.
+PHP 8.3 · Laravel 13 · Inertia 2 + Vue 3 (`<script setup>`) · MySQL · Vite.
+
+**Styling — two systems, deliberately:**
+- The panels and public site are **plain hand-written CSS** in
+  `resources/css/app.css` (`panel-*`, `dash-*`, `client-*` classes). This is
+  the default — new module pages follow it.
+- **Tailwind v4** (`resources/css/ui.css`, `@tailwindcss/vite`) is loaded
+  *without Preflight* and scoped: its utilities only take effect inside an
+  element carrying `.ui`, where the semantic tokens (`bg-surface`, `text-ink`,
+  `border-line`, `rounded-card`, dark-mode flip) are defined. Used by the
+  shadcn-style kit in `resources/js/Components/Ui/*` (`UiCard`, `UiStat`,
+  `UiTabs`, `UiSegmented`, `UiSparkline`, `UiBars`, `UiMeter`, `UiDelta`).
+  The Console **Dashboard** is built on it; other pages can adopt it
+  incrementally by wrapping content in `<div class="ui" data-ui-root>`.
 
 Key packages: `laravel/sanctum` (API PATs), `spatie/laravel-permission` (RBAC),
 `spatie/laravel-activitylog` **v5**, `brick/money`, `barryvdh/laravel-dompdf`.
@@ -106,7 +118,11 @@ Payments & receipts · Receivables (AR ageing) · Exchange rates · Assets
 (+ assignments + straight-line/reducing-balance depreciation, see
 `App\Support\Depreciation`) · **Secrets vault** (see `docs/vault.md` — encrypted
 credential store, password-confirm to reveal, KeePass XML/.kdbx export) ·
-Dashboard · Tags · Settings · Activity log · API tokens.
+Dashboard (Overview + **Business insights** tab — `App\Support\Analytics`:
+LTV, CAC, LTV:CAC, avg project value, win rate, DSO, lead funnel; the
+`insights` prop is an `Inertia::optional` resolved on a partial reload when
+the tab opens; margin % + monthly acquisition spend come from the
+`analytics` Settings group) · Tags · Settings · Activity log · API tokens.
 
 Pending: **Subscriptions & infrastructure** (recurring digital services;
 `vault_entries.related_subscription_id` is reserved for the link).

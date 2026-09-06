@@ -25,6 +25,7 @@ const form = useForm({
         ...props.settings.billing,
         payment_methods: [...(props.settings.billing.payment_methods ?? [])],
     },
+    analytics: { ...props.settings.analytics },
 });
 
 const paymentMethodsText = computed({
@@ -167,6 +168,45 @@ function submit() {
                     >
                         <textarea v-model="paymentMethodsText" rows="5" class="field-input" :disabled="!canManage"></textarea>
                     </PanelField>
+                </div>
+
+                <div class="panel-card" style="margin-top: 1rem">
+                    <h2 class="panel-card-title">Analytics assumptions</h2>
+                    <p class="panel-cell-muted" style="margin: -0.25rem 0 0.9rem">
+                        Used only for the dashboard's Business insights tab —
+                        gross-profit and LTV:CAC figures.
+                    </p>
+                    <div class="panel-form-grid">
+                        <PanelField
+                            label="Blended gross margin (%)"
+                            :error="err('analytics.gross_margin_pct')"
+                            hint="Rough profit left after delivery costs, across all work."
+                        >
+                            <input
+                                v-model="form.analytics.gross_margin_pct"
+                                type="number"
+                                step="1"
+                                min="0"
+                                max="100"
+                                class="field-input"
+                                :disabled="!canManage"
+                            />
+                        </PanelField>
+                        <PanelField
+                            :label="`Monthly acquisition spend (${form.currency.base})`"
+                            :error="err('analytics.monthly_acquisition_spend')"
+                            hint="Sales & marketing cost per month. Drives Customer Acquisition Cost. Leave 0 if unknown."
+                        >
+                            <input
+                                v-model="form.analytics.monthly_acquisition_spend"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                class="field-input"
+                                :disabled="!canManage"
+                            />
+                        </PanelField>
+                    </div>
                 </div>
 
                 <div v-if="canManage" class="panel-form-actions">
