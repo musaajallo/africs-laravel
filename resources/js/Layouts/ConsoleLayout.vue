@@ -81,7 +81,13 @@ const allNav = [
     },
 
     { heading: 'Security' },
-    soon('Secrets vault', 'secrets', 'secrets'),
+    {
+        label: 'Secrets vault',
+        icon: 'secrets',
+        routeName: 'console.vault.index',
+        activeMatch: 'console.vault.*',
+        permission: 'vault.view',
+    },
 
     { heading: 'Administration' },
     {

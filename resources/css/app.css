@@ -3005,6 +3005,130 @@ textarea.field-input {
     color: var(--pnl-danger);
 }
 
+/* ---------- secrets vault ---------- */
+
+.vault-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: var(--pnl-surface-2);
+    color: var(--pnl-muted);
+    border: 1px solid var(--pnl-line);
+}
+
+.vault-pill.is-open {
+    background: color-mix(in srgb, var(--pnl-ok) 14%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--pnl-ok) 75%, var(--pnl-ink));
+    border-color: color-mix(in srgb, var(--pnl-ok) 30%, transparent);
+}
+
+.vault-folder-list {
+    list-style: none;
+    margin: 0 0 0.75rem;
+    padding: 0;
+}
+
+.vault-folder-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--pnl-line);
+    font-size: 0.875rem;
+}
+
+.vault-folder-list li:last-child {
+    border-bottom: 0;
+}
+
+.vault-folder-list .panel-link.is-strong {
+    font-weight: 700;
+    color: var(--pnl-ink);
+}
+
+.vault-folder-actions {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 0.15rem;
+}
+
+.vault-folder-add {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.vault-dl dd {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.vault-secret {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    background: var(--pnl-surface-2);
+    padding: 0.1rem 0.4rem;
+    border-radius: 5px;
+    word-break: break-all;
+}
+
+.vault-mask {
+    letter-spacing: 0.15em;
+    color: var(--pnl-muted);
+}
+
+.vault-copy {
+    background: none;
+    border: 1px solid var(--pnl-line-strong);
+    border-radius: 999px;
+    padding: 0.05rem 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--pnl-ink-soft);
+    cursor: pointer;
+}
+
+.vault-copy:hover {
+    background: var(--pnl-surface-2);
+}
+
+.vault-tag {
+    margin-left: 0.4rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--pnl-accent) 16%, var(--pnl-surface));
+    color: color-mix(in srgb, var(--pnl-accent) 78%, var(--pnl-ink));
+    vertical-align: middle;
+}
+
+.vault-pw-row,
+.vault-custom-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vault-custom-row {
+    margin-bottom: 0.5rem;
+}
+
+.vault-custom-secret {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--pnl-muted);
+    white-space: nowrap;
+}
+
 .panel-card {
     background: var(--pnl-surface);
     border: 1px solid var(--pnl-line);

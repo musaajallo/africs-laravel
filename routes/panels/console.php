@@ -17,6 +17,7 @@ use App\Http\Controllers\Console\RoadmapController;
 use App\Http\Controllers\Console\SettingsController;
 use App\Http\Controllers\Console\TagController;
 use App\Http\Controllers\Console\UserController;
+use App\Http\Controllers\Console\VaultController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -89,6 +90,24 @@ Route::middleware(['auth', 'verified', 'panel:console'])->group(function () {
 
     // Accounts receivable (Finance).
     Route::get('receivables', [ReceivablesController::class, 'index'])->name('receivables.index');
+
+    // Secrets vault (Security).
+    Route::get('vault', [VaultController::class, 'index'])->name('vault.index');
+    Route::post('vault/unlock', [VaultController::class, 'unlock'])->name('vault.unlock');
+    Route::post('vault/lock', [VaultController::class, 'lock'])->name('vault.lock');
+    Route::get('vault/export/xml', [VaultController::class, 'exportXml'])->name('vault.export.xml');
+    Route::post('vault/export/kdbx', [VaultController::class, 'exportKdbx'])->name('vault.export.kdbx');
+    Route::post('vault/folders', [VaultController::class, 'folderStore'])->name('vault.folders.store');
+    Route::put('vault/folders/{folder}', [VaultController::class, 'folderUpdate'])->name('vault.folders.update');
+    Route::delete('vault/folders/{folder}', [VaultController::class, 'folderDestroy'])->name('vault.folders.destroy');
+    Route::get('vault/create', [VaultController::class, 'create'])->name('vault.create');
+    Route::post('vault', [VaultController::class, 'store'])->name('vault.store');
+    Route::get('vault/{entry}', [VaultController::class, 'show'])->name('vault.show');
+    Route::get('vault/{entry}/edit', [VaultController::class, 'edit'])->name('vault.edit');
+    Route::put('vault/{entry}', [VaultController::class, 'update'])->name('vault.update');
+    Route::delete('vault/{entry}', [VaultController::class, 'destroy'])->name('vault.destroy');
+    Route::put('vault/{entry}/restore', [VaultController::class, 'restore'])->name('vault.restore');
+    Route::get('vault/{entry}/reveal', [VaultController::class, 'reveal'])->name('vault.reveal');
 
     // Asset register (Operations).
     Route::put('assets/{asset}/restore', [AssetController::class, 'restore'])->name('assets.restore');

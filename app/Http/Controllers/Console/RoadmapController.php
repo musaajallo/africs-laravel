@@ -20,11 +20,6 @@ class RoadmapController extends Controller
             'phase' => 'Phase 5',
             'blurb' => 'A register of recurring digital services — hosting, domains, SaaS, licences — owned by Africs or run for a client, with renewal reminders.',
         ],
-        'secrets' => [
-            'title' => 'Secrets vault',
-            'phase' => 'Phase 6',
-            'blurb' => 'Encrypted credentials tied to subscriptions, revealed only after re-entering your password, with every reveal written to the audit trail.',
-        ],
     ];
 
     public function show(Request $request, string $module): Response

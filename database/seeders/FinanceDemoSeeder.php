@@ -10,6 +10,8 @@ use App\Models\Payment;
 use App\Models\Proforma;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\VaultEntry;
+use App\Models\VaultFolder;
 use App\Support\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -27,6 +29,7 @@ class FinanceDemoSeeder extends Seeder
     {
         $this->seedExchangeRates();
         $this->seedAssets();
+        $this->seedVault();
 
         $clients = collect([
             ['name' => 'Banjul City Council', 'type' => 'government', 'currency' => 'GMD'],
@@ -134,6 +137,45 @@ class FinanceDemoSeeder extends Seeder
 
         Asset::where('category', 'printer')->first()?->update(['status' => 'repair']);
         Asset::factory()->status('retired')->create(['name' => 'Old ThinkCentre — retired', 'category' => 'desktop']);
+    }
+
+    private function seedVault(): void
+    {
+        $clients = VaultFolder::firstOrCreate(['name' => 'Client logins']);
+        $infra = VaultFolder::firstOrCreate(['name' => 'Infrastructure']);
+
+        VaultEntry::firstOrCreate(['title' => 'Kairaba Hotel — WordPress admin'], [
+            'folder_id' => $clients->id,
+            'username' => 'africs',
+            'password' => 'K@iraba-wp-2026!',
+            'url' => 'https://kairabahotel.gm/wp-admin',
+            'notes' => "Do not update plugins without asking the client.\nStaging: staging.kairabahotel.gm",
+        ]);
+
+        VaultEntry::firstOrCreate(['title' => 'Senegambia Traders — cPanel'], [
+            'folder_id' => $clients->id,
+            'username' => 'sentraders',
+            'password' => 'cP-9273-xR!wq',
+            'url' => 'https://server42.host.gm:2083',
+            'custom_fields' => [
+                ['label' => 'FTP host', 'value' => 'ftp.sentraders.gm', 'secret' => false],
+                ['label' => 'DB root pw', 'value' => 'r00t-db-88x', 'secret' => true],
+            ],
+        ]);
+
+        VaultEntry::firstOrCreate(['title' => 'AWS — Africs root'], [
+            'folder_id' => $infra->id,
+            'username' => 'ops@africs.gm',
+            'password' => 'aws-root-4b8f-QQ',
+            'url' => 'https://console.aws.amazon.com',
+            'totp_secret' => 'JBSWY3DPEHPK3PXP',
+        ]);
+
+        VaultEntry::firstOrCreate(['title' => 'Cloudflare'], [
+            'folder_id' => $infra->id,
+            'username' => 'dns@africs.gm',
+            'password' => 'cf-token-991aa-Z',
+        ]);
     }
 
     private function seedExchangeRates(): void

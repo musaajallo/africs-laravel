@@ -71,6 +71,12 @@ final class Rbac
     /** Add, edit, assign, retire and remove assets. */
     public const PERM_ASSETS_MANAGE = 'assets.manage';
 
+    /** Open the secrets vault and see entry metadata. */
+    public const PERM_VAULT_VIEW = 'vault.view';
+
+    /** Add, edit, reveal, export and delete vault entries. */
+    public const PERM_VAULT_MANAGE = 'vault.manage';
+
     /** View recorded payments and receipts. */
     public const PERM_PAYMENTS_VIEW = 'payments.view';
 
@@ -131,6 +137,8 @@ final class Rbac
             self::PERM_RECEIVABLES_VIEW,
             self::PERM_ASSETS_VIEW,
             self::PERM_ASSETS_MANAGE,
+            self::PERM_VAULT_VIEW,
+            self::PERM_VAULT_MANAGE,
             self::PERM_EXCHANGE_RATES_VIEW,
             self::PERM_EXCHANGE_RATES_MANAGE,
             self::PERM_SETTINGS_VIEW,
@@ -145,6 +153,7 @@ final class Rbac
     /**
      * Permissions that can be granted to an API token as an "ability".
      * Panel-access gates are excluded — a token targets resources, not panels.
+     * The secrets vault is excluded on purpose: it is never exposed over the API.
      *
      * @return list<string>
      */
@@ -153,6 +162,8 @@ final class Rbac
         return array_values(array_diff(self::permissions(), [
             self::PERM_CMS_ACCESS,
             self::PERM_CONSOLE_ACCESS,
+            self::PERM_VAULT_VIEW,
+            self::PERM_VAULT_MANAGE,
         ]));
     }
 
@@ -185,6 +196,8 @@ final class Rbac
                 self::PERM_RECEIVABLES_VIEW,
                 self::PERM_ASSETS_VIEW,
                 self::PERM_ASSETS_MANAGE,
+                self::PERM_VAULT_VIEW,
+                self::PERM_VAULT_MANAGE,
                 self::PERM_EXCHANGE_RATES_VIEW,
                 self::PERM_EXCHANGE_RATES_MANAGE,
                 self::PERM_SETTINGS_VIEW,
