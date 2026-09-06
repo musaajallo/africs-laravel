@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import ConsoleLayout from '@/Layouts/ConsoleLayout.vue';
-import PanelButton from '@/Components/Panel/PanelButton.vue';
+import PanelActions from '@/Components/Panel/PanelActions.vue';
 import ActivityFeed from '@/Components/Panel/ActivityFeed.vue';
 import { useAuth } from '@/Composables/useAuth.js';
 
@@ -58,12 +58,14 @@ const hasAttention = computed(
                     <p class="panel-page-lead">A snapshot of what needs your attention.</p>
                 </div>
                 <div v-if="quickActions.length" class="panel-page-header-actions">
-                    <PanelButton
-                        v-for="(a, i) in quickActions"
-                        :key="a.label"
-                        :href="a.href"
-                        :variant="i === 0 ? 'primary' : 'secondary'"
-                    >{{ a.label }}</PanelButton>
+                    <PanelActions label="Create">
+                        <Link
+                            v-for="a in quickActions"
+                            :key="a.label"
+                            :href="a.href"
+                            class="panel-actions-item"
+                        >{{ a.label }}</Link>
+                    </PanelActions>
                 </div>
             </div>
 
