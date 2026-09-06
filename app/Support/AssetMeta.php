@@ -33,6 +33,13 @@ final class AssetMeta
         'poor' => 'Poor',
     ];
 
+    /** @var array<string, string> */
+    public const DEPRECIATION_METHODS = [
+        'none' => 'None',
+        'straight_line' => 'Straight line',
+        'reducing_balance' => 'Reducing balance',
+    ];
+
     /** Shown in the list by default. */
     public const ACTIVE_STATUSES = ['in_use', 'spare', 'repair'];
 
@@ -52,5 +59,11 @@ final class AssetMeta
     public static function conditionKeys(): array
     {
         return array_keys(self::CONDITIONS);
+    }
+
+    /** @return list<string> */
+    public static function depreciationMethodKeys(): array
+    {
+        return array_keys(self::DEPRECIATION_METHODS);
     }
 }

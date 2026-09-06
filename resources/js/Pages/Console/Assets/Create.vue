@@ -8,6 +8,7 @@ const props = defineProps({
     categories: { type: Object, default: () => ({}) },
     statuses: { type: Object, default: () => ({}) },
     conditions: { type: Object, default: () => ({}) },
+    depreciationMethods: { type: Object, default: () => ({}) },
     currencies: { type: Array, default: () => [] },
 });
 
@@ -16,15 +17,21 @@ const form = useForm({
     category: 'laptop',
     make: '',
     model: '',
+    manufactured_on: '',
     serial_number: '',
     asset_tag: '',
     status: 'spare',
     condition: '',
     purchased_on: '',
+    in_service_on: '',
     purchase_cost: '',
     purchase_currency: '',
     supplier: '',
     warranty_until: '',
+    depreciation_method: 'none',
+    useful_life_months: '',
+    depreciation_rate: '',
+    salvage_value: '',
     location: '',
     notes: '',
 });
@@ -52,6 +59,7 @@ function submit() {
                 :categories="categories"
                 :statuses="statuses"
                 :conditions="conditions"
+                :depreciation-methods="depreciationMethods"
                 :currencies="currencies"
                 submit-label="Add asset"
                 @submit="submit"

@@ -99,20 +99,31 @@ class FinanceDemoSeeder extends Seeder
         ];
 
         foreach ($items as $i => $item) {
+            $bought = now()->subMonths(fake()->numberBetween(2, 30));
+
+            $depreciation = match ($item['category']) {
+                'laptop', 'desktop', 'phone' => ['depreciation_method' => 'straight_line', 'useful_life_months' => 36, 'salvage_value' => round($item['cost'] * 0.1)],
+                'monitor', 'network', 'peripheral' => ['depreciation_method' => 'reducing_balance', 'depreciation_rate' => 20, 'salvage_value' => 0],
+                default => ['depreciation_method' => 'none'],
+            };
+
             $asset = Asset::create([
                 'name' => $item['name'],
                 'category' => $item['category'],
                 'make' => $item['make'],
                 'model' => $item['model'],
+                'manufactured_on' => $bought->copy()->subMonths(fake()->numberBetween(1, 6))->toDateString(),
                 'serial_number' => 'SN-'.now()->timestamp.'-'.$i,
                 'asset_tag' => sprintf('AF-%04d', $i + 1),
                 'status' => 'spare',
                 'condition' => fake()->randomElement(['new', 'good', 'good', 'fair']),
-                'purchased_on' => now()->subMonths(fake()->numberBetween(2, 30))->toDateString(),
+                'purchased_on' => $bought->toDateString(),
+                'in_service_on' => $bought->toDateString(),
                 'purchase_cost' => $item['cost'],
                 'purchase_currency' => 'GMD',
                 'supplier' => fake()->randomElement(['Techno Gambia', 'Gamtech', 'Direct import']),
                 'location' => 'Head office',
+                ...$depreciation,
             ]);
 
             // Assign the first few to whoever exists.

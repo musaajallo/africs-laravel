@@ -45,17 +45,23 @@ class AssetController extends Controller
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString()
-            ->through(fn (Asset $asset) => [
-                'id' => $asset->id,
-                'name' => $asset->name,
-                'category' => $asset->category,
-                'make_model' => trim("{$asset->make} {$asset->model}") ?: null,
-                'serial_number' => $asset->serial_number,
-                'asset_tag' => $asset->asset_tag,
-                'status' => $asset->status,
-                'assignee' => $asset->assignee?->name,
-                'location' => $asset->location,
-            ]);
+            ->through(function (Asset $asset) {
+                $dep = $asset->depreciation();
+
+                return [
+                    'id' => $asset->id,
+                    'name' => $asset->name,
+                    'category' => $asset->category,
+                    'make_model' => trim("{$asset->make} {$asset->model}") ?: null,
+                    'serial_number' => $asset->serial_number,
+                    'asset_tag' => $asset->asset_tag,
+                    'status' => $asset->status,
+                    'assignee' => $asset->assignee?->name,
+                    'location' => $asset->location,
+                    'book_value' => $dep['book_value'],
+                    'book_currency' => $asset->purchase_currency,
+                ];
+            });
 
         return Inertia::render('Console/Assets/Index', [
             'assets' => $assets,
@@ -209,6 +215,7 @@ class AssetController extends Controller
             'categories' => AssetMeta::CATEGORIES,
             'statuses' => AssetMeta::STATUSES,
             'conditions' => AssetMeta::CONDITIONS,
+            'depreciationMethods' => AssetMeta::DEPRECIATION_METHODS,
             'currencies' => Settings::enabledCurrencies(),
         ];
     }
@@ -224,15 +231,22 @@ class AssetController extends Controller
             'category' => $asset->category,
             'make' => $asset->make,
             'model' => $asset->model,
+            'manufactured_on' => $asset->manufactured_on?->toDateString(),
             'serial_number' => $asset->serial_number,
             'asset_tag' => $asset->asset_tag,
             'status' => $asset->status,
             'condition' => $asset->condition,
             'purchased_on' => $asset->purchased_on?->toDateString(),
+            'in_service_on' => $asset->in_service_on?->toDateString(),
             'purchase_cost' => $asset->purchase_cost,
             'purchase_currency' => $asset->purchase_currency,
             'supplier' => $asset->supplier,
             'warranty_until' => $asset->warranty_until?->toDateString(),
+            'depreciation_method' => $asset->depreciation_method,
+            'useful_life_months' => $asset->useful_life_months,
+            'depreciation_rate' => $asset->depreciation_rate,
+            'salvage_value' => $asset->salvage_value,
+            'depreciation' => $asset->depreciation(),
             'location' => $asset->location,
             'notes' => $asset->notes,
             'assigned_to' => $asset->assigned_to,

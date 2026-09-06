@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use App\Support\Depreciation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,21 +13,31 @@ class AssetResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $dep = Depreciation::forAsset($this->resource);
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'category' => $this->category,
             'make' => $this->make,
             'model' => $this->model,
+            'manufactured_on' => $this->manufactured_on?->toDateString(),
             'serial_number' => $this->serial_number,
             'asset_tag' => $this->asset_tag,
             'status' => $this->status,
             'condition' => $this->condition,
             'purchased_on' => $this->purchased_on?->toDateString(),
+            'in_service_on' => $this->in_service_on?->toDateString(),
             'purchase_cost' => $this->purchase_cost,
             'purchase_currency' => $this->purchase_currency,
             'supplier' => $this->supplier,
             'warranty_until' => $this->warranty_until?->toDateString(),
+            'depreciation_method' => $this->depreciation_method,
+            'useful_life_months' => $this->useful_life_months,
+            'depreciation_rate' => $this->depreciation_rate,
+            'salvage_value' => $this->salvage_value,
+            'book_value' => $dep['book_value'],
+            'accumulated_depreciation' => $dep['accumulated'],
             'assigned_to' => $this->assigned_to,
             'assigned_on' => $this->assigned_on?->toDateString(),
             'location' => $this->location,

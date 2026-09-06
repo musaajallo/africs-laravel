@@ -156,6 +156,67 @@ class AssetManagementTest extends TestCase
         $this->assertNotSoftDeleted($asset->fresh());
     }
 
+    public function test_straight_line_depreciation_computes_book_value(): void
+    {
+        $asset = Asset::factory()->create([
+            'purchase_cost' => '36000',
+            'purchase_currency' => 'GMD',
+            'in_service_on' => now()->subMonths(12)->toDateString(),
+            'depreciation_method' => 'straight_line',
+            'useful_life_months' => 36,
+            'salvage_value' => '0',
+        ]);
+
+        $dep = $asset->depreciation();
+
+        // 36000 / 36 = 1000/mo × 12 = 12000 depreciated
+        $this->assertSame(12, $dep['months_elapsed']);
+        $this->assertSame('12000.00', $dep['accumulated']);
+        $this->assertSame('24000.00', $dep['book_value']);
+    }
+
+    public function test_depreciation_never_goes_below_salvage_value(): void
+    {
+        $asset = Asset::factory()->create([
+            'purchase_cost' => '10000',
+            'purchase_currency' => 'GMD',
+            'in_service_on' => now()->subYears(10)->toDateString(),
+            'depreciation_method' => 'straight_line',
+            'useful_life_months' => 24,
+            'salvage_value' => '1500',
+        ]);
+
+        $dep = $asset->depreciation();
+
+        $this->assertSame('1500.00', $dep['book_value']);
+        $this->assertSame('8500.00', $dep['accumulated']);
+        $this->assertTrue($dep['fully_depreciated']);
+    }
+
+    public function test_straight_line_requires_a_useful_life(): void
+    {
+        $this->actingAs($this->manager())
+            ->post('/console/assets', $this->payload([
+                'purchase_cost' => '1000',
+                'purchase_currency' => 'GMD',
+                'depreciation_method' => 'straight_line',
+            ]))
+            ->assertSessionHasErrors('useful_life_months');
+    }
+
+    public function test_salvage_value_cannot_exceed_cost(): void
+    {
+        $this->actingAs($this->manager())
+            ->post('/console/assets', $this->payload([
+                'purchase_cost' => '1000',
+                'purchase_currency' => 'GMD',
+                'depreciation_method' => 'reducing_balance',
+                'depreciation_rate' => '20',
+                'salvage_value' => '1500',
+            ]))
+            ->assertSessionHasErrors('salvage_value');
+    }
+
     public function test_the_api_lists_assets(): void
     {
         $user = $this->manager();

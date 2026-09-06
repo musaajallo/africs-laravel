@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\Depreciation;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,9 +17,10 @@ use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
-    'name', 'category', 'make', 'model', 'serial_number', 'asset_tag',
-    'status', 'condition', 'purchased_on', 'purchase_cost', 'purchase_currency',
-    'supplier', 'warranty_until', 'location', 'notes',
+    'name', 'category', 'make', 'model', 'manufactured_on', 'serial_number', 'asset_tag',
+    'status', 'condition', 'purchased_on', 'in_service_on', 'purchase_cost', 'purchase_currency',
+    'supplier', 'warranty_until', 'depreciation_method', 'useful_life_months',
+    'depreciation_rate', 'salvage_value', 'location', 'notes',
 ])]
 class Asset extends Model
 {
@@ -27,16 +30,32 @@ class Asset extends Model
     protected $attributes = [
         'category' => 'other',
         'status' => 'spare',
+        'depreciation_method' => 'none',
     ];
 
     protected function casts(): array
     {
         return [
+            'manufactured_on' => 'date',
             'purchased_on' => 'date',
+            'in_service_on' => 'date',
             'warranty_until' => 'date',
             'assigned_on' => 'date',
             'purchase_cost' => 'decimal:2',
+            'depreciation_rate' => 'decimal:3',
+            'salvage_value' => 'decimal:2',
+            'useful_life_months' => 'integer',
         ];
+    }
+
+    /**
+     * Current book value and accumulated depreciation.
+     *
+     * @return array<string, mixed>
+     */
+    public function depreciation(?CarbonInterface $asOf = null): array
+    {
+        return Depreciation::forAsset($this, $asOf);
     }
 
     public function assignee(): BelongsTo
@@ -118,9 +137,10 @@ class Asset extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'name', 'category', 'make', 'model', 'serial_number', 'asset_tag',
-                'status', 'condition', 'purchased_on', 'purchase_cost', 'purchase_currency',
-                'supplier', 'warranty_until', 'assigned_to', 'location',
+                'name', 'category', 'make', 'model', 'manufactured_on', 'serial_number', 'asset_tag',
+                'status', 'condition', 'purchased_on', 'in_service_on', 'purchase_cost', 'purchase_currency',
+                'supplier', 'warranty_until', 'depreciation_method', 'useful_life_months',
+                'depreciation_rate', 'salvage_value', 'assigned_to', 'location',
             ])
             ->logOnlyDirty()
             ->dontLogEmptyChanges()

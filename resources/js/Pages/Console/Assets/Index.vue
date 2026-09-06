@@ -89,7 +89,7 @@ function remove(asset) {
             </div>
 
             <PanelTable
-                :columns="['Asset', 'Category', 'Serial / tag', 'Status', 'Assigned to', 'Location', { label: 'Actions', align: 'right' }]"
+                :columns="['Asset', 'Category', 'Serial / tag', 'Status', 'Assigned to', { label: 'Book value', align: 'right' }, { label: 'Actions', align: 'right' }]"
                 :rows="assets.data"
                 empty="No assets match your filter."
             >
@@ -106,7 +106,12 @@ function remove(asset) {
                     </td>
                     <td><AssetStatusBadge :status="row.status" /></td>
                     <td>{{ row.assignee || '—' }}</td>
-                    <td class="panel-cell-muted">{{ row.location || '—' }}</td>
+                    <td class="num" style="text-align: right">
+                        <template v-if="row.book_value != null">
+                            {{ row.book_currency }} {{ Number(row.book_value).toLocaleString() }}
+                        </template>
+                        <span v-else class="panel-cell-muted">—</span>
+                    </td>
                     <td class="panel-row-actions">
                         <Link :href="route('console.assets.show', row.id)" class="panel-link">View</Link>
                         <Link v-if="can('assets.manage')" :href="route('console.assets.edit', row.id)" class="panel-link">Edit</Link>

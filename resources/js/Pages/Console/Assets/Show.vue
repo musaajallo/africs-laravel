@@ -37,12 +37,17 @@ const details = computed(() => [
     { label: 'Asset tag', value: props.asset.asset_tag },
     { label: 'Condition', value: props.asset.condition },
     { label: 'Location', value: props.asset.location },
+    { label: 'Manufactured', value: props.asset.manufactured_on },
     { label: 'Purchased', value: props.asset.purchased_on },
     { label: 'Cost', value: money.value },
     { label: 'Supplier', value: props.asset.supplier },
     { label: 'Warranty until', value: props.asset.warranty_until },
     { label: 'Added by', value: props.asset.created_by },
 ]);
+
+const dep = computed(() => props.asset.depreciation || {});
+const methodLabels = { none: 'None', straight_line: 'Straight line', reducing_balance: 'Reducing balance' };
+const depAmount = (v) => (v == null ? '—' : `${dep.value.currency || ''} ${Number(v).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`.trim());
 
 const assignForm = useForm({ user_id: '', assigned_on: today, notes: '' });
 
@@ -190,6 +195,48 @@ function restore() {
                     </div>
                 </section>
             </div>
+
+            <section v-if="asset.purchase_cost" class="panel-card">
+                <h2 class="panel-card-title">Depreciation</h2>
+                <dl class="client-dl">
+                    <div>
+                        <dt>Method</dt>
+                        <dd>{{ methodLabels[asset.depreciation_method] || asset.depreciation_method }}</dd>
+                    </div>
+                    <div v-if="asset.depreciation_method === 'straight_line'">
+                        <dt>Useful life</dt>
+                        <dd>{{ asset.useful_life_months }} months</dd>
+                    </div>
+                    <div v-if="asset.depreciation_method === 'reducing_balance'">
+                        <dt>Rate</dt>
+                        <dd>{{ asset.depreciation_rate }}% / year</dd>
+                    </div>
+                    <div v-if="asset.in_service_on || asset.purchased_on">
+                        <dt>In service from</dt>
+                        <dd>{{ asset.in_service_on || asset.purchased_on }}</dd>
+                    </div>
+                    <div v-if="Number(asset.salvage_value)">
+                        <dt>Salvage value</dt>
+                        <dd>{{ depAmount(asset.salvage_value) }}</dd>
+                    </div>
+                </dl>
+
+                <div class="doc-totals" style="margin-top: 0.5rem">
+                    <div class="doc-totals-row"><span>Purchase cost</span><span>{{ depAmount(dep.cost) }}</span></div>
+                    <div v-if="dep.applicable" class="doc-totals-row">
+                        <span>Depreciated ({{ dep.months_elapsed }} mo)</span><span>− {{ depAmount(dep.accumulated) }}</span>
+                    </div>
+                    <div class="doc-totals-row is-grand">
+                        <span>Book value today</span><span>{{ depAmount(dep.book_value) }}</span>
+                    </div>
+                </div>
+                <p v-if="dep.fully_depreciated" class="panel-cell-muted" style="margin-top: 0.5rem">
+                    Fully depreciated — carried at its salvage value.
+                </p>
+                <p v-else-if="asset.depreciation_method === 'none'" class="panel-cell-muted" style="margin-top: 0.5rem">
+                    No depreciation is being applied. Set a method to track book value over time.
+                </p>
+            </section>
 
             <section class="panel-card">
                 <h2 class="panel-card-title">Activity</h2>

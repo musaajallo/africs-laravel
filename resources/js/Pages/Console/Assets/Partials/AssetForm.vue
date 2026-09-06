@@ -8,6 +8,7 @@ const props = defineProps({
     categories: { type: Object, default: () => ({}) },
     statuses: { type: Object, default: () => ({}) },
     conditions: { type: Object, default: () => ({}) },
+    depreciationMethods: { type: Object, default: () => ({}) },
     currencies: { type: Array, default: () => [] },
     submitLabel: { type: String, default: 'Save' },
 });
@@ -42,6 +43,9 @@ function err(key) {
                 </PanelField>
                 <PanelField label="Model" :error="err('model')">
                     <input v-model="form.model" type="text" class="field-input" />
+                </PanelField>
+                <PanelField label="Manufactured" :error="err('manufactured_on')" hint="Date of manufacture, if known.">
+                    <input v-model="form.manufactured_on" type="date" class="field-input" />
                 </PanelField>
                 <PanelField label="Serial number" :error="err('serial_number')">
                     <input v-model="form.serial_number" type="text" class="field-input" />
@@ -86,6 +90,44 @@ function err(key) {
                 </PanelField>
                 <PanelField label="Warranty until" :error="err('warranty_until')">
                     <input v-model="form.warranty_until" type="date" class="field-input" />
+                </PanelField>
+            </div>
+        </div>
+
+        <div class="panel-card">
+            <h2 class="panel-card-title">Depreciation</h2>
+            <div class="panel-form-grid">
+                <PanelField label="Method" :error="err('depreciation_method')" required>
+                    <select v-model="form.depreciation_method" class="field-input">
+                        <option v-for="(label, key) in depreciationMethods" :key="key" :value="key">{{ label }}</option>
+                    </select>
+                </PanelField>
+                <PanelField label="In service from" :error="err('in_service_on')" hint="Depreciation start. Defaults to the purchase date.">
+                    <input v-model="form.in_service_on" type="date" class="field-input" />
+                </PanelField>
+                <PanelField
+                    v-if="form.depreciation_method === 'straight_line'"
+                    label="Useful life (months)"
+                    :error="err('useful_life_months')"
+                    required
+                >
+                    <input v-model="form.useful_life_months" type="number" min="1" max="600" class="field-input" placeholder="e.g. 36" />
+                </PanelField>
+                <PanelField
+                    v-if="form.depreciation_method === 'reducing_balance'"
+                    label="Rate (% per year)"
+                    :error="err('depreciation_rate')"
+                    required
+                >
+                    <input v-model="form.depreciation_rate" type="number" step="0.001" min="0" max="100" class="field-input" placeholder="e.g. 25" />
+                </PanelField>
+                <PanelField
+                    v-if="form.depreciation_method !== 'none'"
+                    label="Salvage value"
+                    :error="err('salvage_value')"
+                    hint="Residual value at end of life."
+                >
+                    <input v-model="form.salvage_value" type="number" step="0.01" min="0" class="field-input" />
                 </PanelField>
             </div>
         </div>

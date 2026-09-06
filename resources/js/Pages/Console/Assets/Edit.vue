@@ -9,6 +9,7 @@ const props = defineProps({
     categories: { type: Object, default: () => ({}) },
     statuses: { type: Object, default: () => ({}) },
     conditions: { type: Object, default: () => ({}) },
+    depreciationMethods: { type: Object, default: () => ({}) },
     currencies: { type: Array, default: () => [] },
 });
 
@@ -17,15 +18,21 @@ const form = useForm({
     category: props.asset.category,
     make: props.asset.make ?? '',
     model: props.asset.model ?? '',
+    manufactured_on: props.asset.manufactured_on ?? '',
     serial_number: props.asset.serial_number ?? '',
     asset_tag: props.asset.asset_tag ?? '',
     status: props.asset.status,
     condition: props.asset.condition ?? '',
     purchased_on: props.asset.purchased_on ?? '',
+    in_service_on: props.asset.in_service_on ?? '',
     purchase_cost: props.asset.purchase_cost ?? '',
     purchase_currency: props.asset.purchase_currency ?? '',
     supplier: props.asset.supplier ?? '',
     warranty_until: props.asset.warranty_until ?? '',
+    depreciation_method: props.asset.depreciation_method ?? 'none',
+    useful_life_months: props.asset.useful_life_months ?? '',
+    depreciation_rate: props.asset.depreciation_rate ?? '',
+    salvage_value: props.asset.salvage_value ?? '',
     location: props.asset.location ?? '',
     notes: props.asset.notes ?? '',
 });
@@ -53,6 +60,7 @@ function submit() {
                 :categories="categories"
                 :statuses="statuses"
                 :conditions="conditions"
+                :depreciation-methods="depreciationMethods"
                 :currencies="currencies"
                 submit-label="Save changes"
                 @submit="submit"
