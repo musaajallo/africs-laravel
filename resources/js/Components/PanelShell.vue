@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
+import PanelClock from '@/Components/Panel/PanelClock.vue';
 import PanelFlash from '@/Components/Panel/PanelFlash.vue';
 import PanelNavIcon from '@/Components/Panel/PanelNavIcon.vue';
 import { useAuth } from '@/Composables/useAuth.js';
@@ -131,6 +132,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
                     <span class="panel-brand-divider" aria-hidden="true"></span>
                     <span class="panel-brand-label">{{ props.label }}</span>
                 </Link>
+
+                <PanelClock />
             </div>
 
             <form class="panel-search" role="search" @submit.prevent>

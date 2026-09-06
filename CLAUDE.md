@@ -67,7 +67,7 @@ the reference:
    UI kit in `resources/js/Components/Panel/*`: `PanelTable`, `PanelPagination`,
    `PanelField`, `PanelButton`, `PanelPageHeader`, `PanelFlash`,
    `PanelConfirm` (optional `v-model` for menu-driven confirms),
-   `PanelActions` (detail-page "Actions" dropdown), `PanelNavIcon`.
+   `PanelActions` (detail-page "Actions" dropdown), `PanelNavIcon`, `PanelClock`.
 7. `Api\V1\{Model}Controller` + `Http\Resources\Api\V1\{Model}Resource` under
    `routes/api.php`, gated by `abilities:{perm}`.
 8. Sidebar entry in `ConsoleLayout.vue` (`{ label, icon, routeName, activeMatch,
