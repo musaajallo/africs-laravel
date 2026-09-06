@@ -2403,15 +2403,17 @@ textarea.field-input {
     align-items: center;
     gap: 0.95rem;
     min-width: 0;
-    flex: 1 1 0;
+    flex: 0 1 auto;
 }
 
 .panel-header-right {
     display: flex;
     align-items: center;
+    /* Neither side group grows, so the search's auto margins get the free
+       space to split — keeping it centred between the two groups. */
+    flex: 0 0 auto;
     justify-content: flex-end;
     gap: 0.35rem;
-    flex: 1 1 0;
 }
 
 .panel-brand {
@@ -2483,10 +2485,14 @@ textarea.field-input {
 /* ---------- header search ---------- */
 
 .panel-search {
+    /* Fixed target width; the auto margins split the free space evenly so it
+       sits centred between the left group and the right group. */
+    flex: 0 1 28rem;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    flex: 0 1 30rem;
     height: 2.25rem;
     padding: 0 0.6rem 0 0.8rem;
     border-radius: var(--radius);
