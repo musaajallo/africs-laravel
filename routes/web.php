@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Support\PanelRouter;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,17 @@ foreach ($sitePages as $name => [$uri, $component]) {
         'canLogin' => Route::has('login'),
     ]))->name($name);
 }
+
+// Generated on demand rather than committed as a static file, so the
+// "generated" date and ministry mapping stay current with the Blade view.
+// See docs/national-work-mapping.md.
+Route::get('/limitless-africs/how-we-classify-this-work.pdf', function (Request $request) {
+    $pdf = Pdf::loadView('pdf.how-we-classify-this-work', ['generatedAt' => now()])->setPaper('a4');
+
+    return $request->boolean('download')
+        ? $pdf->download('how-we-classify-this-work.pdf')
+        : $pdf->stream('how-we-classify-this-work.pdf');
+})->name('limitless-africs.classification-pdf');
 
 /*
 |--------------------------------------------------------------------------

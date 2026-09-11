@@ -125,7 +125,13 @@ the tab opens; margin % + monthly acquisition spend come from the
 `analytics` Settings group) · Tags · Settings · Activity log · API tokens.
 
 Pending: **Subscriptions & infrastructure** (recurring digital services;
-`vault_entries.related_subscription_id` is reserved for the link).
+`vault_entries.related_subscription_id` is reserved for the link) ·
+**National work mapping** — Limitless Africs public-site feature: a
+filterable index of real projects tagged by plain-language cluster (not a
+fixed sector list) with a COFOG crosswalk shown as a collapsed legend; full
+brief in `docs/national-work-mapping.md`. Only a representative/placeholder
+version exists so far, inline on `resources/js/Pages/Site/LimitlessAfrics.vue`
+— no data model, no CMS admin, no real project data yet.
 
 Roadmap & scoping answers: `docs/roadmap.md`, `docs/answers.md`.
 

@@ -80,6 +80,12 @@ const heroImageFailed = ref(!props.heroImage);
                 </div>
             </section>
 
+            <section v-if="$slots['before-cards']" class="section section-bone">
+                <div class="container">
+                    <slot name="before-cards" />
+                </div>
+            </section>
+
             <section class="section">
                 <div class="container">
                     <div class="section-head">

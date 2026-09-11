@@ -45,37 +45,34 @@ const year = new Date().getFullYear();
             </div>
 
             <div class="footer-col">
-                <p class="footer-col-title">Quick Links</p>
+                <p class="footer-col-title">Services</p>
+                <div class="footer-col-links">
+                    <Link :href="route('services.business')">Business</Link>
+                    <Link :href="route('services.technology')">Technology</Link>
+                    <Link :href="route('services.design')">Design</Link>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <p class="footer-col-title">Company</p>
                 <div class="footer-col-links">
                     <Link href="/">Home</Link>
-                    <a href="/#services">Services</a>
                     <a href="/#process">How we work</a>
                     <Link :href="route('portfolio')">Portfolio</Link>
                     <Link :href="route('partnerships')">Partnerships</Link>
                     <Link :href="route('network')">Network</Link>
                     <Link :href="route('careers')">Careers</Link>
-                    <Link :href="route('contact')">Contact</Link>
                     <Link :href="route('academy')">Academy</Link>
                     <Link :href="route('limitless-africs')">Limitless Africs</Link>
                 </div>
             </div>
 
             <div class="footer-col">
-                <p class="footer-col-title">Our Divisions</p>
-                <div class="footer-col-links">
-                    <a href="/#services">Digital Transformation</a>
-                    <a href="/#services">Business Strategy</a>
-                    <a href="/#services">Research &amp; Development</a>
-                    <a href="/#services">Operational Excellence</a>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <p class="footer-col-title">Contact Info</p>
+                <p class="footer-col-title">Contact</p>
                 <div class="footer-col-links">
                     <span>Banjul, The Gambia</span>
                     <a href="mailto:info@africsinc.com">info@africsinc.com</a>
-                    <a href="/">africsinc.com</a>
+                    <Link :href="route('contact')">Get in touch</Link>
                 </div>
             </div>
         </div>

@@ -1845,6 +1845,379 @@ textarea.field-input {
     border-color: var(--color-green);
 }
 
+/* ---------- Mainstreaming tabs ---------- */
+
+.mainstreaming-tabs {
+    margin-top: 3rem;
+}
+
+.mainstreaming-tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.mainstreaming-tab {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.75rem 0;
+    border: none;
+    background: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.mainstreaming-tab:hover {
+    color: var(--color-ink);
+}
+
+.mainstreaming-tab.is-active {
+    color: var(--color-green);
+    border-color: var(--color-green);
+}
+
+.mainstreaming-panel {
+    margin-top: 1.75rem;
+    max-width: 42rem;
+}
+
+.mainstreaming-desc {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+}
+
+/* ---------- Inline prose link ---------- */
+
+.inline-link {
+    color: var(--color-green);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.inline-link:hover {
+    color: var(--color-green-dark);
+}
+
+/* ---------- Spotlight (featured, active call to action) ---------- */
+
+.spotlight {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 2.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-amber);
+    border-radius: 12px;
+}
+
+.spotlight-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+}
+
+.spotlight-stat-value {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-green);
+}
+
+.spotlight-stat-label {
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+.spotlight-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* ---------- Step flow (lightweight process sequence) ---------- */
+
+.step-flow {
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 0;
+}
+
+.step-flow-item {
+    flex: 1 1 12rem;
+    position: relative;
+    padding-right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-flow-item:not(:last-child)::after {
+    content: '\2192';
+    position: absolute;
+    top: 0;
+    right: 0.35rem;
+    color: var(--color-border);
+}
+
+@media (max-width: 720px) {
+    .step-flow {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .step-flow-item:not(:last-child)::after {
+        content: none;
+    }
+}
+
+.step-flow-index {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-amber-dark);
+}
+
+.step-flow-name {
+    margin-top: 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-ink);
+}
+
+.step-flow-desc {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+    padding-right: 0.75rem;
+}
+
+/* ---------- National work mapping (representative) ---------- */
+
+.work-map-sample-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--color-muted);
+}
+
+.work-map {
+    margin-top: 3rem;
+}
+
+.work-map-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.75rem 3rem;
+}
+
+.work-map-filter-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+.work-map-chip-row {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.work-map-chip {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.work-map-chip:hover {
+    border-color: var(--color-green);
+}
+
+.work-map-chip.is-active {
+    background: var(--color-green);
+    border-color: var(--color-green);
+    color: var(--color-cream-text);
+}
+
+.work-map-empty {
+    margin-top: 2.5rem;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.work-map-grid {
+    margin-top: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: 1.25rem;
+}
+
+.work-map-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.work-map-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+}
+
+.work-map-status {
+    display: inline-flex;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--color-hover);
+    color: var(--color-muted);
+}
+
+.work-map-status.is-active {
+    background: rgba(13, 77, 44, 0.1);
+    color: var(--color-green);
+}
+
+.work-map-status.is-ongoing {
+    background: rgba(212, 162, 76, 0.16);
+    color: var(--color-amber-dark);
+}
+
+.work-map-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-ink);
+}
+
+.work-map-card-summary {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-muted);
+}
+
+.work-map-tags {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.work-map-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(13, 77, 44, 0.08);
+    color: var(--color-green);
+}
+
+.work-map-legend {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.work-map-legend summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+.work-map-legend summary:hover {
+    color: var(--color-ink);
+}
+
+.work-map-legend-note {
+    margin-top: 1rem;
+    max-width: 42rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+}
+
+.work-map-legend-table-wrap {
+    margin-top: 1.25rem;
+    overflow-x: auto;
+}
+
+.work-map-legend-table {
+    width: 100%;
+    min-width: 30rem;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.work-map-legend-table th,
+.work-map-legend-table td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.work-map-legend-table th {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-muted);
+}
+
+.work-map-legend-download {
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.work-map-legend-download a {
+    color: var(--color-green);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.work-map-legend-download a:hover {
+    color: var(--color-green-dark);
+}
+
 /* ---------- Contact page ---------- */
 
 /* Simple (no-figure) variant of the initiative hero, used by pages whose
