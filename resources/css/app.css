@@ -7,13 +7,18 @@
        hero/CTA sections, cookie banner) — unlike --color-ink above, this
        never flips for the site dark-mode toggle below. */
     --color-ink-fixed: #161a17;
-    --color-green: #0d4d2c;
-    --color-green-dark: #093a20;
+    /* Matches the logo's mark, which is a gradient of #098B4F -> #32A14C ->
+       #5BB748 (public/images/logo.svg) — the old #0d4d2c/#093a20 read as a
+       different, much darker green next to it. --color-green-dark is a
+       proportionally darker companion (the logo has no fourth, darker
+       stop); dark mode below uses the logo's actual brighter stops. */
+    --color-green: #098b4f;
+    --color-green-dark: #076b3d;
     /* Fixed brand-green fill for bands that are always this colour
        regardless of site theme (the initiative-page hero gradient,
        .cta-section) — --color-green/-dark above flip for dark mode. */
-    --color-green-fixed: #0d4d2c;
-    --color-green-dark-fixed: #093a20;
+    --color-green-fixed: #098b4f;
+    --color-green-dark-fixed: #076b3d;
     /* Text/icon colour to put on a var(--color-green) background. White
        works in light mode; dark mode's brighter green needs dark text to
        stay readable, so this flips alongside --color-green. */
@@ -57,8 +62,12 @@
    border tokens instead of the ones redefined here, so they don't move. */
 :root[data-site-theme='dark'] {
     --color-ink: #f2efe6;
-    --color-green: #59aa7b;
-    --color-green-dark: #7bc39a;
+    /* The logo's brightest and middle stops respectively — a bright
+       accent reads better than the light-mode green against a near-black
+       background, and the middle stop makes a legitimate darker/hover
+       companion to it (same relationship as green/green-dark above). */
+    --color-green: #5bb748;
+    --color-green-dark: #32a14c;
     --color-green-contrast: #0b1a10;
     --color-border: #2b322a;
     --color-muted: #a6ab9d;
@@ -250,7 +259,7 @@ input:focus-visible,
 .field-input:focus {
     outline: none;
     border-color: var(--color-green);
-    box-shadow: 0 0 0 3px rgba(13, 77, 44, 0.15);
+    box-shadow: 0 0 0 3px rgba(9, 139, 79, 0.15);
 }
 
 textarea.field-input {
@@ -304,8 +313,8 @@ textarea.field-input {
     background:
         radial-gradient(
             80% 50% at 50% -10%,
-            rgba(13, 77, 44, 0.1) 0%,
-            rgba(13, 77, 44, 0) 55%
+            rgba(9, 139, 79, 0.1) 0%,
+            rgba(9, 139, 79, 0) 55%
         ),
         radial-gradient(
             60% 45% at 100% 100%,
@@ -696,7 +705,7 @@ textarea.field-input {
 .mobile-nav-link.is-active {
     color: var(--color-ink);
     border-left-color: var(--color-green);
-    background: rgba(13, 77, 44, 0.05);
+    background: rgba(9, 139, 79, 0.05);
 }
 
 .mobile-user-info {
@@ -2146,7 +2155,7 @@ textarea.field-input {
 }
 
 .work-map-status.is-active {
-    background: rgba(13, 77, 44, 0.1);
+    background: rgba(9, 139, 79, 0.1);
     color: var(--color-green);
 }
 
@@ -2182,7 +2191,7 @@ textarea.field-input {
     text-transform: uppercase;
     padding: 0.25rem 0.55rem;
     border-radius: 999px;
-    background: rgba(13, 77, 44, 0.08);
+    background: rgba(9, 139, 79, 0.08);
     color: var(--color-green);
 }
 
@@ -2349,7 +2358,7 @@ textarea.field-input {
 
 .contact-form textarea.field-input:focus {
     border-color: var(--color-green);
-    box-shadow: 0 0 0 3px rgba(13, 77, 44, 0.1);
+    box-shadow: 0 0 0 3px rgba(9, 139, 79, 0.1);
 }
 
 .contact-form .form-success {
@@ -2430,7 +2439,7 @@ textarea.field-input {
 .form-success {
     padding: 0.85rem 1rem;
     border-radius: var(--radius);
-    background: rgba(13, 77, 44, 0.08);
+    background: rgba(9, 139, 79, 0.08);
     border: 1px solid var(--color-green);
     color: var(--color-green);
     font-size: 0.9rem;
