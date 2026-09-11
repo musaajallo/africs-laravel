@@ -304,7 +304,9 @@ const crosswalk = [
                     The name is a claim, not a slogan. African capacity for
                     development, innovation, and change is not the limit —
                     resources usually are. Limitless Africs exists to
-                    unlock that potential by providing them.
+                    unlock that potential by working with partners,
+                    individuals, communities, and initiatives to provide
+                    them.
                 </p>
             </div>
 
