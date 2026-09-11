@@ -110,6 +110,11 @@ const initiatives = [
         name: 'TechTrek',
         desc: 'Digital literacy and hands-on technology training — drones, robotics, VR/AR, and open-source computing — taken to where people are, including rural Gambia.',
     },
+    {
+        code: 'BOOKSHARE',
+        name: 'BookShare',
+        desc: 'A catalogue of books owners are willing to lend, connected through a network for borrowing and returning them — from which book clubs, reviews, and a platform for young Gambian writers can develop.',
+    },
 ];
 
 // TechTrek's second project — refurbishing old school computers rather than
