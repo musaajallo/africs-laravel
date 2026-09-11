@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavDropdown from '@/Components/NavDropdown.vue';
@@ -14,9 +14,43 @@ defineProps({
 });
 
 const mobileMenuOpen = ref(false);
-const isDark = ref(false);
+const theme = ref('light');
+const isDark = computed(() => theme.value === 'dark');
 
 const { user, can } = useAuth();
+
+// Public-site dark mode. Scoped to [data-site-theme] on <html>, entirely
+// independent of the CMS/Console panels' own toggle (PanelShell's
+// data-panel-theme + --pnl-* tokens) — the attribute is applied only while
+// this header is mounted, and removed the instant it isn't, so it can never
+// leak into a panel page.
+function applyTheme(value) {
+    theme.value = value;
+    document.documentElement.dataset.siteTheme = value === 'dark' ? 'dark' : '';
+    try {
+        localStorage.setItem('africs.siteTheme', value);
+    } catch (e) {
+        // storage unavailable — the choice just won't persist
+    }
+}
+
+function toggleTheme() {
+    applyTheme(theme.value === 'dark' ? 'light' : 'dark');
+}
+
+onMounted(() => {
+    let stored = null;
+    try {
+        stored = localStorage.getItem('africs.siteTheme');
+    } catch (e) {
+        stored = null;
+    }
+    applyTheme(stored === 'dark' ? 'dark' : 'light');
+});
+
+onUnmounted(() => {
+    document.documentElement.removeAttribute('data-site-theme');
+});
 
 // Panels the signed-in user is allowed to open, in landing-priority order
 // (mirrors App\Support\PanelRouter). Drives whether the nav shows a single
@@ -81,7 +115,7 @@ const moreItems = [
                     role="switch"
                     :aria-checked="isDark"
                     aria-label="Toggle dark mode"
-                    @click="isDark = !isDark"
+                    @click="toggleTheme"
                 >
                     <svg v-if="!isDark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="4.5" />

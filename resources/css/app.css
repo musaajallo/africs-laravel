@@ -3,8 +3,21 @@
 
 :root {
     --color-ink: #161a17;
+    /* Fixed near-black used as a literal background fill (footer, dark
+       hero/CTA sections, cookie banner) — unlike --color-ink above, this
+       never flips for the site dark-mode toggle below. */
+    --color-ink-fixed: #161a17;
     --color-green: #0d4d2c;
     --color-green-dark: #093a20;
+    /* Fixed brand-green fill for bands that are always this colour
+       regardless of site theme (the initiative-page hero gradient,
+       .cta-section) — --color-green/-dark above flip for dark mode. */
+    --color-green-fixed: #0d4d2c;
+    --color-green-dark-fixed: #093a20;
+    /* Text/icon colour to put on a var(--color-green) background. White
+       works in light mode; dark mode's brighter green needs dark text to
+       stay readable, so this flips alongside --color-green. */
+    --color-green-contrast: #ffffff;
     --color-cream-text: #f3efe3;
     --color-amber: #d4a24c;
     --color-amber-dark: #b4863a;
@@ -28,6 +41,26 @@
     --radius: 8px;
     --shadow-card: 0 1px 3px rgba(22, 26, 23, 0.08), 0 1px 2px rgba(22, 26, 23, 0.06);
     --max-width: 72rem;
+}
+
+/* Public site dark mode. Toggled by SiteHeader (the header/nav on every
+   Site/* page) via [data-site-theme] on <html> — entirely separate from the
+   CMS/Console panels' own dark toggle (PanelShell's [data-panel-theme] +
+   --pnl-* tokens further down this file). SiteHeader removes the attribute
+   the instant it unmounts, so this can never carry over into a panel page.
+   Sections that are intentionally dark regardless of theme (site footer,
+   .section-dark, .initiative-hero, .contact-aside, .cookie-banner) use
+   --color-ink-fixed / --color-cream-text / --color-muted-on-dark / *-dark
+   border tokens instead of the ones redefined here, so they don't move. */
+:root[data-site-theme='dark'] {
+    --color-ink: #f2efe6;
+    --color-green: #59aa7b;
+    --color-green-dark: #7bc39a;
+    --color-green-contrast: #0b1a10;
+    --color-border: #2b322a;
+    --color-muted: #a6ab9d;
+    --color-surface: #1a1f1a;
+    --color-hover: #232a22;
 }
 
 *,
@@ -78,7 +111,7 @@ img {
     left: 1rem;
     top: -3rem;
     z-index: 100;
-    background: var(--color-ink);
+    background: var(--color-ink-fixed);
     color: var(--color-cream-text);
     padding: 0.6rem 1rem;
     border-radius: var(--radius);
@@ -137,7 +170,7 @@ input:focus-visible,
 
 .btn-primary {
     background: var(--color-green);
-    color: #fff;
+    color: var(--color-green-contrast);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -154,7 +187,7 @@ input:focus-visible,
 }
 
 .btn-secondary {
-    background: #fff;
+    background: var(--color-surface);
     border-color: var(--color-border);
     color: var(--color-ink);
 }
@@ -208,7 +241,7 @@ input:focus-visible,
     font-size: 0.9rem;
     font-family: inherit;
     color: var(--color-ink);
-    background: #fff;
+    background: var(--color-surface);
 }
 
 .field-input:focus {
@@ -726,13 +759,13 @@ textarea.field-input {
 .panel-title {
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--pnl-ink);
 }
 
 .panel-description {
     margin-top: 0.35rem;
     font-size: 0.875rem;
-    color: var(--color-muted);
+    color: var(--pnl-muted);
 }
 
 /* ---------- Dropdown ---------- */
@@ -1230,7 +1263,7 @@ textarea.field-input {
 }
 
 .section-dark {
-    background: var(--color-ink);
+    background: var(--color-ink-fixed);
     color: var(--color-cream-text);
 }
 
@@ -1510,7 +1543,7 @@ textarea.field-input {
 /* ---------- Closing CTA ---------- */
 
 .cta-section {
-    background: var(--color-green-dark);
+    background: var(--color-green-dark-fixed);
     color: var(--color-cream-text);
     text-align: center;
     padding: 5.5rem 0;
@@ -1548,7 +1581,7 @@ textarea.field-input {
 /* ---------- Footer ---------- */
 
 .site-footer {
-    background: var(--color-ink);
+    background: var(--color-ink-fixed);
     color: var(--color-cream-text);
     padding: 4.5rem 0 0;
 }
@@ -1687,7 +1720,7 @@ textarea.field-input {
 .initiative-hero {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(180deg, var(--color-green) 0%, var(--color-green-dark) 100%);
+    background: linear-gradient(180deg, var(--color-green-fixed) 0%, var(--color-green-dark-fixed) 100%);
     color: var(--color-cream-text);
     padding: 3.5rem 0;
 }
@@ -2336,7 +2369,7 @@ textarea.field-input {
 }
 
 .contact-aside {
-    background: var(--color-ink);
+    background: var(--color-ink-fixed);
     color: var(--color-cream-text);
     border: 1px dashed var(--color-border-dark);
     border-radius: 12px;
@@ -2468,7 +2501,7 @@ textarea.field-input {
     z-index: 90;
     max-width: 60rem;
     margin: 0 auto;
-    background: var(--color-ink);
+    background: var(--color-ink-fixed);
     color: var(--color-cream-text);
     border-radius: 12px;
     box-shadow: var(--shadow-card);
@@ -2521,7 +2554,7 @@ textarea.field-input {
     border-radius: 999px;
     border: none;
     background: var(--color-green);
-    color: #fff;
+    color: var(--color-green-contrast);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2661,7 +2694,7 @@ textarea.field-input {
     height: 2.5rem;
     border-radius: 999px;
     background: var(--color-green);
-    color: #fff;
+    color: var(--color-green-contrast);
     font-family: var(--font-mono);
     font-size: 0.85rem;
     font-weight: 600;
