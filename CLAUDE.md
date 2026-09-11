@@ -27,6 +27,19 @@ PHP 8.3 · Laravel 13 · Inertia 2 + Vue 3 (`<script setup>`) · MySQL · Vite.
   `UiTabs`, `UiSegmented`, `UiSparkline`, `UiBars`, `UiMeter`, `UiDelta`).
   The Console **Dashboard** is built on it; other pages can adopt it
   incrementally by wrapping content in `<div class="ui" data-ui-root>`.
+- The public site has its own **dark/light toggle** (`SiteHeader.vue`,
+  `[data-site-theme]` on `<html>`) — independent of the panels' own
+  `[data-panel-theme]` toggle (`PanelShell.vue`). `SiteHeader` applies the
+  attribute on mount and removes it on unmount, so it can never leak into
+  `/cms` or `/console`. Sections that must look the same regardless of
+  site theme (`.hero`, `.cta-section`, `.initiative-hero`, the footer) use
+  a parallel `*-fixed` token (`--color-ink-fixed`, `--color-surface-fixed`,
+  `--color-green-fixed`, `--color-green-dark-fixed`) instead of the
+  theme-adaptive one — reach for those, not the plain token, in any new
+  section that's intentionally always-dark. Brand green (`--color-green`
+  on the site, `--pnl-accent` in the panels) is sourced from the logo's
+  actual gradient (`public/images/logo.svg`: `#098B4F` → `#32A14C` →
+  `#5BB748`) — don't reintroduce the old `#0d4d2c`.
 
 Key packages: `laravel/sanctum` (API PATs), `spatie/laravel-permission` (RBAC),
 `spatie/laravel-activitylog` **v5**, `brick/money`, `barryvdh/laravel-dompdf`.
@@ -111,6 +124,11 @@ the reference:
 by default (`?download=1` forces attachment). Colour logo: `public/images/logo.png`
 (rasterised from `logo.svg` — the SVG renderer has no gradient support).
 
+One reference PDF isn't tied to a model: `pdf.how-we-classify-this-work`
+(the Limitless Africs ministry/COFOG crosswalk) is rendered the same way
+but from a plain closure route in `routes/web.php` — see
+`docs/national-work-mapping.md`.
+
 ## Modules
 
 Built: Users & access · Leads · Clients · Projects · Proformas · Invoices ·
@@ -133,7 +151,10 @@ brief in `docs/national-work-mapping.md`. Only a representative/placeholder
 version exists so far, inline on `resources/js/Pages/Site/LimitlessAfrics.vue`
 — no data model, no CMS admin, no real project data yet.
 
-Roadmap & scoping answers: `docs/roadmap.md`, `docs/answers.md`.
+Roadmap & scoping answers: `docs/roadmap.md`, `docs/answers.md`. Limitless
+Africs page in-progress framing notes (not yet fully published, or
+published without the detail recorded there): `docs/national-work-mapping.md`,
+`docs/bookshare-initiative.md`, `docs/theory-of-change.md`.
 
 ## Testing notes
 
