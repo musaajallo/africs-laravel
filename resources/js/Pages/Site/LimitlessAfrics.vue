@@ -298,6 +298,17 @@ const crosswalk = [
     >
         <template #before-cards>
             <div class="section-head">
+                <p class="section-eyebrow">About the name</p>
+                <h2 class="section-title">Africans are limitless. Resources are the constraint.</h2>
+                <p class="section-lede">
+                    The name is a claim, not a slogan. African capacity for
+                    development, innovation, and change is not the limit —
+                    resources usually are. Limitless Africs exists to
+                    unlock that potential by providing them.
+                </p>
+            </div>
+
+            <div class="section-head" style="margin-top: 4rem">
                 <p class="section-eyebrow">How we work</p>
                 <h2 class="section-title">Priorities, initiatives, projects.</h2>
                 <p class="section-lede">
