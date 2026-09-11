@@ -2736,8 +2736,10 @@ textarea.field-input {
     --panel-accent: var(--color-amber);
     --panel-header-h: 3.75rem;
     --panel-sidebar-width: 15.5rem;
-    --panel-header-bg: #0c4a29;
-    --panel-sidebar-bg: #093a20;
+    /* Same family as --color-green-fixed/-dark-fixed (the logo's green) —
+       darker again, since these are a chrome backdrop, not the accent. */
+    --panel-header-bg: #076b3d;
+    --panel-sidebar-bg: #054a28;
     --panel-hairline: rgba(243, 239, 227, 0.12);
 
     /* content-area palette — retuned to the ERP plan's warm neutrals.
@@ -2750,10 +2752,12 @@ textarea.field-input {
     --pnl-muted: #7b7f72;
     --pnl-line: #e4dfce;
     --pnl-line-strong: #cec8b3;
-    --pnl-accent: #0d4d2c;
+    /* Matches --color-green(-fixed) on the public site — the logo's
+       darkest stop (public/images/logo.svg), not the old #0d4d2c. */
+    --pnl-accent: #098b4f;
     --pnl-accent-contrast: #ffffff;
-    --pnl-accent-tint: rgba(13, 77, 44, 0.1);
-    --pnl-ok: #0d4d2c;
+    --pnl-accent-tint: rgba(9, 139, 79, 0.1);
+    --pnl-ok: #098b4f;
     --pnl-warn: #a56a1a;
     --pnl-danger: #b3261e;
     --pnl-shadow: 0 1px 2px rgba(20, 26, 20, 0.05),
@@ -2780,8 +2784,10 @@ textarea.field-input {
 }
 
 :root[data-panel-theme='dark'] .panel-shell {
-    --panel-header-bg: #0a3d22;
-    --panel-sidebar-bg: #08301b;
+    /* --panel-header-bg / --panel-sidebar-bg intentionally not redefined
+       here — they're chrome, not the theme-adaptive content area, and now
+       match the base values above exactly (previously they differed by a
+       barely-perceptible shade). */
 
     --pnl-canvas: #0f130f;
     --pnl-surface: #171d16;
@@ -2791,10 +2797,12 @@ textarea.field-input {
     --pnl-muted: #8d9181;
     --pnl-line: #293026;
     --pnl-line-strong: #3a4136;
-    --pnl-accent: #59aa7b;
+    /* The logo's brightest stop — matches --color-green in the site's own
+       dark mode. */
+    --pnl-accent: #5bb748;
     --pnl-accent-contrast: #0b1a10;
-    --pnl-accent-tint: rgba(89, 170, 123, 0.16);
-    --pnl-ok: #59aa7b;
+    --pnl-accent-tint: rgba(91, 183, 72, 0.16);
+    --pnl-ok: #5bb748;
     --pnl-warn: #d8a45a;
     --pnl-danger: #e0685f;
     --pnl-shadow: 0 1px 2px rgba(0, 0, 0, 0.35),
