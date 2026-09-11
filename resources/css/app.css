@@ -30,6 +30,9 @@
     --color-muted: #6b6f6a;
     --color-muted-on-dark: rgba(243, 239, 227, 0.68);
     --color-surface: #ffffff;
+    /* Fixed white — for text/fills on a section that must stay exactly as
+       designed regardless of site theme (the homepage .hero). */
+    --color-surface-fixed: #ffffff;
     --color-hover: #f5f5f5;
 
     --font-sans:
@@ -1107,10 +1110,12 @@ textarea.field-input {
 
 /* ---------- Hero ---------- */
 
+/* Fixed regardless of the site's dark/light toggle — this is the original
+   homepage hero treatment and isn't meant to change with theme. */
 .hero {
     position: relative;
     background:
-        linear-gradient(180deg, var(--color-green) 0%, var(--color-green-dark) 70%, #062616 100%);
+        linear-gradient(180deg, var(--color-green-fixed) 0%, var(--color-green-dark-fixed) 70%, #062616 100%);
     color: var(--color-cream-text);
     overflow: hidden;
     padding: 5rem 0 6rem;
@@ -1204,7 +1209,7 @@ textarea.field-input {
     line-height: 1.03;
     letter-spacing: 0.005em;
     text-transform: uppercase;
-    color: var(--color-surface);
+    color: var(--color-surface-fixed);
 }
 
 .hero-title em {
@@ -1230,7 +1235,7 @@ textarea.field-input {
 
 .hero-actions .btn-primary {
     background: var(--color-amber);
-    color: var(--color-ink);
+    color: var(--color-ink-fixed);
 }
 
 .hero-actions .btn-primary:hover:not(:disabled) {
